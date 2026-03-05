@@ -12,34 +12,49 @@ body {
     background-color: #fff;
     color: #333;
     line-height: 1.6;
-    padding-top: 90px;
+    padding-top:140px;
 }
 
 /* ==========
    HEADER
    ========== */
 header {
-    display: flex;
+   display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 90px; /* antes 800px */
+
+    height: 140px;
     padding: 15px 8%;
+
     background-color: #fff;
     background-image: url(img/fondo1.jpg);
     background-size: cover;
     background-position: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
     z-index: 100;
+
+    transition: all 0.35s ease;
+}
+
+header.scrolled {
+    height: 80px;
+    padding: 10px 8%;
+}
+
+header.scrolled img {
+    height: 60px;
 }
 
 header img {
-    height: 200px;
+    height: 110px;
+    transition: all 0.35s ease;
 }
     
 
@@ -293,6 +308,7 @@ footer {
         padding: 40px 5%;
     }
 }
+
 
 
 
