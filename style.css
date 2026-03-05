@@ -59,7 +59,7 @@ header img {
     
 
 header .pedido-btn {
-    background-color: #FFC107;
+    background-color: #CC2D0A;
     color: black;
     padding: 10px 25px;
     border-radius: 25px;
@@ -70,7 +70,7 @@ header .pedido-btn {
 }
 
 header .pedido-btn:hover {
-    background-color: #0cbf02;
+    background-color: #CC2D0A;
     transform: scale(1.05);
 }
 
@@ -308,6 +308,7 @@ footer {
         padding: 40px 5%;
     }
 }
+
 
 
 
