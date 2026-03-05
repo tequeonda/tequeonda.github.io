@@ -21,7 +21,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 300px;
+    height: 500px;
     padding: 15px 8%;
     background-color: #fff;
     background-image: url(img/fondo1.jpg);
@@ -32,7 +32,7 @@ header {
 }
 
 header img {
-    height: 200px;
+    height: 500px;
 }
     
 
@@ -66,7 +66,7 @@ header .pedido-btn:hover {
     align-items: center;
     text-align: center;
     padding: 20px;
-   background-color: #0cbf02;
+   background-color: #FFC72C;
    color: white;
 }
 
@@ -222,7 +222,7 @@ h2 {
    FOOTER
    ========== */
 footer {
-    background-color: #0cbf02;
+    background-color: #FFC72C;
     color: white;
     text-align: center;
     padding: 20px 10px;
@@ -244,7 +244,7 @@ footer {
 
 .redes-sociales a:hover {
     transform: scale(1.2);
-    color: #009640; /* Verde de tu marca */
+    color: #FFC72C; /* Verde de tu marca */
 }
 
 /* ==========
@@ -286,5 +286,6 @@ footer {
         padding: 40px 5%;
     }
 }
+
 
 
