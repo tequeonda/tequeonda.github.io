@@ -60,7 +60,7 @@ header img {
 
 header .pedido-btn {
     background-color: #CC2D0A;
-    color: black;
+    color: white;
     padding: 10px 25px;
     border-radius: 25px;
     text-decoration: none;
@@ -89,7 +89,7 @@ header .pedido-btn:hover {
     text-align: center;
     padding: 20px;
    background-color: #FFC72C;
-   color: white;
+   color: black;
 }
 
 .hero h1 {
@@ -97,7 +97,7 @@ header .pedido-btn:hover {
     text-transform: uppercase;
     font-weight: bold;
     margin-bottom: 10px;
-    color: white;
+    color: black;
 }
 
 .hero p {
@@ -308,6 +308,7 @@ footer {
         padding: 40px 5%;
     }
 }
+
 
 
 
