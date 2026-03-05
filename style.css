@@ -106,8 +106,8 @@ header .pedido-btn:hover {
 }
 
 .hero .pedido-btn {
-    background-color: #FFC107;
-    color: black;
+    background-color: #CC2D0A;
+    color: white;
     padding: 12px 30px;
     border-radius: 30px;
     text-decoration: none;
@@ -118,7 +118,7 @@ header .pedido-btn:hover {
 }
 
 .hero .pedido-btn:hover {
-    background-color: #007a33;
+    background-color: #CC2D0A;
     transform: scale(1.05);
 }
 
@@ -308,6 +308,7 @@ footer {
         padding: 40px 5%;
     }
 }
+
 
 
 
