@@ -1,0 +1,1155 @@
+/* ==============================================
+   TEQUE ONDA — style.css
+   Estructura:
+   1. Variables & Reset
+   2. Base
+   3. Header
+   4. Hero
+   5. Botones
+   6. Sección: Combos
+   7. Sección: Menú / Productos
+   8. Sección: Nosotros
+   9. Sección: Sucursales
+   10. Footer
+   11. Flotantes (Pedir + WhatsApp)
+   12. Responsive
+============================================== */
+
+
+/* =====================
+   1. VARIABLES & RESET
+   ===================== */
+:root {
+    --gold:        #FFC72C;
+    --gold-dark:   #E0A800;
+    --red:         #C0392B;
+    --dark:        #0D0A05;
+    --dark2:       #140F06;
+    --dark3:       #1A1109;
+    --cream:       #FDF6E3;
+    --text:        #3D2B1A;
+    --muted:       #7A6550;
+    --radius:      14px;
+    --shadow-sm:   0 4px 16px rgba(0, 0, 0, 0.08);
+    --shadow-md:   0 8px 32px rgba(0, 0, 0, 0.18);
+    --shadow-lg:   0 16px 40px rgba(0, 0, 0, 0.25);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* =====================
+   2. BASE
+   ===================== */
+body {
+    font-family: 'Fira Sans', sans-serif;
+    background-color: var(--cream);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Espacio para el header fijo (top-bar + nav) */
+    padding-top: 130px;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+section {
+    padding: 80px 8%;
+}
+
+.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 0.04em;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--dark);
+}
+
+.section-sub {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 48px;
+    font-size: 1rem;
+}
+
+
+/* =====================
+   3. HEADER
+   ===================== */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: var(--dark);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Fila superior: logo + toggle mobile */
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 40px;
+    border-bottom: 1px solid rgba(255, 199, 44, 0.12);
+}
+
+.header-top img {
+    height: 80px;
+    width: auto;
+    transition: height 0.3s ease;
+}
+
+/* Barra de navegación */
+.header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 24px;
+    background-color: var(--dark2);
+}
+
+.header-nav a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px 20px;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.header-nav a:hover {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+/* Botón destacado "Pedir Online" en la nav */
+.header-nav a.nav-highlight {
+    color: var(--gold);
+    border: 1px solid rgba(255, 199, 44, 0.4);
+    border-radius: 50px;
+    padding: 9px 20px;
+    margin-left: 12px;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.header-nav a.nav-highlight:hover {
+    background-color: var(--gold);
+    color: var(--dark);
+    border-color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+/* Hamburger — sólo visible en mobile */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+
+/* =====================
+   4. HERO
+   ===================== */
+.hero {
+    min-height: 100vh;
+    /* Overlay + imagen de fondo.
+       Para ajustar la transparencia, modificá los cuatro valores rgba():
+       - Más alto (ej. 0.85) = más oscuro, foto menos visible
+       - Más bajo (ej. 0.30) = más claro, foto más visible        */
+    background:
+        linear-gradient(
+            160deg,
+            rgba(26, 17, 9, 0.55) 0%,
+            rgba(36, 26, 13, 0.50) 60%,
+            rgba(59, 31, 10, 0.55) 100%
+        ),
+        url('img/fondo1.jpg') center center / cover no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 160px 24px 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(255, 199, 44, 0.18);
+    border: 1px solid rgba(255, 199, 44, 0.5);
+    color: var(--gold);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease both;
+}
+
+.hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 9vw, 7rem);
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    animation: fadeUp 0.7s 0.1s ease both;
+}
+
+.hero h1 span {
+    color: var(--gold);
+}
+
+.hero p {
+    margin-top: 18px;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 520px;
+    animation: fadeUp 0.7s 0.2s ease both;
+}
+
+.hero-cta {
+    margin-top: 36px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.7s 0.3s ease both;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =====================
+   5. BOTONES
+   ===================== */
+.btn {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.08em;
+    font-size: 1rem;
+    padding: 12px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-gold {
+    background-color: var(--gold);
+    color: var(--dark);
+}
+
+.btn-gold:hover {
+    background-color: var(--gold-dark);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+}
+
+.btn-outline:hover {
+    background-color: var(--gold);
+    color: var(--dark);
+}
+
+
+/* =====================
+   6. COMBOS
+   ===================== */
+.combos {
+    background-color: var(--dark3);
+}
+
+.combos .section-title {
+    color: var(--gold);
+}
+
+.combos .section-sub {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.combo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.combo-card {
+    background-color: var(--dark2);
+    border: 1px solid rgba(255, 199, 44, 0.2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.combo-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.combo-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    background-color: var(--dark3);
+}
+
+.combo-card-body {
+    padding: 20px;
+}
+
+.combo-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.06em;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.combo-card p {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+.tag-popular {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: var(--gold);
+    color: var(--dark);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 50px;
+}
+
+
+/* =====================
+   7. MENÚ INTERACTIVO
+   ===================== */
+.menu {
+    background-color: var(--cream);
+}
+
+/* --- Grid de categorías --- */
+.categorias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.categoria-card {
+    background-color: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    position: relative;
+}
+
+.categoria-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    border: 2px solid transparent;
+    transition: border-color 0.22s ease;
+    pointer-events: none;
+}
+
+.categoria-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+}
+
+.categoria-card:hover::after {
+    border-color: var(--gold);
+}
+
+.categoria-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    background-color: #f5f0e8;
+    transition: transform 0.3s ease;
+}
+
+.categoria-card:hover img {
+    transform: scale(1.03);
+}
+
+.categoria-card-body {
+    padding: 16px 18px 18px;
+}
+
+.categoria-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem;
+    letter-spacing: 0.05em;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.categoria-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.categoria-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gold-dark);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: gap 0.2s ease;
+}
+
+.categoria-card:hover .categoria-arrow {
+    gap: 10px;
+}
+
+
+/* --- Panel lateral de productos --- */
+.menu-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 680px;
+    height: 100%;
+    z-index: 300;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-panel-inner {
+    position: absolute;
+    inset: 0;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.18);
+    overflow-y: auto;
+}
+
+/* Overlay oscuro detrás del panel */
+.menu-panel::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.38s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Estado abierto */
+.menu-panel.open {
+    pointer-events: all;
+}
+
+.menu-panel.open .menu-panel-inner {
+    transform: translateX(0);
+}
+
+.menu-panel.open::before {
+    background: rgba(0, 0, 0, 0.55);
+    pointer-events: all;
+}
+
+/* Header del panel */
+.menu-panel-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: var(--dark);
+    padding: 20px 28px 16px;
+    border-bottom: 2px solid var(--gold);
+}
+
+.menu-panel-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.65);
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 12px;
+    transition: color 0.2s ease;
+    letter-spacing: 0.03em;
+}
+
+.menu-panel-close:hover {
+    color: var(--gold);
+}
+
+.menu-panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    line-height: 1;
+}
+
+/* Grid de items dentro del panel */
+.menu-panel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 28px;
+    flex: 1;
+}
+
+/* Cada item de producto dentro del panel */
+.menu-item-card {
+    background-color: #fafafa;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-sm);
+}
+
+.menu-item-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    background-color: #f5f0e8;
+}
+
+.menu-item-card-body {
+    padding: 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item-card h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.04em;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.menu-item-card p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.45;
+    flex: 1;
+    margin-bottom: 12px;
+}
+
+.menu-item-card .btn {
+    font-size: 0.82rem;
+    padding: 8px 16px;
+    align-self: flex-start;
+}
+
+/* CTA al fondo del panel */
+.menu-panel-cta {
+    padding: 24px 28px;
+    background-color: var(--dark);
+    text-align: center;
+    border-top: 1px solid rgba(255, 199, 44, 0.2);
+    position: sticky;
+    bottom: 0;
+}
+
+
+
+/* =====================
+   8. NOSOTROS
+   ===================== */
+.nosotros {
+    background: linear-gradient(135deg, var(--dark3) 0%, var(--dark2) 100%);
+    text-align: center;
+}
+
+.nosotros .section-title {
+    color: var(--gold);
+}
+
+.nosotros p {
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    line-height: 1.85;
+}
+
+
+/* =====================
+   9. SUCURSALES
+   ===================== */
+.sucursales {
+    background-color: #fff;
+    text-align: center;
+}
+
+.sucursales-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 36px;
+}
+
+.sucursales-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    color: var(--text);
+}
+
+.sucursales-info-item i {
+    color: var(--gold-dark);
+    font-size: 1.2rem;
+}
+
+.map-wrapper {
+    max-width: 800px;
+    margin: 0 auto 28px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.map-wrapper iframe {
+    display: block;
+    width: 100%;
+    height: 300px;
+    border: 0;
+}
+
+
+/* =====================
+   10. FOOTER
+   ===================== */
+footer {
+    background-color: var(--dark);
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+    padding: 40px 24px;
+    font-size: 0.88rem;
+}
+
+.redes-sociales {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.redes-sociales a {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 1.5rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.redes-sociales a:hover {
+    color: var(--gold);
+    transform: scale(1.15);
+}
+
+
+/* =====================
+   11. FLOTANTES
+   ===================== */
+
+/* Botón "Pedir Ahora" centrado abajo */
+.pedir-fixed {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    background-color: var(--red);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.1em;
+    padding: 14px 36px;
+    border-radius: 50px;
+    box-shadow: 0 6px 24px rgba(192, 57, 43, 0.5);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    white-space: nowrap;
+}
+
+.pedir-fixed:hover {
+    transform: translateX(-50%) translateY(-3px);
+    box-shadow: 0 10px 30px rgba(192, 57, 43, 0.6);
+}
+
+/* Botón WhatsApp */
+.whatsapp {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    background-color: #25D366;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
+    transition: transform 0.2s ease;
+}
+
+.whatsapp:hover {
+    transform: scale(1.1);
+}
+
+.whatsapp img {
+    width: 30px;
+    height: 30px;
+}
+
+
+/* ==============================================
+   12. RESPONSIVE
+   - max-width: 1024px  → Tablet landscape
+   - max-width: 768px   → Tablet portrait / mobile grande
+   - max-width: 480px   → Mobile estándar
+   - max-width: 360px   → Mobile pequeño
+============================================== */
+
+
+/* ---- Tablet landscape (≤1024px) ---- */
+@media (max-width: 1024px) {
+    .combo-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .categorias-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .menu-panel {
+        max-width: 560px;
+    }
+
+    .menu-panel-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+
+/* ---- Tablet portrait / mobile grande (≤768px) ---- */
+@media (max-width: 768px) {
+
+    /* Base */
+    body {
+        padding-top: 100px;
+    }
+
+    section {
+        padding: 56px 5%;
+    }
+
+    .section-sub {
+        margin-bottom: 32px;
+    }
+
+    /* Header */
+    .header-top {
+        padding: 10px 20px;
+    }
+
+    .header-top img {
+        height: 62px;
+    }
+
+    /* Mostrar hamburger */
+    .nav-toggle {
+        display: flex;
+    }
+
+    /* Nav: colapsada por defecto, se expande con .open */
+    .header-nav {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 6px 20px 16px;
+        gap: 0;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .header-nav.open {
+        display: flex;
+    }
+
+    .header-nav a {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+        padding: 12px 14px;
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .header-nav a:hover,
+    .header-nav a:active {
+        border-left-color: var(--gold);
+        border-bottom: none;
+        background: rgba(255, 199, 44, 0.06);
+    }
+
+    .header-nav a.nav-highlight {
+        margin-left: 0;
+        margin-top: 10px;
+        border-radius: 8px;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* Hero */
+    .hero {
+        min-height: 92vh;
+        padding: 140px 20px 100px;
+    }
+
+    .hero-badge {
+        font-size: 0.72rem;
+        padding: 5px 14px;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .hero-cta .btn {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+    }
+
+    /* Combos */
+    .combo-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    /* Categorías menú */
+    .categorias-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .categoria-card-body {
+        padding: 12px 14px 14px;
+    }
+
+    .categoria-card h3 {
+        font-size: 1.15rem;
+    }
+
+    /* Panel lateral → ocupa pantalla completa en mobile */
+    .menu-panel {
+        max-width: 100%;
+    }
+
+    .menu-panel-header {
+        padding: 16px 20px 12px;
+    }
+
+    .menu-panel-title {
+        font-size: 1.8rem;
+    }
+
+    .menu-panel-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        padding: 20px;
+    }
+
+    .menu-panel-cta {
+        padding: 18px 20px;
+    }
+
+    .menu-panel-cta .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Sucursales */
+    .sucursales-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .map-wrapper iframe {
+        height: 240px;
+    }
+
+    /* Flotantes */
+    .pedir-fixed {
+        font-size: 0.88rem;
+        padding: 12px 26px;
+        bottom: 76px;
+        /* Asegurar que no tape el WhatsApp */
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .whatsapp {
+        width: 50px;
+        height: 50px;
+        bottom: 18px;
+        right: 18px;
+    }
+
+    .whatsapp img {
+        width: 26px;
+        height: 26px;
+    }
+}
+
+
+/* ---- Mobile estándar (≤480px) ---- */
+@media (max-width: 480px) {
+
+    body {
+        padding-top: 90px;
+    }
+
+    section {
+        padding: 48px 4%;
+    }
+
+    /* Hero más compacto */
+    .hero {
+        padding: 120px 16px 90px;
+        min-height: 88vh;
+    }
+
+    .hero p {
+        font-size: 0.95rem;
+    }
+
+    /* Categorías: 1 columna en pantallas muy chicas */
+    .categorias-grid {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+        margin: 0 auto;
+        gap: 12px;
+    }
+
+    /* Las tarjetas de categoría en 1 col quedan horizontales */
+    .categoria-card {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-radius: 12px;
+    }
+
+    .categoria-card img {
+        width: 100px;
+        height: 90px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border-radius: 12px 0 0 12px;
+    }
+
+    .categoria-card-body {
+        padding: 12px 14px;
+        text-align: left;
+    }
+
+    .categoria-card h3 {
+        font-size: 1.05rem;
+        margin-bottom: 2px;
+    }
+
+    .categoria-card p {
+        font-size: 0.78rem;
+        margin-bottom: 6px;
+    }
+
+    /* Panel en mobile pequeño: 1 columna de items */
+    .menu-panel-grid {
+        grid-template-columns: 1fr;
+        padding: 16px;
+        gap: 12px;
+    }
+
+    /* Items horizontales en panel para mobile */
+    .menu-item-card {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .menu-item-card img {
+        width: 90px;
+        height: 80px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .menu-item-card-body {
+        padding: 10px 12px;
+    }
+
+    .menu-item-card h4 {
+        font-size: 1rem;
+    }
+
+    .menu-item-card p {
+        font-size: 0.78rem;
+        margin-bottom: 8px;
+        /* Limitar a 2 líneas */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Combos: 1 columna */
+    .combo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Flotantes compactos */
+    .pedir-fixed {
+        font-size: 0.82rem;
+        padding: 10px 22px;
+        bottom: 70px;
+    }
+
+    .whatsapp {
+        width: 46px;
+        height: 46px;
+        bottom: 14px;
+        right: 14px;
+    }
+}
+
+
+/* ---- Mobile muy pequeño (≤360px) ---- */
+@media (max-width: 360px) {
+
+    .header-top img {
+        height: 50px;
+    }
+
+    .hero h1 {
+        font-size: 2.6rem;
+    }
+
+    .hero-cta .btn {
+        max-width: 100%;
+        padding: 11px 20px;
+        font-size: 0.95rem;
+    }
+
+    .section-title {
+        font-size: 1.7rem;
+    }
+
+    .categoria-card img {
+        width: 80px;
+        height: 75px;
+    }
+
+    .menu-panel-title {
+        font-size: 1.5rem;
+    }
+
+    .pedir-fixed {
+        font-size: 0.78rem;
+        padding: 9px 18px;
+    }
+}
