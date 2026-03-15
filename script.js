@@ -57,7 +57,7 @@ const menuData = {
         items: [
             { nombre: 'Pack Tequeños Congelados x12',  img: 'img/congelados.jpg', descripcion: 'Llévalos y cocinalos en casa al horno, en la AirFryer o fritos. Listos en minutos.' },
             { nombre: 'Pack Pastelitos Congelados con Queso x6', img: 'img/pcmix1.jpg', descripcion: 'Pastelitos congelados surtidos de queso, papa & queso, pizza y jamon ahumado & queso. Para tener siempre a mano. Horneá cuando quieras.' },
-            { nombre: 'Pack Pastelitos Congelados Proteinas X6', img: 'img/pcmix2.jpg', descripcion: 'Pastelitos Consgelados surtidos de carne mechada, carne molida y pollo. Para tener siempre a mano. Horneá cuando quieras.' },
+            { nombre: 'Pack Pastelitos Congelados Proteinas X6', img: 'img/pcmix2.jpg', descripcion: 'Pastelitos Congelados surtidos de carne mechada, carne molida y pollo. Para tener siempre a mano. Horneá cuando quieras.' },
         ]
     },
 
