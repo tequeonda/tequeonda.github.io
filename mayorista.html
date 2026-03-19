@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tequeños al Por Mayor | Proveedor B2B | Teque Onda</title>
+    <meta name="description" content="Proveedor mayorista de tequeños congelados para restaurantes, bares y negocios. Desde $462/u. Stock permanente. Muestra gratis. WhatsApp: 11-5152-2312">
+    <link rel="icon" href="img/logo_to.svg" type="image/svg+xml">
+
+    <!-- Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16832609626"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-16832609626');
+        function trackConversion(tipo) {
+            gtag('event', 'conversion', {
+                'send_to': 'AW-16832609626/' + tipo,
+                'value': 3000, 'currency': 'ARS'
+            });
+        }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+/* ==============================================
+   TEQUE ONDA MAYORISTA — Tema Oscuro Dorado
+============================================== */
+
+/* --- Variables --- */
+:root {
+    --gold:      #FFC72C;
+    --gold-dark: #E0A800;
+    --gold-dim:  rgba(255,199,44,0.15);
+    --gold-line: rgba(255,199,44,0.25);
+    --dark:      #0D0A05;
+    --dark2:     #140F06;
+    --dark3:     #1A1109;
+    --dark4:     #221508;
+    --text-light: rgba(255,255,255,0.75);
+    --text-muted: rgba(255,255,255,0.45);
+    --cream:     #FDF6E3;
+    --text:      #3D2B1A;
+    --muted:     #7A6550;
+    --green:     #1a9e40;
+    --radius:    14px;
+    --radius-lg: 20px;
+}
+
+/* --- Reset & Base --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Fira Sans', sans-serif;
+    background: var(--dark);
+    color: #fff;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+
+section {
+    padding: 80px 8%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Títulos de sección */
+.section-label {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    padding: 5px 16px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+}
+
+.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 0.04em;
+    color: #fff;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.section-title span { color: var(--gold); }
+
+.section-sub {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 48px;
+}
+
+.section-center { text-align: center; }
+
+/* Separador dorado */
+.gold-divider {
+    width: 48px;
+    height: 2px;
+    background: var(--gold-line);
+    margin: 16px auto 20px;
+    border-radius: 2px;
+}
+
+/* --- HEADER --- */
+header {
+    background: var(--dark2);
+    border-bottom: 1px solid var(--gold-line);
+    padding: 14px 8%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    height: 72px;
+    width: auto;
+    transition: height 0.3s ease;
+}
+
+.logo-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--gold);
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
+.btn-back {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 8px 18px;
+    border-radius: 50px;
+    transition: color 0.2s, border-color 0.2s;
+}
+.btn-back:hover { color: var(--gold); border-color: var(--gold-line); }
+.btn-back i { margin-right: 6px; }
+
+/* --- BOTONES --- */
+.btn {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.1em;
+    font-size: 1rem;
+    padding: 14px 32px;
+    border-radius: 50px;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    white-space: nowrap;
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn-gold {
+    background: var(--gold);
+    color: var(--dark);
+    box-shadow: 0 4px 20px rgba(255,199,44,0.3);
+}
+.btn-gold:hover { background: var(--gold-dark); box-shadow: 0 6px 28px rgba(255,199,44,0.4); }
+
+.btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--gold-line);
+    color: var(--gold);
+}
+.btn-outline:hover { background: var(--gold-dim); border-color: var(--gold); }
+
+.btn-green {
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(26,158,64,0.3);
+}
+.btn-green:hover { background: #168034; }
+
+/* --- HERO --- */
+.hero-b2b {
+    background:
+        linear-gradient(160deg, rgba(13,10,5,0.6) 0%, rgba(26,17,9,0.5) 60%, rgba(36,21,8,0.6) 100%),
+        url('img/fondo5.jpg') center center / cover no-repeat;
+    padding: 100px 8% 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-b2b::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(255,199,44,0.07) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.hero-b2b > * { position: relative; z-index: 1; }
+
+.hero-b2b h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: #fff;
+    margin-bottom: 6px;
+    animation: fadeUp 0.7s 0.1s ease both;
+}
+.hero-b2b h1 span { color: var(--gold); }
+
+.hero-vision {
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    color: var(--text-light);
+    max-width: 560px;
+    margin: 0 auto 10px;
+    line-height: 1.75;
+    animation: fadeUp 0.7s 0.2s ease both;
+}
+.hero-vision strong {
+    font-style: italic;
+    font-weight: 500;
+    color: rgba(255,199,44,0.9);
+}
+
+.hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 24px 0 32px;
+    animation: fadeUp 0.7s 0.3s ease both;
+}
+.hero-pill {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 6px 16px;
+    border-radius: 50px;
+}
+
+.hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    animation: fadeUp 0.7s 0.4s ease both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- SECCIONES ALTERNADAS --- */
+.section-dark  { background: var(--dark); }
+.section-dark2 { background: var(--dark2); }
+.section-dark3 { background: var(--dark3); }
+
+/* Secciones claras — misma paleta que la página principal */
+.section-cream { background: var(--cream); }
+.section-white { background: #fff; }
+
+/* En secciones claras, invertir colores de texto */
+.section-cream .section-title,
+.section-white .section-title { color: var(--dark); }
+
+.section-cream .section-sub,
+.section-white .section-sub { color: var(--muted); }
+
+.section-cream .section-label,
+.section-white .section-label {
+    color: var(--dark);
+    background: rgba(26,17,9,0.07);
+    border-color: rgba(26,17,9,0.15);
+}
+
+/* Beneficio cards en fondo claro */
+.section-cream .beneficio-card,
+.section-white .beneficio-card {
+    background: #fff;
+    border-color: rgba(255,199,44,0.4);
+}
+.section-cream .beneficio-card p,
+.section-white .beneficio-card p { color: var(--muted); }
+
+/* Testimonio cards en fondo claro */
+.section-cream .testimonio-card,
+.section-white .testimonio-card {
+    background: #fff;
+    border-color: rgba(255,199,44,0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+}
+.section-cream .testimonio-text,
+.section-white .testimonio-text { color: #555; }
+.section-cream .testimonio-negocio,
+.section-white .testimonio-negocio { color: #888; }
+
+/* Calculadora en fondo claro */
+.section-white .calculadora-wrap {
+    background: var(--cream);
+    border-color: rgba(255,199,44,0.35);
+}
+.section-white .calc-input-group label { color: var(--dark); }
+.section-white .calc-input-group input,
+.section-white .calc-input-group select {
+    background: #fff;
+    border-color: rgba(26,17,9,0.15);
+    color: var(--dark);
+}
+.section-white .calc-results { background: #fff; }
+.section-white .calc-result-item {
+    background: var(--cream);
+    border-color: rgba(0,0,0,0.06);
+}
+.section-white .calc-result-item .label { color: var(--muted); }
+.section-white .calc-result-item .value { color: var(--dark); }
+
+/* Formulario en fondo claro */
+.section-white .form-mayorista {
+    background: var(--cream);
+    border-color: rgba(255,199,44,0.35);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+}
+.section-white .form-group input,
+.section-white .form-group select,
+.section-white .form-group textarea {
+    background: #fff;
+    border-color: rgba(26,17,9,0.15);
+    color: var(--dark);
+}
+.section-white .form-group input::placeholder,
+.section-white .form-group textarea::placeholder { color: #aaa; }
+.section-white .form-group select option { background: #fff; color: var(--dark); }
+.section-white .checkbox-group label { color: var(--muted); }
+.section-white .form-contact-note { color: var(--muted); }
+
+.section-cream > section,
+.section-white > section { max-width: 1200px; margin: 0 auto; padding: 80px 8%; }
+
+/* --- BENEFICIOS --- */
+.beneficios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.beneficio-card {
+    background: var(--dark3);
+    border: 1px solid var(--gold-line);
+    border-left: 3px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.beneficio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+
+.beneficio-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+}
+.beneficio-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.05em;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+.beneficio-card p {
+    color: var(--text-light);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+/* --- PRECIOS --- */
+.pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--dark3);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--gold-line);
+}
+
+.pricing-table thead {
+    background: var(--dark2);
+    border-bottom: 2px solid var(--gold);
+}
+.pricing-table th {
+    padding: 18px 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    text-align: center;
+}
+.pricing-table td {
+    padding: 16px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.pricing-table td:first-child {
+    text-align: left;
+    color: #fff;
+    font-weight: 500;
+}
+.pricing-table tbody tr:last-child td { border-bottom: none; }
+.pricing-table tbody tr:hover { background: rgba(255,199,44,0.04); }
+
+.precio-destacado { color: #4ade80; font-weight: 700; }
+
+.badge-descuento {
+    background: var(--red);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+.pricing-notes {
+    margin-top: 24px;
+    background: var(--dark3);
+    border: 1px solid var(--gold-line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+.pricing-notes p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+.pricing-notes strong { color: var(--gold); }
+
+/* --- CALCULADORA --- */
+.calculadora-wrap {
+    background: var(--dark3);
+    border: 1px solid var(--gold-line);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+}
+
+.calculadora-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.calc-input-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+.calc-input-group input,
+.calc-input-group select {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Fira Sans', sans-serif;
+    background: var(--dark2);
+    border: 1px solid var(--gold-line);
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+.calc-input-group input:focus,
+.calc-input-group select:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+.calc-input-group select option { background: var(--dark2); }
+
+.calc-results {
+    background: var(--dark2);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    text-align: center;
+}
+
+.calc-result-item {
+    padding: 16px;
+    background: var(--dark3);
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.calc-result-item .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+.calc-result-item .value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+    color: #fff;
+}
+
+.calc-result-destacado {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #1a3d1f 0%, #0f2914 100%);
+    border: 1px solid rgba(74,222,128,0.3);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+}
+.calc-result-destacado .label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #4ade80;
+    margin-bottom: 6px;
+}
+.calc-result-destacado .value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    color: #4ade80;
+    letter-spacing: 0.04em;
+}
+
+/* --- PROCESO --- */
+.proceso-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    position: relative;
+}
+
+.step {
+    text-align: center;
+    background: var(--dark3);
+    border: 1px solid var(--gold-line);
+    border-radius: var(--radius);
+    padding: 32px 20px 28px;
+    transition: transform 0.2s ease;
+}
+.step:hover { transform: translateY(-4px); }
+
+.step-number {
+    width: 52px;
+    height: 52px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--dark);
+}
+.step h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+.step p { color: var(--text-light); font-size: 0.9rem; line-height: 1.6; }
+
+/* --- TESTIMONIOS --- */
+.testimonios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.testimonio-card {
+    background: var(--dark3);
+    border: 1px solid var(--gold-line);
+    border-radius: var(--radius);
+    padding: 30px 28px 24px;
+    position: relative;
+}
+.testimonio-card::before {
+    content: '"';
+    font-family: Georgia, serif;
+    font-size: 72px;
+    color: var(--gold);
+    opacity: 0.2;
+    position: absolute;
+    top: -4px;
+    left: 20px;
+    line-height: 1;
+}
+.testimonio-text {
+    font-style: italic;
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+.testimonio-author {
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 0.95rem;
+}
+.testimonio-negocio {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    margin-top: 2px;
+}
+
+/* --- FORMULARIO --- */
+.form-mayorista {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--dark3);
+    border: 1px solid var(--gold-line);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+}
+
+.form-group { margin-bottom: 22px; }
+
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 0.97rem;
+    font-family: 'Fira Sans', sans-serif;
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #fff;
+    transition: border-color 0.2s;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--text-muted); }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+.form-group select option { background: var(--dark2); }
+.form-group textarea { min-height: 110px; resize: vertical; }
+
+.checkbox-group { display: flex; align-items: center; gap: 12px; }
+.checkbox-group input { width: auto; accent-color: var(--gold); }
+.checkbox-group label {
+    font-size: 0.88rem;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-light);
+    font-weight: 400;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 18px;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    border-radius: 50px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.18s ease;
+    box-shadow: 0 4px 24px rgba(255,199,44,0.3);
+}
+.btn-submit:hover { background: var(--gold-dark); transform: translateY(-2px); }
+
+/* Formulario simplificado */
+.form-paso-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-transform: uppercase;
+}
+
+.paso-num {
+    width: 28px;
+    height: 28px;
+    background: var(--gold);
+    color: var(--dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.btn-extra-toggle {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px dashed rgba(255,199,44,0.3);
+    border-radius: 10px;
+    color: var(--muted);
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+}
+.btn-extra-toggle:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.section-white .btn-extra-toggle {
+    border-color: rgba(26,17,9,0.15);
+    color: var(--muted);
+}
+.section-white .btn-extra-toggle:hover {
+    border-color: var(--gold-dark);
+    color: var(--gold-dark);
+}
+
+.form-extra { margin-bottom: 8px; }
+
+.form-garantia {
+    text-align: center;
+    margin: 14px 0 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.section-white .form-garantia { color: #aaa; }
+
+.form-contact-note {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+}
+.form-contact-note a {
+    color: #25D366;
+    font-weight: 600;
+}
+
+/* --- FAQs --- */
+.faq-list { max-width: 760px; margin: 0 auto; }
+
+.faq-item {
+    background: var(--dark3);
+    border: 1px solid var(--gold-line);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.faq-question {
+    padding: 18px 22px;
+    font-weight: 600;
+    color: #fff;
+    font-size: 0.97rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    user-select: none;
+}
+.faq-question i {
+    color: var(--gold);
+    font-size: 0.8rem;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+}
+.faq-item.open .faq-question i { transform: rotate(180deg); }
+.faq-answer {
+    display: none;
+    padding: 14px 22px 20px;
+    color: var(--text-light);
+    line-height: 1.7;
+    font-size: 0.92rem;
+    border-top: 1px solid var(--gold-line);
+}
+.faq-item.open .faq-answer { display: block; }
+
+/* --- CTA FINAL --- */
+.cta-final {
+    background:
+        linear-gradient(135deg, rgba(192,57,43,0.85) 0%, rgba(160,30,20,0.9) 100%),
+        url('img/fondo6.jpg') center / cover no-repeat;
+    padding: 70px 8%;
+    text-align: center;
+}
+.cta-final h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    letter-spacing: 0.04em;
+    color: #fff;
+    margin-bottom: 12px;
+}
+.cta-final p {
+    color: rgba(255,255,255,0.8);
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+}
+.cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 28px;
+}
+.cta-contact {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 2;
+}
+.cta-contact a { color: #fff; font-weight: 600; }
+
+/* --- FOOTER --- */
+footer {
+    background: var(--dark2);
+    border-top: 1px solid var(--gold-line);
+    text-align: center;
+    padding: 36px 8%;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+footer a { color: var(--gold); }
+footer p + p { margin-top: 12px; }
+
+/* --- WHATSAPP FLOAT --- */
+.whatsapp {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    background: #25D366;
+    border-radius: 50%;
+    width: 56px; height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(37,211,102,0.5);
+    transition: transform 0.2s ease;
+}
+.whatsapp:hover { transform: scale(1.1); }
+.whatsapp img { width: 30px; height: 30px; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    section { padding: 56px 5%; }
+    .section-cream > section,
+    .section-white > section { padding: 56px 5%; }
+    .hero-b2b { padding: 70px 5% 60px; }
+    .hero-cta { flex-direction: column; align-items: center; }
+    .hero-cta .btn { width: 100%; max-width: 320px; text-align: center; }
+    .pricing-table th, .pricing-table td { padding: 12px 8px; font-size: 0.85rem; }
+    .calculadora-wrap { padding: 24px 18px; }
+    .form-mayorista { padding: 28px 20px; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .cta-buttons .btn { width: 100%; max-width: 320px; text-align: center; }
+    header { padding: 12px 5%; }
+}
+
+@media (max-width: 480px) {
+    .hero-b2b h1 { font-size: 2.2rem; }
+    .beneficios-grid { grid-template-columns: 1fr; }
+    .proceso-steps { grid-template-columns: 1fr; }
+    .testimonios-grid { grid-template-columns: 1fr; }
+    .calc-results { grid-template-columns: 1fr 1fr; }
+    .pricing-table { font-size: 0.78rem; }
+    .pricing-table th, .pricing-table td { padding: 10px 6px; }
+}
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="logo-container">
+            <img src="img/logo_to.svg" alt="Teque Onda" class="logo-img">
+            <span class="logo-badge">Mayorista</span>
+        </div>
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver al Inicio
+        </a>
+    </header>
+
+    <!-- ========== HERO ========== -->
+    <div class="hero-b2b">
+        <span class="section-label">Canal Mayorista B2B</span>
+        <h1>Bienvenido a <span>Teque Onda</span> Mayorista</h1>
+        <div class="gold-divider"></div>
+        <p class="hero-vision">
+            <strong>No buscamos Clientes, Impulsamos Socios Comerciales.</strong><br>
+            Tu éxito es el nuestro — Te ofrecemos el respaldo de una marca sólida
+            y productos de excelencia para crecer juntos en el mercado gastronómico.
+        </p>
+        <div class="hero-pills">
+            <span class="hero-pill">Stock permanente</span>
+            <span class="hero-pill">Fábrica propia</span>
+            <span class="hero-pill">Entrega en 48hs</span>
+            <span class="hero-pill">Muestra gratis</span>
+            <span class="hero-pill">Desde $463/unidad</span>
+        </div>
+        <div class="hero-cta">
+            <a href="#formulario" class="btn btn-gold" onclick="trackConversion('solicitar_muestra')">
+                🎁 Solicitar Muestra Gratis
+            </a>
+            <a href="#precios" class="btn btn-outline">
+                💰 Ver Lista de Precios
+            </a>
+            <a href="https://wa.me/5491151522312?text=Hola!%20Me%20interesa%20comprar%20tequeños%20al%20por%20mayor"
+               class="btn btn-green" target="_blank" rel="noopener" onclick="trackConversion('whatsapp_b2b')">
+                <i class="fab fa-whatsapp"></i> WhatsApp: 11-5152-2312
+            </a>
+        </div>
+    </div>
+
+    <!-- ========== BENEFICIOS ========== -->
+    <div class="section-cream">
+        <section>
+            <div class="section-center">
+                <span class="section-label">¿Por qué elegirnos?</span>
+                <h2 class="section-title">Tu Proveedor de <span>Confianza</span></h2>
+                <p class="section-sub">Respaldo real para que tu negocio siempre tenga producto</p>
+            </div>
+            <div class="beneficios-grid">
+                <div class="beneficio-card">
+                    <span class="beneficio-icon">🏭</span>
+                    <h3>Fábrica Propia</h3>
+                    <p>Producción de 5.000+ tequeños diarios. Stock permanente sin intermediarios.</p>
+                </div>
+                <div class="beneficio-card">
+                    <span class="beneficio-icon">💰</span>
+                    <h3>Precios Competitivos</h3>
+                    <p>15-20% más barato que la competencia. Descuentos por volumen creciente.</p>
+                </div>
+                <div class="beneficio-card">
+                    <span class="beneficio-icon">🚚</span>
+                    <h3>Entrega Gratis</h3>
+                    <p>En CABA y GBA para pedidos mayores a 20 packs (240 unidades).</p>
+                </div>
+                <div class="beneficio-card">
+                    <span class="beneficio-icon">⭐</span>
+                    <h3>Calidad Premium</h3>
+                    <p>Masa artesanal extra crocante. Receta venezolana auténtica, constante lote a lote.</p>
+                </div>
+                <div class="beneficio-card">
+                    <span class="beneficio-icon">💳</span>
+                    <h3>Crédito 7 Días</h3>
+                    <p>Para clientes recurrentes con 5+ pedidos realizados. Sin burocracia.</p>
+                </div>
+                <div class="beneficio-card">
+                    <span class="beneficio-icon">📈</span>
+                    <h3>Asesoramiento</h3>
+                    <p>Te ayudamos a vender más. Material POS y estrategia de promociones incluida.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== PRECIOS ========== -->
+    <div class="section-dark" id="precios">
+        <section>
+            <div class="section-center">
+                <span class="section-label">Lista de Precios 2026</span>
+                <h2 class="section-title">Precios <span>Mayoristas</span></h2>
+                <p class="section-sub">Por pack según volumen de compra · No incluye IVA</p>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;">Producto</th>
+                            <th>10–20 Packs<br><small style="font-family:'Fira Sans';font-size:0.78rem;font-weight:400;color:rgba(255,199,44,0.6);">120–240 unidades</small></th>
+                            <th>21–50 Packs<br><small style="font-family:'Fira Sans';font-size:0.78rem;font-weight:400;color:rgba(255,199,44,0.6);">252–588 unidades</small></th>
+                            <th>50+ Packs<br><small style="font-family:'Fira Sans';font-size:0.78rem;font-weight:400;color:rgba(255,199,44,0.6);">+600 unidades</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Tequeño Queso x12 unds</strong></td>
+                            <td>$5.550</td>
+                            <td>$5.350</td>
+                            <td class="precio-destacado">$4.950 <span class="badge-descuento">-10,8%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tequeño Jamón/Queso x12 unds</strong></td>
+                            <td>$9.850</td>
+                            <td>$9.300</td>
+                            <td class="precio-destacado">$8.200 <span class="badge-descuento">-17%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tequeños Fiesteros x25 unds</strong></td>
+                            <td>$7.875</td>
+                            <td>$7.400</td>
+                            <td class="precio-destacado">$6.950 <span class="badge-descuento">-22%</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pricing-notes">
+                <p><strong>📦 Pedido mínimo:</strong> 10 packs (120 unidades)</p>
+                <p><strong>🚚 Envío gratis:</strong> Pedidos +20 packs en CABA y GBA</p>
+                <p><strong>❄️ Conservación:</strong> Freezer -18°C hasta 6 meses</p>
+                <p><strong>🍳 Preparación:</strong> 5 a 7 min en freidora a 180°C (sin descongelar)</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== CALCULADORA ========== -->
+    <div class="section-white">
+        <section>
+            <div class="section-center">
+                <span class="section-label">Herramienta de Negocio</span>
+                <h2 class="section-title">Calculá Tu <span>Ganancia</span></h2>
+                <p class="section-sub">Descubrí cuánto podés ganar vendiendo nuestros tequeños</p>
+            </div>
+            <div class="calculadora-wrap">
+                <div class="calculadora-inputs">
+                    <div class="calc-input-group">
+                        <label>Packs por semana</label>
+                        <input type="number" id="packs" value="10" min="10" step="5">
+                    </div>
+                    <div class="calc-input-group">
+                        <label>Tu precio de venta (pack)</label>
+                        <input type="number" id="precioVenta" value="8500" min="7000" step="500">
+                    </div>
+                    <div class="calc-input-group">
+                        <label>Volumen de compra</label>
+                        <select id="volumen">
+                            <option value="5990">10–20 packs</option>
+                            <option value="5350">21–49 packs</option>
+                            <option value="4950">50+ packs</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="calc-results">
+                    <div class="calc-result-item">
+                        <div class="label">Costo por pack</div>
+                        <div class="value" id="costoPorpacks">$5.990</div>
+                    </div>
+                    <div class="calc-result-item">
+                        <div class="label">Costo semanal</div>
+                        <div class="value" id="costoSemanal">$59.900</div>
+                    </div>
+                    <div class="calc-result-item">
+                        <div class="label">Ingresos semanales</div>
+                        <div class="value" id="ingresosSemanal">$85.000</div>
+                    </div>
+                    <div class="calc-result-item">
+                        <div class="label">Margen por pack</div>
+                        <div class="value" id="margenpacks">$2.510 <span style="font-size:0.9rem;color:var(--text-muted);">(<span id="margenPorcentaje">42%</span>)</span></div>
+                    </div>
+                    <div class="calc-result-destacado">
+                        <div class="label">💰 Ganancia mensual estimada</div>
+                        <div class="value" id="gananciaMensual">$100.400</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== PROCESO ========== -->
+    <div class="section-dark2">
+        <section>
+            <div class="section-center">
+                <span class="section-label">Así de simple</span>
+                <h2 class="section-title">¿Cómo <span>Funciona?</span></h2>
+                <p class="section-sub">En 4 pasos empezás a vender tequeños en tu negocio</p>
+            </div>
+            <div class="proceso-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Solicitá Muestra</h4>
+                    <p>Completá el formulario o escribinos. Te enviamos 12 unidades (1 pack) gratis para que pruebes.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Evaluá Calidad</h4>
+                    <p>Freilos en tu cocina, probá el sabor, compará con tu proveedor actual. Sin compromiso.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Primer Pedido</h4>
+                    <p>Si te convencen, hacé tu primer pedido. 20% OFF en compras +20 packs (240 unidades).</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Socio Recurrente</h4>
+                    <p>Pedidos semanales o quincenales. Crédito 7 días y asesoramiento comercial continuo.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== TESTIMONIOS ========== -->
+    <div class="section-cream">
+        <section>
+            <div class="section-center">
+                <span class="section-label">Lo dicen nuestros socios</span>
+                <h2 class="section-title">Clientes que <span>Confían</span></h2>
+                <p class="section-sub">Negocios reales, resultados reales</p>
+            </div>
+            <div class="testimonios-grid">
+                <div class="testimonio-card">
+                    <p class="testimonio-text">"Aumentamos 30% la venta de cerveza gracias a los tequeños de Teque Onda. Los clientes los piden por nombre."</p>
+                    <p class="testimonio-author">Bar La Esquina</p>
+                    <p class="testimonio-negocio">Palermo Hollywood</p>
+                </div>
+                <div class="testimonio-card">
+                    <p class="testimonio-text">"Mejor proveedor que encontramos. Stock siempre disponible y entregas puntuales. Calidad constante."</p>
+                    <p class="testimonio-author">Restaurante El Criollo</p>
+                    <p class="testimonio-negocio">Recoleta</p>
+                </div>
+                <div class="testimonio-card">
+                    <p class="testimonio-text">"Mis clientes los prefieren a cualquier otro. La masa es más crocante y el queso se estira. Muy buena rentabilidad."</p>
+                    <p class="testimonio-author">Kiosco 24hs</p>
+                    <p class="testimonio-negocio">Villa Crespo</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== FORMULARIO ========== -->
+    <div class="section-white" id="formulario">
+        <section>
+            <div class="section-center">
+                <span class="section-label">Empezá hoy</span>
+                <h2 class="section-title">Solicitá Tu <span>Muestra Gratis</span></h2>
+                <p class="section-sub">Completá el formulario y te contactamos en menos de 2 horas</p>
+            </div>
+            <!-- Paso 1: Formulario rápido -->
+            <form class="form-mayorista" id="formPaso1" action="https://formsubmit.co/tequeondabonpland@gmail.com" method="POST">
+                <input type="text" name="_honey" style="display:none">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="https://tequeonda.github.io/gracias-mayorista.html">
+                <input type="hidden" name="muestra_gratis" value="Sí">
+
+                <div class="form-paso-label">
+                    <span class="paso-num">1</span>
+                    <span>Datos básicos — 30 segundos</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Tu nombre *</label>
+                    <input type="text" name="nombre" required placeholder="¿Cómo te llamás?">
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre del negocio *</label>
+                    <input type="text" name="negocio" required placeholder="Bar, restaurante, kiosco...">
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp *</label>
+                    <input type="tel" name="telefono" required placeholder="11-5555-5555">
+                </div>
+
+                <!-- Campos ocultos que se revelan opcionalmente -->
+                <div class="form-extra" id="formExtra" style="display:none">
+                    <div class="form-group">
+                        <label>Tipo de negocio</label>
+                        <select name="tipo_negocio">
+                            <option value="">Seleccioná</option>
+                            <option value="Restaurante">Restaurante</option>
+                            <option value="Bar/Cervecería">Bar / Cervecería</option>
+                            <option value="Kiosco">Kiosco / Almacén</option>
+                            <option value="Catering">Catering / Eventos</option>
+                            <option value="Food Truck">Food Truck</option>
+                            <option value="Supermercado">Supermercado</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad mensual estimada</label>
+                        <select name="cantidad_mensual">
+                            <option value="10-20">10 a 20 packs</option>
+                            <option value="21-49">21 a 49 packs</option>
+                            <option value="50+">Más de 50 packs</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Comentarios o preguntas</label>
+                        <textarea name="comentarios" placeholder="¿Alguna consulta específica?"></textarea>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-extra-toggle" id="btnExtra" onclick="toggleExtra()">
+                    + Agregar más detalles <span id="extraIcon">▾</span>
+                </button>
+
+                <button type="submit" class="btn-submit" onclick="trackConversion('formulario_enviado')">
+                    🎁 Quiero mi muestra gratis →
+                </button>
+
+                <div class="form-garantia">
+                    <span>🔒 Sin spam · Te respondemos en menos de 2 horas</span>
+                </div>
+
+                <p class="form-contact-note">
+                    ¿Preferís hablar directo?<br>
+                    <a href="https://wa.me/5491151522312?text=Hola!%20Me%20interesa%20comprar%20tequeños%20al%20por%20mayor">
+                        💬 Escribinos por WhatsApp ahora
+                    </a>
+                </p>
+            </form>
+        </section>
+    </div>
+
+    <!-- ========== FAQs ========== -->
+    <div class="section-dark2">
+        <section>
+            <div class="section-center">
+                <span class="section-label">Todo lo que necesitás saber</span>
+                <h2 class="section-title">Preguntas <span>Frecuentes</span></h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">¿Cuál es el pedido mínimo? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">20 packs (240 unidades). Podés mezclar diferentes productos.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">¿Cómo se conservan los tequeños? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">En freezer a -18°C se mantienen hasta 6 meses en perfecto estado.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">¿Cómo se preparan? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">Directo del freezer a freidora a 180°C por 5 a 8 minutos. No hace falta descongelar.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">¿Ofrecen crédito? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">Sí, 7 días para clientes recurrentes con al menos 5 pedidos realizados.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">¿Hacen envíos al interior? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">Sí, consultá costo de envío según tu localidad. Trabajamos con transporte refrigerado.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">¿Tienen certificación bromatológica? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">Sí, contamos con habilitación ANMAT y certificados bromatológicos. Te los enviamos con el primer pedido.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">¿Cuánto tarda la entrega? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">En CABA y GBA, 24–48hs. Interior del país, 3–5 días hábiles.</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== CTA FINAL ========== -->
+    <div class="cta-final">
+        <h2>¿Listo para Agregar Tequeños a Tu Menú?</h2>
+        <p>Muestra gratis · Stock permanente · Entrega en 48hs · Asesoramiento incluido</p>
+        <div class="cta-buttons">
+            <a href="#formulario" class="btn btn-gold">Solicitar Muestra Ahora</a>
+            <a href="https://wa.me/5491157048535?text=Hola!%20Me%20interesa%20comprar%20tequeños%20al%20por%20mayor"
+               class="btn btn-green" target="_blank" rel="noopener">
+                <i class="fab fa-whatsapp"></i> Hablar por WhatsApp
+            </a>
+        </div>
+        <p class="cta-contact">
+            📞 <a href="tel:1151522312">11-5152-2312</a> &nbsp;·&nbsp;
+            📧 <a href="/cdn-cgi/l/email-protection#d2a6b7a3a7b7bdbcb6b3b0bdbca2beb3bcb692b5bfb3bbbefcb1bdbf"><span class="__cf_email__" data-cfemail="80f4e5f1f5e5efeee4e1e2efeef0ece1eee4c0e7ede1e9ecaee3efed">[email&#160;protected]</span></a><br>
+            Horario comercial: Lun–Sab 9am a 18pm
+        </p>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <p>&copy; 2026 Teque Onda — Proveedor Mayorista. Todos los derechos reservados.</p>
+        <p><a href="index.html"><i class="fas fa-home"></i> Volver al sitio principal</a></p>
+    </footer>
+
+    <!-- WhatsApp flotante -->
+    <a href="https://wa.me/5491151522312?text=Hola!%20Me%20interesa%20comprar%20tequeños%20al%20por%20mayor"
+       class="whatsapp" onclick="trackConversion('whatsapp_float')" aria-label="WhatsApp Mayorista" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Toggle campos extra del formulario
+        function toggleExtra() {
+            const extra  = document.getElementById('formExtra');
+            const icon   = document.getElementById('extraIcon');
+            const btn    = document.getElementById('btnExtra');
+            const open   = extra.style.display === 'none';
+            extra.style.display = open ? 'block' : 'none';
+            icon.textContent    = open ? '▴' : '▾';
+            btn.textContent     = (open ? '− Ocultar detalles ' : '+ Agregar más detalles ');
+            btn.appendChild(icon);
+        }
+
+        // Calculadora
+        function calcular() {
+            const packs       = parseInt(document.getElementById('packs').value) || 0;
+            const precioVenta = parseInt(document.getElementById('precioVenta').value) || 0;
+            const costo       = parseInt(document.getElementById('volumen').value) || 0;
+
+            const costoSemanal    = packs * costo;
+            const ingresosSemanal = packs * precioVenta;
+            const margenPack      = precioVenta - costo;
+            const margenPct       = costo > 0 ? Math.round((margenPack / costo) * 100) : 0;
+            const gananciaMensual = (ingresosSemanal - costoSemanal) * 4;
+
+            const fmt = n => '$' + n.toLocaleString('es-AR');
+            document.getElementById('costoPorpacks').textContent   = fmt(costo);
+            document.getElementById('costoSemanal').textContent     = fmt(costoSemanal);
+            document.getElementById('ingresosSemanal').textContent  = fmt(ingresosSemanal);
+            document.getElementById('margenpacks').textContent      = fmt(margenPack);
+            document.getElementById('margenPorcentaje').textContent = margenPct + '%';
+            document.getElementById('gananciaMensual').textContent  = fmt(gananciaMensual);
+        }
+
+        document.getElementById('packs').addEventListener('input', calcular);
+        document.getElementById('precioVenta').addEventListener('input', calcular);
+        document.getElementById('volumen').addEventListener('change', calcular);
+        calcular();
+
+        // FAQs accordion
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!isOpen) item.classList.add('open');
+            });
+        });
+    </script>
+</body>
+</html>
