@@ -282,37 +282,31 @@
     recognition.start();
   }
 
-  async function procesarTranscript() {
+  function procesarTranscript() {
     const texto = transcriptAcum.trim();
     if (!texto) { setBtn('idle'); setStatus('No se detectó audio. Intentá de nuevo.', true); return; }
-    setBtn('load'); setStatus('Extrayendo tareas con IA...');
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: 'Extraés tareas de un texto dictado en español rioplatense. Respondé ÚNICAMENTE con JSON válido: {"tareas":["tarea 1","tarea 2",...]}. Sin markdown ni texto extra. Corregí errores de transcripción. Capitalizá bien. No inventes tareas.',
-          messages: [{ role: 'user', content: 'Texto dictado: "' + texto + '"' }]
-        })
-      });
-      const data = await res.json();
-      const raw = (data.content.find(b => b.type==='text') || {}).text || '{}';
-      let parsed;
-      try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); } catch(e) { throw new Error('JSON inválido'); }
-      const nuevas = parsed.tareas || [];
-      if (nuevas.length === 0) { setStatus('No encontré tareas. Intentá de nuevo.', true); setBtn('idle'); return; }
+    setBtn('load'); setStatus('Procesando...');
 
-      const preview = nuevas.map((t,i) => (i+1)+'. '+t).join('\n');
-      const reemplazar = confirm('Se detectaron ' + nuevas.length + ' tarea(s):\n\n' + preview + '\n\n¿Reemplazar la lista actual con estas?');
-      if (reemplazar) { tareas = nuevas.map(t => ({ id: nextId++, texto: t, done: false })); }
-      else { nuevas.forEach(t => tareas.push({ id: nextId++, texto: t, done: false })); }
-      guardarTareas(); render();
-      setBtn('idle'); setStatus('✓ ' + nuevas.length + ' tarea' + (nuevas.length>1?'s':'') + ' cargada' + (nuevas.length>1?'s':''));
-    } catch(err) {
-      setBtn('idle'); setStatus('Error al procesar. Intentá de nuevo.', true); console.error(err);
-    }
+    // Separar por patrones comunes del habla en español
+    const sepRe = /(?:,|;|\.\s|\sy\s+(?=(?:la\s)?(?:siguiente|que\s(?:sigue|viene)|otra|también|además|después|luego))|(?:\s|^)(?:la\s)?(?:primera|segunda|tercera|cuarta|quinta|sexta|séptima|octava|novena|décima)\s+(?:tarea\s+)?(?:es\s+)?|(?:\s|^)\d+[\.\)]\s*)/gi;
+
+    const partes = texto.split(sepRe)
+      .map(p => p ? p.trim() : '')
+      .filter(p => p && p.length > 3);
+
+    const nuevas = partes.length > 1 ? partes.map(capitalizar) : [capitalizar(texto)];
+
+    const preview = nuevas.map((t,i) => (i+1)+'. '+t).join('\n');
+    const reemplazar = confirm('Se detectaron ' + nuevas.length + ' tarea(s):\n\n' + preview + '\n\n¿Reemplazar la lista actual con estas?');
+    if (reemplazar) { tareas = nuevas.map(t => ({ id: nextId++, texto: t, done: false })); }
+    else { nuevas.forEach(t => tareas.push({ id: nextId++, texto: t, done: false })); }
+    guardarTareas(); render();
+    setBtn('idle'); setStatus('✓ ' + nuevas.length + ' tarea' + (nuevas.length>1?'s':'') + ' cargada' + (nuevas.length>1?'s':''));
+  }
+
+  function capitalizar(str) {
+    str = str.trim();
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   render();
