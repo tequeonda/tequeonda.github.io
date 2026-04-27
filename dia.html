@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día de Hoy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-dim: #8a6f30;
+    --bg: #0f0e0b;
+    --surface: #1a1814;
+    --border: #2e2a20;
+    --done-bg: #141a10;
+    --done-text: #4a5e3a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: #e8e0cc;
+    font-family: 'Fira Sans', sans-serif;
+    min-height: 100vh; padding: 28px 20px 100px;
+    user-select: none; -webkit-user-select: none;
+  }
+  header { margin-bottom: 28px; }
+  .fecha { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 3px; color: var(--gold-dim); margin-bottom: 6px; }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; color: var(--gold); line-height: 1; }
+  .progress-bar-wrap { margin-top: 16px; background: var(--border); border-radius: 2px; height: 3px; overflow: hidden; }
+  .progress-bar { height: 100%; background: var(--gold); transition: width 0.5s ease; border-radius: 2px; }
+  .progress-label { font-size: 11px; color: var(--gold-dim); margin-top: 6px; letter-spacing: 1px; }
+  .section-label { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 3px; color: var(--gold-dim); margin: 24px 0 8px; padding-left: 2px; }
+  .tasks { display: flex; flex-direction: column; gap: 8px; }
+  .task {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 14px 14px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+    transition: border-color 0.2s, background 0.3s, transform 0.15s, box-shadow 0.15s;
+    position: relative; touch-action: pan-y; -webkit-tap-highlight-color: transparent;
+  }
+  .task.dragging { opacity: 0.5; transform: scale(0.97); }
+  .task.drag-over { border-color: var(--gold); background: #221e14; }
+  .task.ghost {
+    position: fixed; z-index: 1000; pointer-events: none;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.6); border-color: var(--gold-dim);
+    opacity: 0.95; transform: rotate(1.5deg) scale(1.02); transition: none;
+  }
+  .task.done { background: var(--done-bg); border-color: #2a3520; }
+  .task.done .task-label { color: var(--done-text); text-decoration: line-through; text-decoration-color: #3a4e2a; }
+  .task.done .task-num { color: #3a4e2a; }
+  .drag-handle { color: #3a3528; font-size: 16px; flex-shrink: 0; line-height: 1; cursor: grab; padding: 2px 0; }
+  .task.done .drag-handle { color: #2a3020; }
+  .checkbox { width: 22px; height: 22px; border: 2px solid var(--gold-dim); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s, border-color 0.2s; }
+  .task.done .checkbox { background: #4a7a3a; border-color: #4a7a3a; }
+  .checkmark { display: none; color: #fff; font-size: 13px; font-weight: 700; }
+  .task.done .checkmark { display: block; }
+  .task-body { flex: 1; min-width: 0; }
+  .task-num { font-family: 'Bebas Neue', sans-serif; font-size: 10px; letter-spacing: 2px; color: var(--gold-dim); margin-bottom: 2px; }
+  .task-label { font-size: 14px; font-weight: 400; color: #e8e0cc; line-height: 1.3; transition: color 0.3s; word-break: break-word; }
+  .add-section { margin-top: 28px; display: flex; gap: 10px; }
+  input[type="text"] {
+    flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    color: #e8e0cc; font-family: 'Fira Sans', sans-serif; font-size: 14px; padding: 12px 14px; outline: none; transition: border-color 0.2s;
+  }
+  input[type="text"]:focus { border-color: var(--gold-dim); }
+  input[type="text"]::placeholder { color: #4a4535; }
+  button.add-btn { background: var(--gold); border: none; border-radius: 6px; color: #0f0e0b; font-family: 'Bebas Neue', sans-serif; font-size: 20px; padding: 0 20px; cursor: pointer; transition: opacity 0.2s; }
+  button.add-btn:active { opacity: 0.7; }
+
+  .voice-section { margin-top: 0; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .voice-btn {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px;
+    padding: 14px 20px; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  }
+  .voice-btn:active { background: #221e14; border-color: var(--gold-dim); }
+  .voice-btn.recording { border-color: #c04040; background: #1a1010; color: #e06060; animation: pulse 1s infinite; }
+  .voice-btn.loading { border-color: var(--gold-dim); color: var(--gold-dim); pointer-events: none; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .voice-status { font-size: 12px; color: var(--gold-dim); text-align: center; min-height: 18px; letter-spacing: 0.5px; padding: 0 4px; }
+  .voice-status.error { color: #c04040; }
+
+  .hint { font-size: 11px; color: #3a3528; margin-top: 14px; letter-spacing: 0.5px; text-align: center; }
+  .reset-btn { display: block; margin: 10px auto 0; background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--gold-dim); font-family: 'Fira Sans', sans-serif; font-size: 12px; letter-spacing: 1px; padding: 8px 18px; cursor: pointer; }
+  .reset-btn:active { color: var(--gold); border-color: var(--gold-dim); }
+  .all-done { display: none; text-align: center; margin-top: 36px; font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--gold); letter-spacing: 2px; animation: fadeIn 0.8s forwards; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="fecha" id="fecha"></div>
+  <h1>HOY</h1>
+  <div class="progress-bar-wrap"><div class="progress-bar" id="bar" style="width:0%"></div></div>
+  <div class="progress-label" id="prog-label">0 de 0 tareas</div>
+</header>
+
+<div class="voice-section">
+  <button class="voice-btn" id="voice-btn" onclick="toggleVoice()">
+    <span>🎙️</span>
+    <span id="voice-lbl">DICTAR TAREAS DEL DÍA</span>
+  </button>
+  <div class="voice-status" id="voice-status"></div>
+</div>
+
+<div id="app"></div>
+
+<div class="add-section">
+  <input type="text" id="nueva" placeholder="Agregar tarea..." />
+  <button class="add-btn" onclick="agregarTarea()">+</button>
+</div>
+
+<div class="hint">Mantené presionada una tarea para moverla · Tocá para tildar</div>
+<button class="reset-btn" onclick="resetearDia()">↺ Nuevo día</button>
+<div class="all-done" id="all-done">¡Todo listo! 🔥</div>
+
+<script>
+  const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const hoy = new Date();
+  document.getElementById('fecha').textContent = dias[hoy.getDay()] + ' ' + hoy.getDate() + ' de ' + meses[hoy.getMonth()];
+
+  function cargarTareas() {
+    try { const g = localStorage.getItem('tareas_dia'); if (g) return JSON.parse(g); } catch(e) {}
+    return [];
+  }
+  function guardarTareas() {
+    try { localStorage.setItem('tareas_dia', JSON.stringify(tareas)); } catch(e) {}
+  }
+
+  let tareas = cargarTareas();
+  let nextId = tareas.length > 0 ? Math.max(...tareas.map(t => t.id)) + 1 : 0;
+  let dragId = null, ghost = null, ghostOffsetY = 0, longPressTimer = null, isDragging = false, startY = 0;
+
+  function render() {
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+    const pending = tareas.filter(t => !t.done);
+    const done = tareas.filter(t => t.done);
+    const total = tareas.length, doneCount = done.length;
+    const pct = total ? Math.round(doneCount/total*100) : 0;
+    document.getElementById('bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = doneCount + ' de ' + total + ' tarea' + (total!==1?'s':'');
+
+    if (done.length > 0) {
+      const lbl = document.createElement('div'); lbl.className = 'section-label'; lbl.textContent = '✓ COMPLETADAS'; app.appendChild(lbl);
+      const w = document.createElement('div'); w.className = 'tasks'; done.forEach(t => w.appendChild(makeTask(t))); app.appendChild(w);
+    }
+    if (pending.length > 0) {
+      const lbl = document.createElement('div'); lbl.className = 'section-label'; lbl.textContent = done.length > 0 ? '— PENDIENTES' : '— TAREAS'; app.appendChild(lbl);
+      const w = document.createElement('div'); w.className = 'tasks'; pending.forEach(t => w.appendChild(makeTask(t))); app.appendChild(w);
+    }
+    if (total === 0) {
+      const e = document.createElement('div');
+      e.style.cssText = 'text-align:center;color:#3a3528;font-size:13px;margin-top:40px;line-height:2.2';
+      e.innerHTML = 'No hay tareas todavía.<br>Dictá con el micrófono o escribí abajo.';
+      app.appendChild(e);
+    }
+    document.getElementById('all-done').style.display = (total > 0 && doneCount === total) ? 'block' : 'none';
+  }
+
+  function makeTask(t) {
+    const div = document.createElement('div');
+    div.className = 'task' + (t.done ? ' done' : '');
+    div.dataset.id = t.id;
+    const idx = tareas.findIndex(x => x.id === t.id);
+    div.innerHTML = '<div class="drag-handle">⠿</div><div class="checkbox"><span class="checkmark">✓</span></div><div class="task-body"><div class="task-num">TAREA ' + (idx+1) + '</div><div class="task-label">' + t.texto + '</div></div>';
+    div.addEventListener('click', () => { if (isDragging) return; t.done = !t.done; guardarTareas(); render(); });
+    div.addEventListener('touchstart', onTouchStart, { passive: true });
+    return div;
+  }
+
+  function onTouchStart(e) {
+    const el = e.currentTarget;
+    const touch = e.touches[0];
+    startY = touch.clientY; isDragging = false;
+    longPressTimer = setTimeout(() => startDrag(el, touch), 400);
+  }
+
+  document.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    if (!isDragging) { if (Math.abs(touch.clientY - startY) > 10) clearTimeout(longPressTimer); return; }
+    e.preventDefault();
+    ghost.style.top = (touch.clientY - ghostOffsetY) + 'px';
+    ghost.style.display = 'none';
+    const under = document.elementFromPoint(touch.clientX, touch.clientY);
+    ghost.style.display = '';
+    const tgt = under ? under.closest('.task') : null;
+    document.querySelectorAll('.task.drag-over').forEach(el => el.classList.remove('drag-over'));
+    if (tgt && tgt.dataset.id !== String(dragId)) tgt.classList.add('drag-over');
+  }, { passive: false });
+
+  document.addEventListener('touchend', (e) => {
+    clearTimeout(longPressTimer);
+    if (!isDragging) return;
+    const touch = e.changedTouches[0];
+    ghost.style.display = 'none';
+    const under = document.elementFromPoint(touch.clientX, touch.clientY);
+    ghost.style.display = '';
+    const tgt = under ? under.closest('.task') : null;
+    if (tgt && tgt.dataset.id !== String(dragId)) {
+      const fi = tareas.findIndex(t => t.id === dragId);
+      const ti = tareas.findIndex(t => t.id === Number(tgt.dataset.id));
+      if (fi !== -1 && ti !== -1) { const [m] = tareas.splice(fi, 1); tareas.splice(ti, 0, m); guardarTareas(); }
+    }
+    if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+    ghost = null; dragId = null; isDragging = false;
+    document.querySelectorAll('.task.dragging,.task.drag-over').forEach(el => el.classList.remove('dragging','drag-over'));
+    render();
+  });
+
+  function startDrag(el, touch) {
+    isDragging = true; dragId = Number(el.dataset.id);
+    const rect = el.getBoundingClientRect();
+    ghostOffsetY = touch.clientY - rect.top;
+    ghost = el.cloneNode(true);
+    ghost.classList.add('ghost');
+    ghost.style.width = rect.width + 'px';
+    ghost.style.left = rect.left + 'px';
+    ghost.style.top = (touch.clientY - ghostOffsetY) + 'px';
+    document.body.appendChild(ghost);
+    el.classList.add('dragging');
+    if (navigator.vibrate) navigator.vibrate(30);
+  }
+
+  function agregarTarea() {
+    const input = document.getElementById('nueva');
+    const val = input.value.trim(); if (!val) return;
+    tareas.push({ id: nextId++, texto: val, done: false });
+    input.value = ''; guardarTareas(); render();
+  }
+  document.getElementById('nueva').addEventListener('keydown', e => { if (e.key === 'Enter') agregarTarea(); });
+
+  function resetearDia() {
+    if (!confirm('¿Limpiar todas las tareas y empezar de cero?')) return;
+    tareas = []; nextId = 0; guardarTareas(); render();
+  }
+
+  // --- VOICE ---
+  let recognition = null, isRecording = false, transcriptAcum = '';
+
+  function setStatus(msg, err) {
+    const el = document.getElementById('voice-status');
+    el.textContent = msg; el.className = 'voice-status' + (err ? ' error' : '');
+  }
+  function setBtn(state) {
+    const btn = document.getElementById('voice-btn'), lbl = document.getElementById('voice-lbl');
+    if (state==='idle') { btn.className='voice-btn'; lbl.textContent='DICTAR TAREAS DEL DÍA'; }
+    else if (state==='rec') { btn.className='voice-btn recording'; lbl.textContent='GRABANDO... TOCÁ PARA DETENER'; }
+    else if (state==='load') { btn.className='voice-btn loading'; lbl.textContent='PROCESANDO...'; }
+  }
+
+  function toggleVoice() {
+    if (isRecording) { isRecording = false; if (recognition) recognition.stop(); }
+    else startRecording();
+  }
+
+  function startRecording() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setStatus('Usá Chrome o Safari para el micrófono.', true); return; }
+    transcriptAcum = '';
+    recognition = new SR();
+    recognition.lang = 'es-AR';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onstart = () => { isRecording = true; setBtn('rec'); setStatus('Escuchando... hablá tus tareas'); };
+
+    recognition.onresult = (e) => {
+      let interim = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) transcriptAcum += t + ' ';
+        else interim = t;
+      }
+      const preview = (transcriptAcum + interim).trim().slice(-50);
+      setStatus('...' + preview);
+    };
+
+    recognition.onerror = (e) => { isRecording = false; setBtn('idle'); setStatus('Error: ' + e.error, true); };
+    recognition.onend = () => { if (!isRecording) procesarTranscript(); else { isRecording = false; procesarTranscript(); } };
+    recognition.start();
+  }
+
+  async function procesarTranscript() {
+    const texto = transcriptAcum.trim();
+    if (!texto) { setBtn('idle'); setStatus('No se detectó audio. Intentá de nuevo.', true); return; }
+    setBtn('load'); setStatus('Extrayendo tareas con IA...');
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: 'Extraés tareas de un texto dictado en español rioplatense. Respondé ÚNICAMENTE con JSON válido: {"tareas":["tarea 1","tarea 2",...]}. Sin markdown ni texto extra. Corregí errores de transcripción. Capitalizá bien. No inventes tareas.',
+          messages: [{ role: 'user', content: 'Texto dictado: "' + texto + '"' }]
+        })
+      });
+      const data = await res.json();
+      const raw = (data.content.find(b => b.type==='text') || {}).text || '{}';
+      let parsed;
+      try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); } catch(e) { throw new Error('JSON inválido'); }
+      const nuevas = parsed.tareas || [];
+      if (nuevas.length === 0) { setStatus('No encontré tareas. Intentá de nuevo.', true); setBtn('idle'); return; }
+
+      const preview = nuevas.map((t,i) => (i+1)+'. '+t).join('\n');
+      const reemplazar = confirm('Se detectaron ' + nuevas.length + ' tarea(s):\n\n' + preview + '\n\n¿Reemplazar la lista actual con estas?');
+      if (reemplazar) { tareas = nuevas.map(t => ({ id: nextId++, texto: t, done: false })); }
+      else { nuevas.forEach(t => tareas.push({ id: nextId++, texto: t, done: false })); }
+      guardarTareas(); render();
+      setBtn('idle'); setStatus('✓ ' + nuevas.length + ' tarea' + (nuevas.length>1?'s':'') + ' cargada' + (nuevas.length>1?'s':''));
+    } catch(err) {
+      setBtn('idle'); setStatus('Error al procesar. Intentá de nuevo.', true); console.error(err);
+    }
+  }
+
+  render();
+</script>
+</body>
+</html>
