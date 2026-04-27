@@ -282,31 +282,70 @@
     recognition.start();
   }
 
-  function procesarTranscript() {
+  async function procesarTranscript() {
     const texto = transcriptAcum.trim();
     if (!texto) { setBtn('idle'); setStatus('No se detectó audio. Intentá de nuevo.', true); return; }
-    setBtn('load'); setStatus('Procesando...');
-
-    // Separar por patrones comunes del habla en español
-    const sepRe = /(?:,|;|\.\s|\sy\s+(?=(?:la\s)?(?:siguiente|que\s(?:sigue|viene)|otra|también|además|después|luego))|(?:\s|^)(?:la\s)?(?:primera|segunda|tercera|cuarta|quinta|sexta|séptima|octava|novena|décima)\s+(?:tarea\s+)?(?:es\s+)?|(?:\s|^)\d+[\.\)]\s*)/gi;
-
-    const partes = texto.split(sepRe)
-      .map(p => p ? p.trim() : '')
-      .filter(p => p && p.length > 3);
-
-    const nuevas = partes.length > 1 ? partes.map(capitalizar) : [capitalizar(texto)];
-
-    const preview = nuevas.map((t,i) => (i+1)+'. '+t).join('\n');
-    const reemplazar = confirm('Se detectaron ' + nuevas.length + ' tarea(s):\n\n' + preview + '\n\n¿Reemplazar la lista actual con estas?');
-    if (reemplazar) { tareas = nuevas.map(t => ({ id: nextId++, texto: t, done: false })); }
-    else { nuevas.forEach(t => tareas.push({ id: nextId++, texto: t, done: false })); }
-    guardarTareas(); render();
-    setBtn('idle'); setStatus('✓ ' + nuevas.length + ' tarea' + (nuevas.length>1?'s':'') + ' cargada' + (nuevas.length>1?'s':''));
+    const apiKey = getApiKey();
+    if (!apiKey) { pedirApiKey(); return; }
+    setBtn('load'); setStatus('Extrayendo tareas con IA...');
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': getApiKey(),
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 1000,
+          system: 'Sos un asistente que extrae tareas de texto dictado por voz en español rioplatense. El texto puede tener repeticiones, errores de transcripcion o ruido. Tu trabajo: identificar las tareas reales, eliminar repeticiones, y devolver cada tarea limpia. Responde UNICAMENTE con JSON valido: {"tareas":["tarea 1","tarea 2",...]}. Sin markdown, sin explicaciones, solo el JSON.',
+          messages: [{ role: 'user', content: 'Texto dictado (puede tener errores): "' + texto + '"' }]
+        })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      const raw = (data.content.find(b => b.type==='text') || {}).text || '{}';
+      let parsed;
+      try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); } catch(e) { throw new Error('JSON invalido'); }
+      const nuevas = parsed.tareas || [];
+      if (nuevas.length === 0) { setStatus('No encontré tareas. Intentá de nuevo.', true); setBtn('idle'); return; }
+      const preview = nuevas.map((t,i) => (i+1)+'. '+t).join('\n');
+      const reemplazar = confirm('Se detectaron ' + nuevas.length + ' tarea(s):\n\n' + preview + '\n\n¿Reemplazar la lista actual con estas?');
+      if (reemplazar) { tareas = nuevas.map(t => ({ id: nextId++, texto: t, done: false })); }
+      else { nuevas.forEach(t => tareas.push({ id: nextId++, texto: t, done: false })); }
+      guardarTareas(); render();
+      setBtn('idle'); setStatus('✓ ' + nuevas.length + ' tarea' + (nuevas.length>1?'s':'') + ' cargada' + (nuevas.length>1?'s':''));
+    } catch(err) {
+      setBtn('idle'); setStatus('Error: ' + err.message, true); console.error(err);
+    }
   }
 
   function capitalizar(str) {
     str = str.trim();
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function getApiKey() {
+    try { return localStorage.getItem('anthropic_key') || ''; } catch(e) { return ''; }
+  }
+
+  function pedirApiKey() {
+    const k = prompt('Ingresá tu API key de Anthropic (se guarda solo en tu dispositivo):');
+    if (k && k.trim().startsWith('sk-ant-')) {
+      try { localStorage.setItem('anthropic_key', k.trim()); } catch(e) {}
+      setStatus('✓ API key guardada. Ahora dictá tus tareas.', false);
+    } else if (k) {
+      setStatus('API key inválida. Debe empezar con sk-ant-', true);
+    }
+  }
+
+  // Si no hay key guardada, pedirla al abrir
+  if (!getApiKey()) {
+    setTimeout(() => {
+      setStatus('Tocá el micrófono para configurar tu API key la primera vez.', false);
+    }, 500);
   }
 
   render();
