@@ -120,6 +120,24 @@
   .project-add input::placeholder { color: #4a3a5e; }
   .project-add button { background: var(--proj-dim); border: none; border-radius: 5px; color: #fff; font-size: 16px; width: 36px; cursor: pointer; }
 
+  /* Project swipe actions */
+  .project-card { position: relative; overflow: hidden; transition: border-color 0.2s; touch-action: pan-y; }
+  .project-header { position: relative; }
+  .proj-actions {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    display: flex; align-items: stretch;
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+    z-index: 10;
+  }
+  .project-card.show-proj-actions .proj-actions { transform: translateX(0); }
+  .project-card.show-proj-actions .project-name,
+  .project-card.show-proj-actions .project-count,
+  .project-card.show-proj-actions .project-toggle { opacity: 0.3; }
+  .project-card.dragging-proj { opacity: 0.45; transform: scale(0.97); }
+  .project-card.drag-over-proj { border-color: var(--proj-accent); }
+  .ghost-proj { position: fixed; z-index: 1000; pointer-events: none; box-shadow: 0 12px 32px rgba(0,0,0,0.7); opacity: 0.95; transform: rotate(1deg) scale(1.02); transition: none; border-radius: 10px; }
+
   .add-project-btn { width: 100%; background: none; border: 1px dashed var(--proj-border); border-radius: 8px; color: var(--proj-dim); font-family: 'Fira Sans', sans-serif; font-size: 13px; padding: 12px; cursor: pointer; letter-spacing: 1px; margin-top: 4px; }
   .add-project-btn:active { border-color: var(--proj-accent); color: var(--proj-accent); }
 
@@ -421,19 +439,26 @@
   }
 
   // PROJECTS
+  let projDragId=null, projGhost=null, projGhostOffsetY=0, projLongTimer=null, projIsDragging=false, projSwipeStartX=0, projSwipeStartY=0, projSwiping=false;
+
   function makeProject(p) {
     const card = document.createElement('div');
     card.className = 'project-card' + (p.collapsed ? ' collapsed' : '');
+    card.dataset.pid = p.id;
 
     const doneCount = p.subtareas.filter(s => s.done).length;
     const total = p.subtareas.length;
 
     card.innerHTML = `
-      <div class="project-header">
+      <div class="project-header" style="position:relative;overflow:hidden">
         <div class="project-dot"></div>
         <div class="project-name">${p.nombre}</div>
         <div class="project-count">${doneCount}/${total}</div>
         <div class="project-toggle">▾</div>
+        <div class="proj-actions">
+          <button class="action-btn action-edit" style="font-size:16px">✏️</button>
+          <button class="action-btn action-delete" style="font-size:16px">🗑️</button>
+        </div>
       </div>
       <div class="project-body">
         <div class="subtasks-wrap"></div>
@@ -443,9 +468,30 @@
         </div>
       </div>`;
 
-    card.querySelector('.project-header').addEventListener('click', () => {
+    // toggle collapse on tap (only if not swiped)
+    card.querySelector('.project-header').addEventListener('click', (e) => {
+      if (card.classList.contains('show-proj-actions')) { hideAllProjActions(); return; }
+      if (e.target.closest('.proj-actions')) return;
       p.collapsed = !p.collapsed; save(); render();
     });
+
+    // edit/delete buttons
+    card.querySelector('.action-edit').addEventListener('click', e => {
+      e.stopPropagation(); hideAllProjActions();
+      openModal('EDITAR PROYECTO', p.nombre, val => { p.nombre = val; save(); render(); });
+    });
+    card.querySelector('.action-delete').addEventListener('click', e => {
+      e.stopPropagation(); hideAllProjActions();
+      if (confirm('¿Eliminar "' + p.nombre + '" y todas sus acciones?')) {
+        proyectos = proyectos.filter(x => x.id !== p.id); save(); render();
+      }
+    });
+
+    // swipe left → actions, long press → drag
+    const header = card.querySelector('.project-header');
+    header.addEventListener('touchstart', e => onProjTouchStart(e, card), { passive: true });
+    header.addEventListener('touchmove', e => onProjTouchMove(e, card), { passive: false });
+    header.addEventListener('touchend', e => onProjTouchEnd(e, card), { passive: true });
 
     // subtasks
     const wrap = card.querySelector('.subtasks-wrap');
@@ -464,23 +510,83 @@
     addInput.addEventListener('keydown', e => { if (e.key==='Enter') addSub(); });
     addInput.addEventListener('click', e => e.stopPropagation());
 
-    // long press header to edit/delete project
-    let projTimer;
-    card.querySelector('.project-header').addEventListener('touchstart', () => {
-      projTimer = setTimeout(() => {
-        const action = confirm('"' + p.nombre + '"\n\nOK = Editar nombre\nCancelar = Eliminar proyecto');
-        if (action) {
-          openModal('EDITAR PROYECTO', p.nombre, val => { p.nombre = val; save(); render(); });
-        } else {
-          if (confirm('¿Eliminar el proyecto "' + p.nombre + '" y todas sus acciones?')) {
-            proyectos = proyectos.filter(x => x.id !== p.id); save(); render();
-          }
-        }
-      }, 600);
-    }, { passive: true });
-    card.querySelector('.project-header').addEventListener('touchend', () => clearTimeout(projTimer));
-
     return card;
+  }
+
+  function hideAllProjActions() {
+    document.querySelectorAll('.project-card.show-proj-actions').forEach(el => el.classList.remove('show-proj-actions'));
+  }
+
+  function onProjTouchStart(e, card) {
+    projSwipeStartX = e.touches[0].clientX;
+    projSwipeStartY = e.touches[0].clientY;
+    projSwiping = false; projIsDragging = false;
+    projLongTimer = setTimeout(() => {
+      if (!projSwiping) startProjDrag(card, e.touches[0]);
+    }, 400);
+  }
+
+  function onProjTouchMove(e, card) {
+    const touch = e.touches[0];
+    const dx = projSwipeStartX - touch.clientX;
+    const dy = Math.abs(touch.clientY - projSwipeStartY);
+
+    if (projIsDragging) {
+      e.preventDefault();
+      if (projGhost) projGhost.style.top = (touch.clientY - projGhostOffsetY) + 'px';
+      projGhost.style.display = 'none';
+      const under = document.elementFromPoint(touch.clientX, touch.clientY);
+      projGhost.style.display = '';
+      const tgt = under ? under.closest('.project-card') : null;
+      document.querySelectorAll('.project-card.drag-over-proj').forEach(el => el.classList.remove('drag-over-proj'));
+      if (tgt && tgt.dataset.pid !== String(projDragId)) tgt.classList.add('drag-over-proj');
+      return;
+    }
+
+    if (!projSwiping && dx > 15 && dx > dy) {
+      projSwiping = true;
+      clearTimeout(projLongTimer);
+      hideAllProjActions();
+      card.classList.add('show-proj-actions');
+      if (navigator.vibrate) navigator.vibrate(20);
+      return;
+    }
+    if (dy > 10) clearTimeout(projLongTimer);
+  }
+
+  function onProjTouchEnd(e, card) {
+    clearTimeout(projLongTimer);
+    if (projIsDragging) {
+      const touch = e.changedTouches[0];
+      projGhost.style.display = 'none';
+      const under = document.elementFromPoint(touch.clientX, touch.clientY);
+      projGhost.style.display = '';
+      const tgt = under ? under.closest('.project-card') : null;
+      if (tgt && tgt.dataset.pid !== String(projDragId)) {
+        const fi = proyectos.findIndex(p => p.id === projDragId);
+        const ti = proyectos.findIndex(p => p.id === Number(tgt.dataset.pid));
+        if (fi !== -1 && ti !== -1) { const [m] = proyectos.splice(fi,1); proyectos.splice(ti,0,m); save(); }
+      }
+      if (projGhost && projGhost.parentNode) projGhost.parentNode.removeChild(projGhost);
+      projGhost=null; projDragId=null; projIsDragging=false;
+      document.querySelectorAll('.project-card.dragging-proj,.project-card.drag-over-proj').forEach(el=>el.classList.remove('dragging-proj','drag-over-proj'));
+      render();
+    }
+    projSwiping = false;
+  }
+
+  function startProjDrag(card, touch) {
+    projIsDragging = true; projDragId = Number(card.dataset.pid);
+    const rect = card.getBoundingClientRect();
+    projGhostOffsetY = touch.clientY - rect.top;
+    projGhost = card.cloneNode(true);
+    projGhost.classList.add('ghost-proj');
+    projGhost.style.width = rect.width + 'px'; projGhost.style.left = rect.left + 'px';
+    projGhost.style.top = (touch.clientY - projGhostOffsetY) + 'px';
+    projGhost.style.background = '#1a1422';
+    document.body.appendChild(projGhost);
+    card.classList.add('dragging-proj');
+    if (navigator.vibrate) navigator.vibrate(30);
   }
 
   function makeSubtask(p, s) {
