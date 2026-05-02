@@ -7,11 +7,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --gold: #C9A84C; --gold-dim: #8a6f30;
+    --gold: #D4860A; --gold-dim: #9a5f08;
     --bg: #0f0e0b; --surface: #1a1814; --border: #2e2a20;
     --done-bg: #141a10; --done-text: #4a5e3a;
-    --proj: #1a1422; --proj-border: #3a2a4a; --proj-accent: #9b6fc4;
-    --proj-dim: #5a3f7a;
+    --proj: #0e1f08; --proj-border: #5a9e0a; --proj-accent: #7bd11a;
+    --proj-dim: #5a8a0a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: #e8e0cc; font-family: 'Fira Sans', sans-serif; min-height: 100vh; padding: 28px 20px 100px; user-select: none; -webkit-user-select: none; }
@@ -77,7 +77,7 @@
   .task.done .checkmark { display: block; }
   .task-body { flex: 1; min-width: 0; }
   .task-num { font-family: 'Bebas Neue', sans-serif; font-size: 10px; letter-spacing: 2px; color: var(--gold-dim); margin-bottom: 1px; }
-  .task-label { font-size: 14px; color: #e8e0cc; line-height: 1.3; word-break: break-word; transition: color 0.3s; }
+  .task-label { font-size: 17px; color: #e8e0cc; line-height: 1.35; word-break: break-word; transition: color 0.3s; }
 
   /* PROJECTS */
   .projects { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
@@ -91,7 +91,7 @@
     padding: 14px 14px 12px; cursor: pointer;
   }
   .project-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--proj-accent); flex-shrink: 0; }
-  .project-name { font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 1px; color: var(--proj-accent); flex: 1; }
+  .project-name { font-family: 'Bebas Neue', sans-serif; font-size: 21px; letter-spacing: 1px; color: var(--proj-accent); flex: 1; }
   .project-count { font-size: 11px; color: var(--proj-dim); letter-spacing: 1px; }
   .project-toggle { font-size: 12px; color: var(--proj-dim); transition: transform 0.2s; }
   .project-card.collapsed .project-toggle { transform: rotate(-90deg); }
@@ -100,24 +100,24 @@
   .project-card.collapsed .project-body { display: none; }
 
   .subtask {
-    background: #201828; border: 1px solid #2e2040; border-radius: 6px;
+    background: #111f08; border: 1px solid #3a6010; border-radius: 6px;
     padding: 10px 12px; display: flex; align-items: center; gap: 10px;
     touch-action: pan-y; -webkit-tap-highlight-color: transparent;
     position: relative; overflow: hidden; transition: background 0.2s;
   }
-  .subtask.done { background: #161020; border-color: #2a1f35; }
-  .subtask.done .subtask-label { color: #5a4a6e; text-decoration: line-through; text-decoration-color: #3a2a4e; }
+  .subtask.done { background: #0c1806; border-color: #2a4a10; }
+  .subtask.done .subtask-label { color: #4a6a30; text-decoration: line-through; text-decoration-color: #2a4a10; }
   .sub-checkbox { width: 19px; height: 19px; border: 2px solid var(--proj-dim); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: background 0.2s; }
   .subtask.done .sub-checkbox { background: var(--proj-dim); border-color: var(--proj-dim); }
   .sub-check { display: none; color: #fff; font-size: 11px; font-weight: 700; }
   .subtask.done .sub-check { display: block; }
-  .subtask-label { font-size: 13px; color: #c8b8e0; flex: 1; word-break: break-word; }
+  .subtask-label { font-size: 15px; color: #b8e090; flex: 1; word-break: break-word; }
   .subtask-actions { position: absolute; right: 0; top: 0; bottom: 0; display: flex; align-items: stretch; transform: translateX(100%); transition: transform 0.22s; }
   .subtask.show-actions .subtask-actions { transform: translateX(0); }
 
   .project-add { display: flex; gap: 8px; margin-top: 4px; }
-  .project-add input { flex: 1; background: #16101e; border: 1px solid #2e2040; border-radius: 5px; color: #c8b8e0; font-family: 'Fira Sans', sans-serif; font-size: 13px; padding: 8px 10px; outline: none; }
-  .project-add input::placeholder { color: #4a3a5e; }
+  .project-add input { flex: 1; background: #0e1808; border: 1px solid #3a6010; border-radius: 5px; color: #b8e090; font-family: 'Fira Sans', sans-serif; font-size: 13px; padding: 8px 10px; outline: none; }
+  .project-add input::placeholder { color: #3a5a20; }
   .project-add button { background: var(--proj-dim); border: none; border-radius: 5px; color: #fff; font-size: 16px; width: 36px; cursor: pointer; }
 
   /* Project swipe actions */
@@ -583,7 +583,7 @@
     projGhost.classList.add('ghost-proj');
     projGhost.style.width = rect.width + 'px'; projGhost.style.left = rect.left + 'px';
     projGhost.style.top = (touch.clientY - projGhostOffsetY) + 'px';
-    projGhost.style.background = '#1a1422';
+    projGhost.style.background = '#0e1f08';
     document.body.appendChild(projGhost);
     card.classList.add('dragging-proj');
     if (navigator.vibrate) navigator.vibrate(30);
