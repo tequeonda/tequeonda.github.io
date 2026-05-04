@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Órdenes – Teque Onda</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --gold: #FFC72C;
+    --gold-dim: rgba(255,199,44,0.12);
+    --gold-border: rgba(255,199,44,0.28);
+    --bg: #111;
+    --bg-page: #181818;
+    --text: #e8e8e8;
+    --muted: #777;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg-page);
+    font-family: 'Fira Sans', sans-serif;
+    color: var(--text);
+    padding: 20px 12px 60px;
+  }
+
+  h2.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--gold-border);
+  }
+
+  /* ── EDITOR ── */
+  .editor { max-width: 480px; margin: 0 auto 24px; background: #1c1c1c; border: 1px solid var(--gold-border); border-radius: 12px; padding: 18px 16px; }
+
+  .editor-header { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+  .editor-logo-wrap { width:48px; height:48px; min-width:48px; }
+  .editor-logo-wrap img { width:100%; height:100%; object-fit:contain; border-radius:8px; }
+  .editor-header h1 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--gold); line-height:1; }
+  .editor-header p { font-size:11px; color:var(--muted); margin-top:2px; }
+
+  /* cliente / fecha */
+  .client-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .field-group { display:flex; flex-direction:column; gap:4px; }
+  .field-group label { font-size:10px; color:var(--muted); font-weight:600; letter-spacing:0.5px; text-transform:uppercase; }
+  input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    background:#111; border:1px solid rgba(255,255,255,0.1); border-radius:5px;
+    color:#fff; font-family:'Fira Sans',sans-serif; font-size:13px;
+    padding:7px 8px; width:100%; outline:none; transition:border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color:var(--gold); }
+  select option { background:#1c1c1c; }
+
+  /* escala */
+  .scale-row { display:flex; gap:8px; margin-bottom:16px; }
+  .scale-btn {
+    flex:1; background:#111; border:1px solid var(--gold-border); border-radius:6px;
+    color:var(--muted); font-family:'Bebas Neue',sans-serif; font-size:13px;
+    letter-spacing:1px; padding:8px 4px; cursor:pointer; text-align:center; transition:all 0.15s;
+  }
+  .scale-btn.active { background:var(--gold); color:#111; border-color:var(--gold); }
+
+  /* filas producto */
+  .product-rows { display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+  .product-row {
+    background:#111; border:1px solid rgba(255,255,255,0.07); border-radius:8px;
+    padding:10px 12px; display:grid; grid-template-columns:1fr 60px;
+    gap:8px; align-items:start; position:relative;
+  }
+  .product-row.disabled { opacity:0.35; }
+  .row-left { display:flex; flex-direction:column; gap:5px; }
+  input.qty-input {
+    width:56px; text-align:center; font-family:'Bebas Neue',sans-serif;
+    font-size:22px; color:var(--gold); padding:4px 6px;
+  }
+  .row-right { display:flex; flex-direction:column; gap:5px; align-items:flex-end; }
+  .row-right label { font-size:10px; color:var(--muted); font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
+  .row-subtotal { font-family:'Bebas Neue',sans-serif; font-size:15px; color:#fff; letter-spacing:.5px; margin-top:2px; }
+
+  .toggle-row {
+    position:absolute; top:8px; right:8px;
+    width:28px; height:16px; background:#333; border-radius:8px;
+    cursor:pointer; transition:background 0.2s; border:none;
+  }
+  .toggle-row::after {
+    content:''; position:absolute; top:2px; left:2px;
+    width:12px; height:12px; background:#777; border-radius:50%;
+    transition:transform 0.2s, background 0.2s;
+  }
+  .toggle-row.on { background:rgba(255,199,44,0.25); }
+  .toggle-row.on::after { transform:translateX(12px); background:var(--gold); }
+
+  .add-row-btn {
+    width:100%; background:transparent; border:1px dashed var(--gold-border);
+    border-radius:8px; color:var(--muted); font-family:'Fira Sans',sans-serif;
+    font-size:12px; padding:8px; cursor:pointer; transition:all 0.15s; margin-bottom:16px;
+  }
+  .add-row-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* totals */
+  .totals-display {
+    background:#111; border:1px solid var(--gold-border); border-radius:8px;
+    padding:12px; display:flex; flex-direction:column; gap:6px; margin-bottom:12px;
+  }
+  .tot-row { display:flex; justify-content:space-between; font-size:12px; }
+  .tot-row .lbl { color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+  .tot-row .val { color:#ccc; }
+  .tot-row.envio .val { color:#4caf50; font-weight:700; }
+
+  .total-final-display {
+    background:var(--gold); border-radius:8px; padding:12px 16px;
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;
+  }
+  .total-final-display .lbl { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; color:#111; }
+  .total-final-display .val { font-family:'Bebas Neue',sans-serif; font-size:26px; color:#111; }
+
+  .nota-wrap { margin-bottom:14px; }
+  .nota-wrap textarea { resize:none; }
+
+  .btn-gen {
+    width:100%; background:var(--gold); color:#111; border:none;
+    padding:14px; font-family:'Bebas Neue',sans-serif; font-size:20px;
+    letter-spacing:2px; border-radius:8px; cursor:pointer; transition:background 0.2s;
+  }
+  .btn-gen:hover { background:#e6b000; }
+
+  /* ── CARD ── */
+  .preview-wrap { max-width:480px; margin:0 auto; }
+
+  #card {
+    width:100%; background:#111; border:2px solid var(--gold);
+    border-radius:12px; overflow:hidden; margin-bottom:12px;
+  }
+
+  .card-header { background:var(--gold); padding:14px 16px; display:flex; align-items:center; gap:12px; }
+  .card-logo { width:46px; height:46px; min-width:46px; background:#111; border-radius:8px; padding:5px; display:flex; align-items:center; justify-content:center; }
+  .card-logo img { width:100%; height:100%; object-fit:contain; }
+  .card-header-text h1 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:#111; line-height:1; }
+  .card-header-text p { font-size:10px; color:#444; font-weight:500; margin-top:1px; }
+
+  /* cliente row en card */
+  .card-client-row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 14px 0;
+  }
+  .card-client { display:flex; flex-direction:column; }
+  .card-client .lbl { font-size:9px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+  .card-client .val { font-size:13px; font-weight:700; color:#fff; margin-top:1px; }
+  .card-fecha { display:flex; flex-direction:column; align-items:flex-end; }
+  .card-fecha .lbl { font-size:9px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+  .card-fecha .val { font-size:12px; color:#ccc; margin-top:1px; }
+
+  .card-badge {
+    margin:10px 14px 0; background:rgba(255,199,44,0.08); border:1px solid var(--gold-border);
+    border-radius:6px; padding:7px 10px; display:flex; align-items:center; gap:8px;
+  }
+  .card-badge .tag { background:var(--gold); color:#111; font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:1px; padding:2px 7px; border-radius:4px; white-space:nowrap; }
+  .card-badge .desc { color:#bbb; font-size:10px; font-weight:500; }
+
+  .card-table-wrap { padding:10px 14px 0; }
+  .card-table { width:100%; border-collapse:collapse; }
+  .card-table thead tr { border-bottom:1px solid var(--gold-border); }
+  .card-table thead th { font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:1.5px; color:var(--gold); padding:5px 3px; text-align:left; }
+  .card-table thead th:not(:first-child) { text-align:right; }
+  .card-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.05); }
+  .card-table tbody tr:last-child { border-bottom:none; }
+  .card-table tbody td { padding:9px 3px; font-size:11px; color:#e0e0e0; vertical-align:middle; }
+  .card-table tbody td:not(:first-child) { text-align:right; }
+  .card-table td.pname { font-weight:600; color:#fff; font-size:12px; line-height:1.3; }
+  .card-table td.pname small { display:block; font-weight:400; color:#666; font-size:10px; margin-top:1px; }
+  .card-table td.pqty { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--gold); white-space:nowrap; }
+  .card-table td.pprice { color:#aaa; white-space:nowrap; }
+  .card-table td.psub { font-weight:700; color:#fff; white-space:nowrap; }
+
+  .card-totals { margin:4px 14px 0; border-top:1px solid var(--gold-border); padding:10px 0 4px; display:flex; flex-direction:column; gap:6px; }
+  .card-tot-row { display:flex; justify-content:space-between; }
+  .card-tot-row .lbl { font-size:10px; color:#555; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+  .card-tot-row .val { font-size:11px; color:#bbb; }
+  .card-tot-row.envio .val { color:#4caf50; font-weight:700; }
+
+  .card-total-final {
+    display:flex; justify-content:space-between; align-items:center;
+    background:var(--gold); margin:10px 14px 0; padding:12px 14px; border-radius:7px;
+  }
+  .card-total-final .lbl { font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:2px; color:#111; }
+  .card-total-final .val { font-family:'Bebas Neue',sans-serif; font-size:24px; color:#111; }
+
+  .card-nota { margin:8px 14px 0; background:rgba(255,199,44,0.06); border-left:2px solid var(--gold); padding:6px 10px; font-size:11px; color:#aaa; border-radius:0 4px 4px 0; }
+
+  .card-footer { margin:10px 14px 14px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .card-chips { display:flex; gap:5px; flex-wrap:wrap; }
+  .card-chip { background:rgba(255,199,44,0.1); border:1px solid var(--gold-border); border-radius:20px; padding:3px 8px; font-size:9px; color:var(--gold); font-weight:600; white-space:nowrap; }
+  .card-footer-note { font-size:9px; color:#444; text-align:right; line-height:1.6; flex-shrink:0; }
+
+  .btn-download {
+    width:100%; background:#222; color:var(--gold); border:1px solid var(--gold-border);
+    padding:12px; font-family:'Bebas Neue',sans-serif; font-size:17px;
+    letter-spacing:2px; border-radius:8px; cursor:pointer; transition:all 0.2s;
+  }
+  .btn-download:hover { background:var(--gold); color:#111; }
+  .btn-back { background:transparent; color:#555; border-color:#333; font-size:14px; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<!-- ══ EDITOR ══ -->
+<div class="editor" id="editor">
+
+  <div class="editor-header">
+    <div class="editor-logo-wrap">
+      <img src="https://tequeonda.com.ar/img/logo_to.svg" alt="Teque Onda"
+           onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex'">
+      <div id="logoFallback" style="display:none;width:48px;height:48px;background:#111;border:1px solid var(--gold-border);border-radius:8px;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:9px;color:var(--gold);text-align:center;line-height:1.2;">TEQUE<br>ONDA</div>
+    </div>
+    <div>
+      <h1>GENERADOR DE ÓRDENES</h1>
+      <p>Completá los datos y descargá la imagen</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">DATOS DEL PEDIDO</h2>
+  <div class="client-row" style="margin-bottom:16px">
+    <div class="field-group">
+      <label>Nombre del cliente</label>
+      <input type="text" id="clienteInput" placeholder="Ej: Bar El Panas">
+    </div>
+    <div class="field-group">
+      <label>Fecha del pedido</label>
+      <input type="date" id="fechaInput">
+    </div>
+  </div>
+
+  <h2 class="section-title">ESCALA DE PRECIOS</h2>
+  <div class="scale-row" id="scaleRow">
+    <button class="scale-btn" data-scale="10-19" onclick="setScale(this)">10–19<br><small style="font-size:10px;font-family:'Fira Sans'">packs</small></button>
+    <button class="scale-btn" data-scale="20-49" onclick="setScale(this)">20–49<br><small style="font-size:10px;font-family:'Fira Sans'">packs</small></button>
+    <button class="scale-btn active" data-scale="50+" onclick="setScale(this)">50+<br><small style="font-size:10px;font-family:'Fira Sans'">packs</small></button>
+  </div>
+
+  <h2 class="section-title">PRODUCTOS</h2>
+  <div class="product-rows" id="productRows"></div>
+  <button class="add-row-btn" onclick="addRow()">+ Agregar producto</button>
+
+  <h2 class="section-title">RESUMEN</h2>
+  <div class="totals-display">
+    <div class="tot-row"><span class="lbl">Total Packs</span><span class="val" id="sumPacks">0 packs</span></div>
+    <div class="tot-row"><span class="lbl">Total Unidades</span><span class="val" id="sumUnits">0 unidades</span></div>
+    <div class="tot-row envio"><span class="lbl">Envío</span><span class="val" id="sumEnvio">—</span></div>
+    <div class="tot-row"><span class="lbl">IVA</span><span class="val">No incluido</span></div>
+  </div>
+  <div class="total-final-display">
+    <span class="lbl">TOTAL DEL PEDIDO</span>
+    <span class="val" id="sumTotal">$0</span>
+  </div>
+
+  <div class="nota-wrap">
+    <h2 class="section-title" style="margin-bottom:8px">NOTA (opcional)</h2>
+    <textarea id="notaInput" rows="2" placeholder="Ej: Pago 50% adelantado. Entrega jueves AM."></textarea>
+  </div>
+
+  <button class="btn-gen" onclick="generateCard()">▶ GENERAR IMAGEN</button>
+</div>
+
+<!-- ══ PREVIEW ══ -->
+<div class="preview-wrap" id="previewWrap" style="display:none">
+  <h2 class="section-title" style="max-width:480px;margin:0 auto 10px">VISTA PREVIA</h2>
+
+  <div id="card">
+    <!-- header -->
+    <div class="card-header">
+      <div class="card-logo">
+        <img id="cardLogo" src="https://tequeonda.com.ar/img/logo_to.svg" alt="Teque Onda"
+             onerror="this.parentElement.innerHTML='<span style=\'font-family:Bebas Neue,sans-serif;font-size:9px;color:#FFC72C;text-align:center;line-height:1.2;\'>TEQUE<br>ONDA</span>'">
+      </div>
+      <div class="card-header-text">
+        <h1>ORDEN MAYORISTA</h1>
+        <p>Canal B2B · tequeonda.com.ar/mayorista</p>
+      </div>
+    </div>
+
+    <!-- cliente + fecha -->
+    <div class="card-client-row" id="cardClientRow">
+      <div class="card-client">
+        <span class="lbl">Cliente</span>
+        <span class="val" id="cardCliente"></span>
+      </div>
+      <div class="card-fecha">
+        <span class="lbl">Fecha</span>
+        <span class="val" id="cardFecha"></span>
+      </div>
+    </div>
+
+    <!-- escala -->
+    <div class="card-badge">
+      <span class="tag" id="cardScaleTag">50+ PACKS</span>
+      <span class="desc" id="cardScaleDesc">Mejor precio · Envío gratis CABA/GBA</span>
+    </div>
+
+    <!-- tabla -->
+    <div class="card-table-wrap">
+      <table class="card-table">
+        <thead><tr><th>Producto</th><th>Cant.</th><th>$/Pack</th><th>Total</th></tr></thead>
+        <tbody id="cardTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- totales -->
+    <div class="card-totals">
+      <div class="card-tot-row"><span class="lbl">Total Packs</span><span class="val" id="cardPacks"></span></div>
+      <div class="card-tot-row"><span class="lbl">Total Unidades</span><span class="val" id="cardUnits"></span></div>
+      <div class="card-tot-row envio"><span class="lbl">Envío</span><span class="val" id="cardEnvio"></span></div>
+      <div class="card-tot-row"><span class="lbl">IVA</span><span class="val">No incluido</span></div>
+    </div>
+
+    <div class="card-total-final">
+      <span class="lbl">TOTAL DEL PEDIDO</span>
+      <span class="val" id="cardTotal"></span>
+    </div>
+
+    <div class="card-nota" id="cardNotaWrap" style="display:none"><span id="cardNota"></span></div>
+
+    <div class="card-footer">
+      <div class="card-chips">
+        <span class="card-chip">📦 Stock permanente</span>
+        <span class="card-chip">🚚 Entrega 48hs</span>
+      </div>
+      <div class="card-footer-note">WA: 11-5152-2312<br>tequeonda.com.ar</div>
+    </div>
+  </div>
+
+  <button class="btn-download" onclick="downloadImage()">⬇ DESCARGAR PNG PARA WHATSAPP</button>
+  <button class="btn-download btn-back" onclick="backToEditor()">← Editar orden</button>
+</div>
+
+<script>
+const PRODUCTS = [
+  { name:"Tequeño Queso",       desc:"Pack x12 · ~9cm · más queso",  units:12, prices:{"10-19":5550,"20-49":5350,"50+":4950} },
+  { name:"Tequeños Fiesteros",  desc:"Pack x25 · ~6cm · finger food", units:25, prices:{"10-19":7875,"20-49":7400,"50+":6950} },
+  { name:"Tequeño Jamón/Queso", desc:"Pack x12 · ~9cm · más queso",  units:12, prices:{"10-19":9850,"20-49":9300,"50+":8200} },
+];
+
+let currentScale = "50+";
+let rows = [
+  { ...PRODUCTS[0], qty:20, active:true },
+  { ...PRODUCTS[1], qty:20, active:true },
+  { ...PRODUCTS[2], qty:20, active:true },
+];
+
+// set today's date
+document.getElementById("fechaInput").valueAsDate = new Date();
+
+function fmt(n) { return "$" + n.toLocaleString("es-AR"); }
+
+function fmtDate(val) {
+  if (!val) return "";
+  const [y,m,d] = val.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+function setScale(btn) {
+  document.querySelectorAll(".scale-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  currentScale = btn.dataset.scale;
+  renderRows(); recalc();
+}
+
+function getPrice(row) {
+  return row.customPrice !== undefined ? row.customPrice : row.prices[currentScale];
+}
+
+function renderRows() {
+  const container = document.getElementById("productRows");
+  container.innerHTML = "";
+  rows.forEach((row,i) => {
+    const price = getPrice(row);
+    const sub = row.active ? price * row.qty : 0;
+    const div = document.createElement("div");
+    div.className = "product-row" + (row.active ? "" : " disabled");
+    div.innerHTML = `
+      <button class="toggle-row ${row.active?"on":""}" onclick="toggleRow(${i})"></button>
+      <div class="row-left">
+        <div class="field-group">
+          <label>Producto</label>
+          <select onchange="changeProduct(${i},this.value)">
+            ${PRODUCTS.map((p,pi)=>`<option value="${pi}" ${p.name===row.name?"selected":""}>${p.name}</option>`).join("")}
+            <option value="custom" ${!PRODUCTS.find(p=>p.name===row.name)?"selected":""}>Personalizado</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Descripción</label>
+          <input type="text" value="${row.desc}" onchange="rows[${i}].desc=this.value;recalc()">
+        </div>
+        <div style="display:flex;gap:8px">
+          <div class="field-group" style="flex:1">
+            <label>$/Pack</label>
+            <input type="number" value="${price}" onchange="rows[${i}].customPrice=+this.value;recalc()" id="price-${i}">
+          </div>
+          <div class="field-group" style="flex:1">
+            <label>Unds/Pack</label>
+            <input type="number" value="${row.units}" onchange="rows[${i}].units=+this.value;recalc()">
+          </div>
+        </div>
+      </div>
+      <div class="row-right">
+        <label>Cant.</label>
+        <input type="number" class="qty-input" value="${row.qty}" min="0" onchange="rows[${i}].qty=+this.value;recalc()">
+        <div class="row-subtotal">${row.active ? fmt(sub) : "—"}</div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function changeProduct(i, val) {
+  if (val==="custom") {
+    rows[i] = { name:"", desc:"", units:12, prices:{"10-19":0,"20-49":0,"50+":0}, qty:rows[i].qty, active:true };
+  } else {
+    rows[i] = { ...PRODUCTS[+val], qty:rows[i].qty, active:rows[i].active };
+  }
+  renderRows(); recalc();
+}
+
+function toggleRow(i) { rows[i].active=!rows[i].active; renderRows(); recalc(); }
+
+function addRow() { rows.push({ ...PRODUCTS[0], qty:10, active:true }); renderRows(); recalc(); }
+
+function recalc() {
+  let packs=0, units=0, money=0;
+  rows.forEach((row,i) => {
+    if (!row.active) return;
+    const price = getPrice(row);
+    packs += row.qty; units += row.qty*row.units; money += price*row.qty;
+    const prow = document.querySelectorAll(".product-row")[i];
+    if (prow) { const s=prow.querySelector(".row-subtotal"); if(s) s.textContent=fmt(price*row.qty); }
+  });
+  document.getElementById("sumPacks").textContent = packs+" packs";
+  document.getElementById("sumUnits").textContent = units+" unidades";
+  document.getElementById("sumEnvio").textContent = packs>=20 ? "GRATIS ✓" : "A calcular";
+  document.getElementById("sumTotal").textContent = fmt(money);
+}
+
+function generateCard() {
+  let packs=0, units=0, money=0;
+  const active = rows.filter(r=>r.active);
+  active.forEach(row => {
+    const price = getPrice(row);
+    packs+=row.qty; units+=row.qty*row.units; money+=price*row.qty;
+  });
+
+  // escala
+  const scaleLabels = {"10-19":"10–19 PACKS","20-49":"20–49 PACKS","50+":"50+ PACKS"};
+  const scaleDescs  = {"10-19":"Precio estándar · Pedido mínimo 10 packs","20-49":"Precio intermedio · Envío gratis CABA/GBA","50+":"Mejor precio · Envío gratis CABA/GBA"};
+  document.getElementById("cardScaleTag").textContent  = scaleLabels[currentScale];
+  document.getElementById("cardScaleDesc").textContent = scaleDescs[currentScale];
+
+  // cliente / fecha
+  const cliente = document.getElementById("clienteInput").value.trim();
+  const fecha   = document.getElementById("fechaInput").value;
+  const clientRow = document.getElementById("cardClientRow");
+  if (cliente || fecha) {
+    clientRow.style.display = "flex";
+    document.getElementById("cardCliente").textContent = cliente || "—";
+    document.getElementById("cardFecha").textContent   = fmtDate(fecha) || "—";
+  } else {
+    clientRow.style.display = "none";
+  }
+
+  // tabla
+  const tbody = document.getElementById("cardTableBody");
+  tbody.innerHTML = "";
+  active.forEach(row => {
+    const price = getPrice(row);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="pname">${row.name}<small>${row.desc}</small></td>
+      <td class="pqty">${row.qty}</td>
+      <td class="pprice">${fmt(price)}</td>
+      <td class="psub">${fmt(price*row.qty)}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("cardPacks").textContent = packs+" packs";
+  document.getElementById("cardUnits").textContent = units+" unidades";
+  document.getElementById("cardEnvio").textContent = packs>=20 ? "GRATIS ✓" : "A calcular";
+  document.getElementById("cardTotal").textContent = fmt(money);
+
+  const nota = document.getElementById("notaInput").value.trim();
+  if (nota) {
+    document.getElementById("cardNota").textContent = "📝 "+nota;
+    document.getElementById("cardNotaWrap").style.display="block";
+  } else {
+    document.getElementById("cardNotaWrap").style.display="none";
+  }
+
+  document.getElementById("editor").style.display="none";
+  document.getElementById("previewWrap").style.display="block";
+  window.scrollTo(0,0);
+}
+
+function backToEditor() {
+  document.getElementById("editor").style.display="block";
+  document.getElementById("previewWrap").style.display="none";
+}
+
+async function downloadImage() {
+  const card = document.getElementById("card");
+  const canvas = await html2canvas(card, {
+    scale:3, backgroundColor:"#111111", useCORS:true, logging:false,
+    width:card.offsetWidth, windowWidth:card.offsetWidth
+  });
+  const link = document.createElement("a");
+  // filename with client name
+  const cliente = document.getElementById("clienteInput").value.trim().replace(/\s+/g,"_") || "pedido";
+  link.download = `orden_tequeonda_${cliente}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+renderRows(); recalc();
+</script>
+</body>
+</html>
