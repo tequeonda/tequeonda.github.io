@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Órdenes Mayoristas – Teque Onda</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --gold: #FFC72C;
+  --gold-dim: rgba(255,199,44,0.12);
+  --gold-border: rgba(255,199,44,0.28);
+  --bg: #111;
+  --bg-page: #161616;
+  --bg-card: #1c1c1c;
+  --text: #e8e8e8;
+  --muted: #666;
+  --green: #4caf50;
+  --red: #ef5350;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg-page); font-family:'Fira Sans',sans-serif; color:var(--text); min-height:100vh; }
+
+/* ── NAV TABS ── */
+.tabs { display:flex; background:#111; border-bottom:1px solid var(--gold-border); position:sticky; top:0; z-index:100; }
+.tab {
+  flex:1; padding:14px 4px; text-align:center;
+  font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px;
+  color:var(--muted); cursor:pointer; border-bottom:2px solid transparent;
+  transition:all 0.2s; background:none; border-top:none; border-left:none; border-right:none;
+}
+.tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+.tab-icon { display:block; font-size:18px; margin-bottom:2px; }
+
+/* ── PAGES ── */
+.page { display:none; padding:16px 12px 80px; max-width:480px; margin:0 auto; }
+.page.active { display:block; }
+
+/* ── SECTION TITLES ── */
+h2.st {
+  font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:3px;
+  color:var(--gold); margin-bottom:10px; padding-bottom:5px;
+  border-bottom:1px solid var(--gold-border);
+}
+
+/* ── INPUTS ── */
+.field-group { display:flex; flex-direction:column; gap:4px; }
+.field-group label { font-size:10px; color:var(--muted); font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+  background:#111; border:1px solid rgba(255,255,255,0.1); border-radius:6px;
+  color:#fff; font-family:'Fira Sans',sans-serif; font-size:13px;
+  padding:8px 10px; width:100%; outline:none; transition:border-color 0.15s;
+  -webkit-appearance:none;
+}
+input:focus, select:focus, textarea:focus { border-color:var(--gold); }
+select option { background:#1c1c1c; }
+textarea { resize:none; }
+
+/* ── CARDS ── */
+.panel { background:var(--bg-card); border:1px solid var(--gold-border); border-radius:10px; padding:14px; margin-bottom:14px; }
+
+/* ── SCALE BTNS ── */
+.scale-row { display:flex; gap:8px; }
+.scale-btn {
+  flex:1; background:#111; border:1px solid var(--gold-border); border-radius:6px;
+  color:var(--muted); font-family:'Bebas Neue',sans-serif; font-size:13px;
+  letter-spacing:1px; padding:8px 4px; cursor:pointer; text-align:center; transition:all 0.15s;
+}
+.scale-btn.active { background:var(--gold); color:#111; border-color:var(--gold); }
+.scale-btn small { display:block; font-size:9px; font-family:'Fira Sans',sans-serif; margin-top:1px; }
+
+/* ── PRODUCT ROWS ── */
+.product-rows { display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
+.product-row {
+  background:#111; border:1px solid rgba(255,255,255,0.07); border-radius:8px;
+  padding:10px 10px 10px 12px; display:grid; grid-template-columns:1fr 58px;
+  gap:8px; align-items:start; position:relative;
+}
+.product-row.disabled { opacity:0.35; }
+.row-left { display:flex; flex-direction:column; gap:5px; }
+.row-right { display:flex; flex-direction:column; gap:4px; align-items:flex-end; }
+.row-right label { font-size:9px; color:var(--muted); font-weight:600; text-transform:uppercase; }
+input.qty-input {
+  width:52px; text-align:center; font-family:'Bebas Neue',sans-serif;
+  font-size:22px; color:var(--gold); padding:4px 4px;
+}
+.row-subtotal { font-family:'Bebas Neue',sans-serif; font-size:14px; color:#fff; margin-top:2px; }
+.toggle-row {
+  position:absolute; top:8px; right:8px; width:26px; height:15px;
+  background:#2a2a2a; border-radius:8px; cursor:pointer; transition:background 0.2s; border:none;
+}
+.toggle-row::after {
+  content:''; position:absolute; top:2px; left:2px; width:11px; height:11px;
+  background:#555; border-radius:50%; transition:all 0.2s;
+}
+.toggle-row.on { background:rgba(255,199,44,0.2); }
+.toggle-row.on::after { transform:translateX(11px); background:var(--gold); }
+
+.add-row-btn {
+  width:100%; background:transparent; border:1px dashed var(--gold-border);
+  border-radius:8px; color:var(--muted); font-size:12px;
+  padding:8px; cursor:pointer; transition:all 0.15s; margin-bottom:12px;
+}
+.add-row-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ── RESUMEN ── */
+.totals-box { display:flex; flex-direction:column; gap:6px; }
+.tot-row { display:flex; justify-content:space-between; font-size:12px; }
+.tot-row .lbl { color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+.tot-row .val { color:#ccc; }
+.tot-row.envio .val { color:var(--green); font-weight:700; }
+
+.total-box {
+  background:var(--gold); border-radius:8px; padding:13px 16px;
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;
+}
+.total-box .lbl { font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:2px; color:#111; }
+.total-box .val { font-family:'Bebas Neue',sans-serif; font-size:26px; color:#111; }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width:100%; background:var(--gold); color:#111; border:none;
+  padding:14px; font-family:'Bebas Neue',sans-serif; font-size:20px;
+  letter-spacing:2px; border-radius:8px; cursor:pointer; transition:background 0.2s;
+}
+.btn-primary:hover { background:#e6b000; }
+.btn-secondary {
+  width:100%; background:transparent; color:var(--gold); border:1px solid var(--gold-border);
+  padding:11px; font-family:'Bebas Neue',sans-serif; font-size:16px;
+  letter-spacing:2px; border-radius:8px; cursor:pointer; transition:all 0.2s; margin-top:8px;
+}
+.btn-secondary:hover { background:var(--gold-dim); }
+.btn-ghost {
+  width:100%; background:transparent; color:#444; border:1px solid #2a2a2a;
+  padding:10px; font-family:'Bebas Neue',sans-serif; font-size:14px;
+  letter-spacing:1px; border-radius:8px; cursor:pointer; margin-top:6px;
+}
+
+/* ── ORDER NUMBER BADGE ── */
+.order-num-badge {
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--gold-dim); border:1px solid var(--gold-border);
+  border-radius:8px; padding:10px 14px; margin-bottom:14px;
+}
+.order-num-badge .num {
+  font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--gold); letter-spacing:3px;
+}
+.order-num-badge .hint { font-size:10px; color:var(--muted); }
+
+/* ── PREVIEW CARD ── */
+#card {
+  width:100%; background:#111; border:2px solid var(--gold);
+  border-radius:12px; overflow:hidden; margin-bottom:10px;
+}
+.card-header { background:var(--gold); padding:13px 14px; display:flex; align-items:center; gap:10px; }
+.card-logo { width:42px; height:42px; min-width:42px; background:#111; border-radius:7px; padding:5px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.card-logo img { width:100%; height:100%; object-fit:contain; }
+.card-logo-fb { font-family:'Bebas Neue',sans-serif; font-size:8px; color:var(--gold); text-align:center; line-height:1.2; }
+.card-header-text h1 { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:#111; line-height:1; }
+.card-header-text p { font-size:9px; color:#444; font-weight:500; margin-top:1px; }
+
+.card-order-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 12px; background:rgba(255,199,44,0.06);
+  border-bottom:1px solid var(--gold-border);
+}
+.card-order-num { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--gold); letter-spacing:3px; }
+.card-order-date { font-size:10px; color:var(--muted); }
+
+.card-client-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0; margin:0 12px;
+  border-bottom:1px solid rgba(255,199,44,0.12);
+}
+.card-client .lbl, .card-fecha .lbl { font-size:9px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+.card-client .val { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; letter-spacing:3px; margin-top:3px; }
+.card-fecha { text-align:right; }
+.card-fecha .val { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--gold); letter-spacing:2px; margin-top:3px; }
+
+.card-badge { margin:8px 12px 0; background:rgba(255,199,44,0.07); border:1px solid var(--gold-border); border-radius:5px; padding:6px 9px; display:flex; align-items:center; gap:7px; }
+.card-badge .tag { background:var(--gold); color:#111; font-family:'Bebas Neue',sans-serif; font-size:10px; letter-spacing:1px; padding:2px 6px; border-radius:3px; white-space:nowrap; }
+.card-badge .desc { color:#aaa; font-size:10px; }
+
+.card-table-wrap { padding:9px 12px 0; }
+.ct { width:100%; border-collapse:collapse; }
+.ct thead tr { border-bottom:1px solid var(--gold-border); }
+.ct thead th { font-family:'Bebas Neue',sans-serif; font-size:10px; letter-spacing:1.5px; color:var(--gold); padding:4px 3px; text-align:left; }
+.ct thead th:not(:first-child) { text-align:right; }
+.ct tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); }
+.ct tbody tr:last-child { border-bottom:none; }
+.ct tbody td { padding:8px 3px; font-size:11px; color:#ddd; vertical-align:middle; }
+.ct tbody td:not(:first-child) { text-align:right; }
+.ct td.pname { font-weight:600; color:#fff; font-size:11px; line-height:1.3; }
+.ct td.pname small { display:block; font-weight:400; color:#555; font-size:9px; margin-top:1px; }
+.ct td.pqty { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--gold); }
+.ct td.pprice { color:#888; white-space:nowrap; }
+.ct td.psub { font-weight:700; color:#fff; white-space:nowrap; }
+
+.card-totals { margin:4px 12px 0; border-top:1px solid var(--gold-border); padding:8px 0 3px; display:flex; flex-direction:column; gap:5px; }
+.ctr { display:flex; justify-content:space-between; }
+.ctr .lbl { font-size:9px; color:#444; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+.ctr .val { font-size:10px; color:#aaa; }
+.ctr.envio .val { color:var(--green); font-weight:700; }
+
+.card-total-final { display:flex; justify-content:space-between; align-items:center; background:var(--gold); margin:8px 12px 0; padding:11px 13px; border-radius:7px; }
+.card-total-final .lbl { font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px; color:#111; }
+.card-total-final .val { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#111; }
+
+.card-nota { margin:7px 12px 0; background:rgba(255,199,44,0.05); border-left:2px solid var(--gold); padding:5px 8px; font-size:10px; color:#888; border-radius:0 4px 4px 0; }
+
+.card-footer { margin:8px 12px 12px; display:flex; justify-content:space-between; align-items:center; gap:6px; }
+.card-chips { display:flex; gap:4px; flex-wrap:wrap; }
+.card-chip { background:rgba(255,199,44,0.08); border:1px solid var(--gold-border); border-radius:20px; padding:3px 7px; font-size:8px; color:var(--gold); font-weight:600; }
+.card-footer-note { font-size:8px; color:#333; text-align:right; line-height:1.6; }
+
+/* ── TICKET PRINT ── */
+@media print {
+  body * { visibility:hidden; }
+  #ticket, #ticket * { visibility:visible; }
+  #ticket { position:fixed; top:0; left:0; width:80mm; background:#fff; color:#000; }
+}
+#ticket {
+  width:100%; background:#fff; color:#000; font-family:monospace;
+  font-size:11px; padding:8px; display:none; margin-top:10px;
+  border:1px dashed #ccc; border-radius:8px;
+}
+#ticket .tk-center { text-align:center; }
+#ticket .tk-logo { font-size:16px; font-weight:bold; letter-spacing:2px; }
+#ticket .tk-div { border-top:1px dashed #aaa; margin:5px 0; }
+#ticket .tk-row { display:flex; justify-content:space-between; margin:2px 0; font-size:10px; }
+#ticket .tk-total { font-weight:bold; font-size:12px; }
+#ticket .tk-sm { font-size:9px; color:#666; }
+
+/* ── STATS PAGE ── */
+.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.stat-card {
+  background:var(--bg-card); border:1px solid var(--gold-border); border-radius:10px;
+  padding:14px 12px;
+}
+.stat-card .s-label { font-size:9px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+.stat-card .s-val { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--gold); line-height:1; }
+.stat-card .s-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+.stat-card.full { grid-column:1/-1; }
+
+/* orders list */
+.orders-list { display:flex; flex-direction:column; gap:8px; }
+.order-item {
+  background:var(--bg-card); border:1px solid rgba(255,255,255,0.07);
+  border-radius:8px; padding:12px 14px; cursor:pointer; transition:border-color 0.15s;
+}
+.order-item:hover { border-color:var(--gold-border); }
+.order-item-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px; }
+.order-item-num { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--gold); letter-spacing:2px; }
+.order-item-total { font-family:'Bebas Neue',sans-serif; font-size:16px; color:#fff; }
+.order-item-client { font-size:13px; font-weight:600; color:#fff; }
+.order-item-meta { font-size:10px; color:var(--muted); margin-top:2px; }
+.order-item-del { background:none; border:none; color:#333; font-size:14px; cursor:pointer; padding:4px; float:right; }
+.order-item-del:hover { color:var(--red); }
+.order-item-actions { display:flex; gap:6px; margin-top:10px; }
+.oia-btn {
+  flex:1; background:rgba(255,199,44,0.07); border:1px solid var(--gold-border);
+  border-radius:6px; color:var(--gold); font-size:11px; font-family:'Fira Sans',sans-serif;
+  font-weight:600; padding:6px 4px; cursor:pointer; transition:all 0.15s; text-align:center;
+}
+.oia-btn:hover { background:rgba(255,199,44,0.18); }
+
+.empty-state { text-align:center; padding:40px 20px; color:var(--muted); }
+.empty-state .big { font-size:40px; margin-bottom:10px; }
+.empty-state p { font-size:13px; }
+
+/* filter row */
+.filter-row { display:flex; gap:8px; margin-bottom:14px; }
+.filter-btn { flex:1; background:#111; border:1px solid rgba(255,255,255,0.08); border-radius:6px; color:var(--muted); font-size:11px; font-family:'Bebas Neue',sans-serif; letter-spacing:1px; padding:7px 4px; cursor:pointer; text-align:center; transition:all 0.15s; }
+.filter-btn.active { background:var(--gold-dim); border-color:var(--gold-border); color:var(--gold); }
+
+/* chart bar */
+.bar-chart { display:flex; align-items:flex-end; gap:4px; height:60px; margin-top:8px; }
+.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; }
+.bar-fill { width:100%; background:var(--gold); border-radius:3px 3px 0 0; min-height:2px; transition:height 0.3s; opacity:0.8; }
+.bar-lbl { font-size:8px; color:var(--muted); }
+
+/* ── PAYMENT STATUS BADGES ── */
+.pay-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  border-radius:20px; padding:3px 9px; font-size:10px; font-weight:700;
+  letter-spacing:.3px; white-space:nowrap;
+}
+.pay-badge.pagado   { background:rgba(76,175,80,0.15);  color:#4caf50; border:1px solid rgba(76,175,80,0.3); }
+.pay-badge.pendiente{ background:rgba(255,152,0,0.15);  color:#ff9800; border:1px solid rgba(255,152,0,0.3); }
+.pay-badge.vencido  { background:rgba(239,83,80,0.15);  color:#ef5350; border:1px solid rgba(239,83,80,0.3); }
+.pay-badge.parcial  { background:rgba(33,150,243,0.15); color:#42a5f5; border:1px solid rgba(33,150,243,0.3); }
+
+/* ── COBROS PAGE ── */
+.cobro-item { background:var(--bg-card); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:14px; margin-bottom:10px; }
+.cobro-item.vencido { border-color:rgba(239,83,80,0.35); }
+.cobro-item.parcial { border-color:rgba(33,150,243,0.35); }
+.cobro-item-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
+.cobro-cliente { font-size:16px; font-weight:700; color:#fff; font-family:"Bebas Neue",sans-serif; letter-spacing:1px; }
+.cobro-num { font-size:10px; color:var(--muted); margin-top:2px; }
+.cobro-montos { text-align:right; }
+.cobro-deuda { font-family:"Bebas Neue",sans-serif; font-size:20px; color:#ef5350; line-height:1; }
+.cobro-deuda.parcial { color:#42a5f5; }
+.cobro-total-sm { font-size:10px; color:var(--muted); margin-top:1px; }
+.cobro-meta { font-size:11px; color:var(--muted); margin-bottom:10px; display:flex; gap:10px; flex-wrap:wrap; }
+.cobro-vence { color:#ef5350; font-weight:600; }
+.cobro-vence.ok { color:#ff9800; }
+.cobro-actions { display:flex; gap:6px; }
+.cobro-btn { flex:1; border-radius:6px; font-size:11px; font-weight:600; padding:7px 4px; cursor:pointer; text-align:center; transition:all 0.15s; border:none; }
+.cobro-btn.pagar { background:rgba(76,175,80,0.15); color:#4caf50; border:1px solid rgba(76,175,80,0.3); }
+.cobro-btn.pagar:hover { background:rgba(76,175,80,0.3); }
+.cobro-btn.parcial-btn { background:rgba(33,150,243,0.12); color:#42a5f5; border:1px solid rgba(33,150,243,0.25); }
+.cobro-btn.ver-btn { background:rgba(255,199,44,0.08); color:var(--gold); border:1px solid var(--gold-border); }
+.pagos-list { margin-top:8px; border-top:1px solid rgba(255,255,255,0.05); padding-top:8px; display:flex; flex-direction:column; gap:4px; }
+.pago-item { display:flex; justify-content:space-between; font-size:11px; color:#aaa; }
+.pago-item .pm { color:var(--muted); font-size:10px; }
+.alert-box { background:rgba(239,83,80,0.1); border:1px solid rgba(239,83,80,0.3); border-radius:8px; padding:12px 14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
+.alert-box .lbl { font-size:11px; color:#ef5350; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+.alert-box .val { font-family:"Bebas Neue",sans-serif; font-size:22px; color:#ef5350; }
+.calle-box { background:rgba(255,199,44,0.08); border:1px solid var(--gold-border); border-radius:8px; padding:14px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
+.calle-box .lbl { font-size:11px; color:var(--gold); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+.calle-box .val { font-family:"Bebas Neue",sans-serif; font-size:28px; color:var(--gold); }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:200; align-items:flex-end; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:#1c1c1c; border:1px solid var(--gold-border); border-radius:16px 16px 0 0; padding:20px 16px 36px; width:100%; max-width:480px; }
+.modal-title { font-family:"Bebas Neue",sans-serif; font-size:20px; letter-spacing:2px; color:var(--gold); margin-bottom:4px; }
+.modal-sub { font-size:12px; color:var(--muted); margin-bottom:16px; }
+.modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.modal-btn-row { display:flex; gap:8px; margin-top:14px; }
+</style>
+</head>
+<body>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showPage('pgNueva')">
+    <span class="tab-icon">📋</span>NUEVA
+  </button>
+  <button class="tab" onclick="showPage('pgPreview')">
+    <span class="tab-icon">🖼</span>ORDEN
+  </button>
+  <button class="tab" onclick="showPage('pgCobros'); renderCobros()">
+    <span class="tab-icon">💰</span>COBROS
+  </button>
+  <button class="tab" onclick="showPage('pgStats'); renderStats()">
+    <span class="tab-icon">📊</span>STATS
+  </button>
+</div>
+
+<!-- ══════════════ PAGE: NUEVA ORDEN ══════════════ -->
+<div class="page active" id="pgNueva">
+
+  <!-- Número de orden -->
+  <div class="order-num-badge">
+    <div>
+      <div style="font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Próxima orden</div>
+      <div class="num" id="nextOrderNum">MO-0001</div>
+    </div>
+    <div class="hint">Auto-incremental</div>
+  </div>
+
+  <!-- Datos del pedido -->
+  <h2 class="st">DATOS DEL PEDIDO</h2>
+  <div class="panel">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="field-group">
+        <label>Nombre del cliente</label>
+        <input type="text" id="clienteInput" placeholder="Bar El Panas">
+      </div>
+      <div class="field-group">
+        <label>Fecha</label>
+        <input type="date" id="fechaInput">
+      </div>
+    </div>
+  </div>
+
+  <!-- Escala -->
+  <h2 class="st">ESCALA DE PRECIOS</h2>
+  <div class="panel" style="padding:10px">
+    <div class="scale-row" id="scaleRow">
+      <button class="scale-btn" data-scale="10-19" onclick="setScale(this)">10–19<small>packs</small></button>
+      <button class="scale-btn" data-scale="20-49" onclick="setScale(this)">20–49<small>packs</small></button>
+      <button class="scale-btn active" data-scale="50+" onclick="setScale(this)">50+<small>packs</small></button>
+    </div>
+  </div>
+
+  <!-- Productos -->
+  <h2 class="st">PRODUCTOS</h2>
+  <div class="product-rows" id="productRows"></div>
+  <button class="add-row-btn" onclick="addRow()">+ Agregar producto</button>
+
+  <!-- Resumen -->
+  <h2 class="st">RESUMEN</h2>
+  <div class="panel">
+    <div class="totals-box">
+      <div class="tot-row"><span class="lbl">Total Packs</span><span class="val" id="sumPacks">0</span></div>
+      <div class="tot-row"><span class="lbl">Total Unidades</span><span class="val" id="sumUnits">0</span></div>
+      <div class="tot-row envio"><span class="lbl">Envío</span><span class="val" id="sumEnvio">—</span></div>
+      <div class="tot-row"><span class="lbl">IVA</span><span class="val">No incluido</span></div>
+    </div>
+  </div>
+  <div class="total-box">
+    <span class="lbl">TOTAL</span>
+    <span class="val" id="sumTotal">$0</span>
+  </div>
+
+  <!-- Nota -->
+  <h2 class="st">NOTA (opcional)</h2>
+  <div class="panel" style="padding:8px">
+    <textarea id="notaInput" rows="2" placeholder="Ej: Pago 50% adelantado. Entrega jueves AM."></textarea>
+  </div>
+
+  <!-- Condición de pago -->
+  <h2 class="st">CONDICIÓN DE PAGO</h2>
+  <div class="panel">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div class="field-group">
+        <label>Estado</label>
+        <select id="pagoEstado" onchange="togglePagoFields()">
+          <option value="contado">Contado</option>
+          <option value="credito">Crédito</option>
+          <option value="parcial">Pago parcial</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Medio de pago</label>
+        <select id="pagoMedio">
+          <option value="efectivo">Efectivo</option>
+          <option value="transferencia">Transferencia</option>
+          <option value="cheque">Cheque</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+    </div>
+    <div id="pagoVenceWrap" style="display:none;margin-bottom:10px">
+      <div class="field-group">
+        <label>Fecha de vencimiento</label>
+        <input type="date" id="pagoVence">
+      </div>
+    </div>
+    <div id="pagoAdelantoWrap" style="display:none">
+      <div class="field-group">
+        <label>Monto adelantado ($)</label>
+        <input type="number" id="pagoAdelanto" placeholder="0" oninput="updateAdelantoCalc()">
+        <div id="adelantoCalc" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="generateOrder()" style="margin-top:4px">▶ GENERAR ORDEN</button>
+</div>
+
+<!-- ══════════════ PAGE: COBROS ══════════════ -->
+<div class="page" id="pgCobros">
+  <div class="calle-box">
+    <div><div class="lbl">💸 En la calle</div><div style="font-size:10px;color:var(--muted);margin-top:2px">deuda total pendiente</div></div>
+    <div class="val" id="calleTotal">$0</div>
+  </div>
+  <div class="alert-box" id="vencidosAlert" style="display:none">
+    <div><div class="lbl">🔴 Vencidos</div><div style="font-size:10px;color:#ef5350;margin-top:2px" id="vencidosCount"></div></div>
+    <div class="val" id="vencidosMonto">$0</div>
+  </div>
+  <h2 class="st">PENDIENTES DE COBRO</h2>
+  <div id="cobrosList"></div>
+  <div id="cobrosEmpty" class="empty-state" style="display:none">
+    <div class="big">✅</div><p>Todo cobrado. No hay deuda pendiente.</p>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE: PREVIEW / ACCIONES ══════════════ -->
+<div class="page" id="pgPreview">
+  <div id="card">
+    <div class="card-header">
+      <div class="card-logo">
+        <img id="cardLogo" src="https://tequeonda.com.ar/img/logo_to.svg" alt="TO"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div class="card-logo-fb" style="display:none">TEQUE<br>ONDA</div>
+      </div>
+      <div class="card-header-text">
+        <h1>ORDEN MAYORISTA</h1>
+        <p>Canal B2B · tequeonda.com.ar/mayorista</p>
+      </div>
+    </div>
+
+    <div class="card-order-row">
+      <span class="card-order-num" id="cardOrderNum">MO-0001</span>
+      <span class="card-order-date" id="cardOrderDate"></span>
+    </div>
+
+    <div class="card-client-row">
+      <div class="card-client">
+        <div class="lbl">Cliente</div>
+        <div class="val" id="cardCliente">—</div>
+      </div>
+      <div class="card-fecha">
+        <div class="lbl">Fecha</div>
+        <div class="val" id="cardFecha">—</div>
+      </div>
+    </div>
+
+    <div class="card-badge">
+      <span class="tag" id="cardScaleTag">50+ PACKS</span>
+      <span class="desc" id="cardScaleDesc">Mejor precio · Envío gratis CABA/GBA</span>
+    </div>
+
+    <div class="card-table-wrap">
+      <table class="ct">
+        <thead><tr><th>Producto</th><th>Cant.</th><th>$/Pack</th><th>Total</th></tr></thead>
+        <tbody id="cardTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="card-totals">
+      <div class="ctr"><span class="lbl">Total Packs</span><span class="val" id="cardPacks"></span></div>
+      <div class="ctr"><span class="lbl">Total Unidades</span><span class="val" id="cardUnits"></span></div>
+      <div class="ctr envio"><span class="lbl">Envío</span><span class="val" id="cardEnvio"></span></div>
+      <div class="ctr"><span class="lbl">IVA</span><span class="val">No incluido</span></div>
+    </div>
+
+    <div class="card-total-final">
+      <span class="lbl">TOTAL DEL PEDIDO</span>
+      <span class="val" id="cardTotal"></span>
+    </div>
+
+    <div class="card-nota" id="cardNotaWrap" style="display:none"><span id="cardNota"></span></div>
+
+    <div class="card-footer">
+      <div class="card-chips">
+        <span class="card-chip">📦 Stock permanente</span>
+        <span class="card-chip">🚚 Entrega 48hs</span>
+      </div>
+      <div class="card-footer-note">WA: 11-5152-2312<br>tequeonda.com.ar</div>
+    </div>
+  </div>
+
+  <!-- ACCIONES -->
+  <button class="btn-primary" onclick="downloadImage()">⬇ DESCARGAR PNG — WHATSAPP</button>
+  <button class="btn-secondary" onclick="printTicket()">🖨 IMPRIMIR TICKET</button>
+  <button class="btn-ghost" onclick="showPage('pgNueva')">← NUEVA ORDEN</button>
+
+  <!-- TICKET IMPRESIÓN -->
+  <div id="ticket">
+    <div class="tk-center tk-logo">TEQUE ONDA</div>
+    <div class="tk-center tk-sm">tequeonda.com.ar</div>
+    <div class="tk-center tk-sm">WA: 11-5152-2312</div>
+    <div class="tk-div"></div>
+    <div class="tk-row"><span>ORDEN</span><span id="tkNum"></span></div>
+    <div class="tk-row"><span>FECHA</span><span id="tkFecha"></span></div>
+    <div class="tk-row"><span>CLIENTE</span><span id="tkCliente"></span></div>
+    <div class="tk-div"></div>
+    <div id="tkItems"></div>
+    <div class="tk-div"></div>
+    <div class="tk-row"><span>PACKS</span><span id="tkPacks"></span></div>
+    <div class="tk-row"><span>UNIDADES</span><span id="tkUnits"></span></div>
+    <div class="tk-row"><span>ENVÍO</span><span id="tkEnvio"></span></div>
+    <div class="tk-div"></div>
+    <div class="tk-row tk-total"><span>TOTAL</span><span id="tkTotal"></span></div>
+    <div class="tk-div"></div>
+    <div id="tkNota" class="tk-sm" style="display:none"></div>
+    <div class="tk-center tk-sm" style="margin-top:6px">¡Gracias por su pedido!</div>
+    <div class="tk-center tk-sm">IVA no incluido · Canal mayorista</div>
+    <br>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE: HISTORIAL / STATS ══════════════ -->
+<div class="page" id="pgStats">
+
+  <!-- KPIs -->
+  <h2 class="st">RESUMEN</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="s-label">Órdenes Totales</div>
+      <div class="s-val" id="statTotal">0</div>
+      <div class="s-sub">desde el inicio</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Monto Total</div>
+      <div class="s-val" id="statMonto" style="font-size:20px">$0</div>
+      <div class="s-sub">acumulado</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Este Mes</div>
+      <div class="s-val" id="statMes">0</div>
+      <div class="s-sub" id="statMesLabel">órdenes</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Esta Semana</div>
+      <div class="s-val" id="statSemana">0</div>
+      <div class="s-sub">órdenes</div>
+    </div>
+    <div class="stat-card full">
+      <div class="s-label">Últimos 7 días</div>
+      <div class="bar-chart" id="barChart"></div>
+    </div>
+  </div>
+
+  <!-- Filtro -->
+  <h2 class="st">ÓRDENES</h2>
+  <div class="filter-row">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">TODAS</button>
+    <button class="filter-btn" data-filter="week" onclick="setFilter(this)">SEMANA</button>
+    <button class="filter-btn" data-filter="month" onclick="setFilter(this)">MES</button>
+  </div>
+
+  <div class="orders-list" id="ordersList"></div>
+
+  <button class="btn-ghost" onclick="if(confirm('¿Borrar TODO el historial?')) { localStorage.removeItem('toOrders'); localStorage.removeItem('toCounter'); renderStats(); updateOrderNum(); }" style="margin-top:14px;color:#333">🗑 Borrar historial</button>
+</div>
+
+<!-- MODAL PAGO -->
+<div class="modal-overlay" id="pagoModal" onclick="closePagoModal(event)">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle">REGISTRAR PAGO</div>
+    <div class="modal-sub" id="modalSub"></div>
+    <div class="modal-grid">
+      <div class="field-group">
+        <label>Monto ($)</label>
+        <input type="number" id="modalMonto" placeholder="0">
+      </div>
+      <div class="field-group">
+        <label>Medio de pago</label>
+        <select id="modalMedio">
+          <option value="efectivo">Efectivo</option>
+          <option value="transferencia">Transferencia</option>
+          <option value="cheque">Cheque</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-group" style="margin-bottom:0">
+      <label>Nota (opcional)</label>
+      <input type="text" id="modalNota" placeholder="Ej: Abono parcial">
+    </div>
+    <div class="modal-btn-row">
+      <button class="btn-secondary" style="margin-top:0" onclick="closePagoModal()">Cancelar</button>
+      <button class="btn-primary" style="padding:11px" onclick="confirmarPago()">✓ CONFIRMAR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STORAGE ──
+function getOrders() { try { return JSON.parse(localStorage.getItem('toOrders') || '[]'); } catch(e){ return []; } }
+function saveOrders(o) { localStorage.setItem('toOrders', JSON.stringify(o)); }
+function getCounter() { return parseInt(localStorage.getItem('toCounter') || '0'); }
+function bumpCounter() { const n = getCounter()+1; localStorage.setItem('toCounter', n); return n; }
+function padNum(n) { return 'MO-' + String(n).padStart(4,'0'); }
+
+// ── PRODUCTS ──
+const PRODUCTS = [
+  { name:"Tequeño Queso",       desc:"Pack x12 · ~9cm · más queso",  units:12, prices:{"10-19":5550,"20-49":5350,"50+":4950} },
+  { name:"Tequeños Fiesteros",  desc:"Pack x25 · ~6cm · finger food", units:25, prices:{"10-19":7875,"20-49":7400,"50+":6950} },
+  { name:"Tequeño Jamón/Queso", desc:"Pack x12 · ~9cm · más queso",  units:12, prices:{"10-19":9850,"20-49":9300,"50+":8200} },
+];
+
+let currentScale = "50+";
+let rows = [
+  { ...PRODUCTS[0], qty:20, active:true },
+  { ...PRODUCTS[1], qty:20, active:true },
+  { ...PRODUCTS[2], qty:20, active:true },
+];
+let currentOrderNum = "";
+
+// ── UTILS ──
+function fmt(n) { return "$" + Math.round(n).toLocaleString("es-AR"); }
+function fmtDate(val) { if(!val) return ""; const [y,m,d]=val.split("-"); return `${d}/${m}/${y}`; }
+function getPrice(row) { return row.customPrice !== undefined ? row.customPrice : row.prices[currentScale]; }
+
+function updateOrderNum() {
+  const next = padNum(getCounter()+1);
+  document.getElementById("nextOrderNum").textContent = next;
+}
+
+// ── TABS ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = ['pgNueva','pgPreview','pgCobros','pgStats'].indexOf(id);
+  if(idx>=0) document.querySelectorAll('.tab')[idx].classList.add('active');
+}
+
+// ── SCALE ──
+function setScale(btn) {
+  document.querySelectorAll(".scale-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  currentScale = btn.dataset.scale;
+  renderRows(); recalc();
+}
+
+// ── RENDER ROWS ──
+function renderRows() {
+  const container = document.getElementById("productRows");
+  container.innerHTML = "";
+  rows.forEach((row,i) => {
+    const price = getPrice(row);
+    const sub = row.active ? price*row.qty : 0;
+    const div = document.createElement("div");
+    div.className = "product-row" + (row.active ? "" : " disabled");
+    div.innerHTML = `
+      <button class="toggle-row ${row.active?"on":""}" onclick="toggleRow(${i})"></button>
+      <div class="row-left">
+        <div class="field-group">
+          <label>Producto</label>
+          <select onchange="changeProduct(${i},this.value)">
+            ${PRODUCTS.map((p,pi)=>`<option value="${pi}" ${p.name===row.name?"selected":""}>${p.name}</option>`).join("")}
+            <option value="custom" ${!PRODUCTS.find(p=>p.name===row.name)?"selected":""}>Personalizado</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Descripción</label>
+          <input type="text" value="${row.desc}" onchange="rows[${i}].desc=this.value;recalc()">
+        </div>
+        <div style="display:flex;gap:8px">
+          <div class="field-group" style="flex:1"><label>$/Pack</label>
+            <input type="number" value="${price}" onchange="rows[${i}].customPrice=+this.value;recalc()">
+          </div>
+          <div class="field-group" style="flex:1"><label>Unds/Pack</label>
+            <input type="number" value="${row.units}" onchange="rows[${i}].units=+this.value;recalc()">
+          </div>
+        </div>
+      </div>
+      <div class="row-right">
+        <label>Cant.</label>
+        <input type="number" class="qty-input" value="${row.qty}" min="0" onchange="rows[${i}].qty=+this.value;recalc()">
+        <div class="row-subtotal">${row.active?fmt(sub):"—"}</div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function changeProduct(i,val) {
+  if(val==="custom") rows[i]={name:"",desc:"",units:12,prices:{"10-19":0,"20-49":0,"50+":0},qty:rows[i].qty,active:true};
+  else rows[i]={...PRODUCTS[+val],qty:rows[i].qty,active:rows[i].active};
+  renderRows(); recalc();
+}
+function toggleRow(i) { rows[i].active=!rows[i].active; renderRows(); recalc(); }
+function addRow() { rows.push({...PRODUCTS[0],qty:10,active:true}); renderRows(); recalc(); }
+
+function recalc() {
+  let packs=0,units=0,money=0;
+  rows.forEach((row,i)=>{
+    if(!row.active) return;
+    const price=getPrice(row);
+    packs+=row.qty; units+=row.qty*row.units; money+=price*row.qty;
+    const pr=document.querySelectorAll(".product-row")[i];
+    if(pr){const s=pr.querySelector(".row-subtotal");if(s)s.textContent=fmt(price*row.qty);}
+  });
+  document.getElementById("sumPacks").textContent=packs+" packs";
+  document.getElementById("sumUnits").textContent=units+" unidades";
+  document.getElementById("sumEnvio").textContent=packs>=20?"GRATIS ✓":"A calcular";
+  document.getElementById("sumTotal").textContent=fmt(money);
+}
+
+// ── GENERATE ORDER ──
+function generateOrder() {
+  let packs=0,units=0,money=0;
+  const active=rows.filter(r=>r.active);
+  if(!active.length) { alert("Agregá al menos un producto"); return; }
+  active.forEach(row=>{ const p=getPrice(row); packs+=row.qty; units+=row.qty*row.units; money+=p*row.qty; });
+
+  const num = bumpCounter();
+  currentOrderNum = padNum(num);
+  updateOrderNum();
+
+  const scaleLabels={"10-19":"10–19 PACKS","20-49":"20–49 PACKS","50+":"50+ PACKS"};
+  const scaleDescs={"10-19":"Precio estándar · Pedido mínimo 10 packs","20-49":"Precio intermedio · Envío gratis CABA/GBA","50+":"Mejor precio · Envío gratis CABA/GBA"};
+  const cliente=document.getElementById("clienteInput").value.trim();
+  const fecha=document.getElementById("fechaInput").value;
+  const nota=document.getElementById("notaInput").value.trim();
+  const envio=packs>=20?"GRATIS ✓":"A calcular";
+
+  // fill card
+  document.getElementById("cardOrderNum").textContent=currentOrderNum;
+  document.getElementById("cardOrderDate").textContent=new Date().toLocaleString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  document.getElementById("cardScaleTag").textContent=scaleLabels[currentScale];
+  document.getElementById("cardScaleDesc").textContent=scaleDescs[currentScale];
+  document.getElementById("cardCliente").textContent=cliente||"—";
+  document.getElementById("cardFecha").textContent=fmtDate(fecha)||"—";
+
+  const tbody=document.getElementById("cardTableBody");
+  tbody.innerHTML="";
+  active.forEach(row=>{
+    const price=getPrice(row);
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td class="pname">${row.name}<small>${row.desc}</small></td><td class="pqty">${row.qty}</td><td class="pprice">${fmt(price)}</td><td class="psub">${fmt(price*row.qty)}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("cardPacks").textContent=packs+" packs";
+  document.getElementById("cardUnits").textContent=units+" unidades";
+  document.getElementById("cardEnvio").textContent=envio;
+  document.getElementById("cardTotal").textContent=fmt(money);
+
+  if(nota){
+    document.getElementById("cardNota").textContent="📝 "+nota;
+    document.getElementById("cardNotaWrap").style.display="block";
+  } else {
+    document.getElementById("cardNotaWrap").style.display="none";
+  }
+
+  // fill ticket
+  document.getElementById("tkNum").textContent=currentOrderNum;
+  document.getElementById("tkFecha").textContent=fmtDate(fecha)||new Date().toLocaleDateString("es-AR");
+  document.getElementById("tkCliente").textContent=cliente||"—";
+  document.getElementById("tkPacks").textContent=packs+" packs";
+  document.getElementById("tkUnits").textContent=units+" unidades";
+  document.getElementById("tkEnvio").textContent=envio;
+  document.getElementById("tkTotal").textContent=fmt(money);
+  const tkItems=document.getElementById("tkItems");
+  tkItems.innerHTML="";
+  active.forEach(row=>{
+    const price=getPrice(row);
+    tkItems.innerHTML+=`<div class="tk-row"><span>${row.qty}x ${row.name}</span><span>${fmt(price*row.qty)}</span></div>`;
+  });
+  if(nota){
+    document.getElementById("tkNota").textContent="Nota: "+nota;
+    document.getElementById("tkNota").style.display="block";
+  } else {
+    document.getElementById("tkNota").style.display="none";
+  }
+
+  // payment data
+  const pagoEstado = document.getElementById("pagoEstado").value;
+  const pagoMedio  = document.getElementById("pagoMedio").value;
+  const pagoVence  = document.getElementById("pagoVence").value || null;
+  const pagoAdelanto = pagoEstado==="parcial" ? (parseFloat(document.getElementById("pagoAdelanto").value)||0) : (pagoEstado==="contado" ? money : 0);
+  const deuda = money - pagoAdelanto;
+
+  // save to history
+  const orderData = {
+    num: currentOrderNum,
+    numInt: num,
+    cliente,
+    fecha: fecha || new Date().toISOString().split("T")[0],
+    scale: currentScale,
+    items: active.map(row=>({ name:row.name, qty:row.qty, price:getPrice(row), subtotal:getPrice(row)*row.qty, units:row.units })),
+    packs, units, money,
+    envio, nota,
+    pagoEstado,
+    pagoMedio,
+    pagoVence,
+    pagos: pagoAdelanto>0 ? [{monto:pagoAdelanto, medio:pagoMedio, fecha:new Date().toISOString().split("T")[0], nota:"Pago inicial"}] : [],
+    deuda,
+    createdAt: new Date().toISOString()
+  };
+  const orders = getOrders();
+  orders.unshift(orderData);
+  saveOrders(orders);
+
+  showPage('pgPreview');
+}
+
+// ── DOWNLOAD ──
+async function downloadImage() {
+  const card=document.getElementById("card");
+  document.getElementById("ticket").style.display="none";
+  const canvas=await html2canvas(card,{scale:3,backgroundColor:"#111111",useCORS:true,logging:false,width:card.offsetWidth,windowWidth:card.offsetWidth});
+  const link=document.createElement("a");
+  const cliente=document.getElementById("clienteInput").value.trim().replace(/\s+/g,"_")||"pedido";
+  link.download=`${currentOrderNum}_${cliente}.png`;
+  link.href=canvas.toDataURL("image/png");
+  link.click();
+}
+
+// ── PRINT ──
+function printTicket() {
+  const t=document.getElementById("ticket");
+  t.style.display="block";
+  setTimeout(()=>{ window.print(); },300);
+}
+
+// ── STATS ──
+let currentFilter="all";
+
+function setFilter(btn) {
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  currentFilter=btn.dataset.filter;
+  renderOrdersList();
+}
+
+function renderStats() {
+  const orders=getOrders();
+  const now=new Date();
+
+  // totals
+  document.getElementById("statTotal").textContent=orders.length;
+  document.getElementById("statMonto").textContent=fmt(orders.reduce((a,o)=>a+o.money,0));
+
+  // this month
+  const thisMonth=orders.filter(o=>{ const d=new Date(o.createdAt); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); });
+  document.getElementById("statMes").textContent=thisMonth.length;
+  document.getElementById("statMesLabel").textContent=fmt(thisMonth.reduce((a,o)=>a+o.money,0));
+
+  // this week
+  const weekStart=new Date(now); weekStart.setDate(now.getDate()-now.getDay());
+  const thisWeek=orders.filter(o=>new Date(o.createdAt)>=weekStart);
+  document.getElementById("statSemana").textContent=thisWeek.length;
+
+  // bar chart last 7 days
+  const chart=document.getElementById("barChart");
+  chart.innerHTML="";
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(now); d.setDate(now.getDate()-i);
+    const key=d.toISOString().split("T")[0];
+    const count=orders.filter(o=>o.createdAt&&o.createdAt.startsWith(key)).length;
+    days.push({label:d.toLocaleDateString("es-AR",{weekday:"short"}).slice(0,2),count});
+  }
+  const maxCount=Math.max(...days.map(d=>d.count),1);
+  days.forEach(d=>{
+    const col=document.createElement("div"); col.className="bar-col";
+    const fill=document.createElement("div"); fill.className="bar-fill";
+    fill.style.height=Math.max(2,Math.round((d.count/maxCount)*54))+"px";
+    const lbl=document.createElement("div"); lbl.className="bar-lbl"; lbl.textContent=d.label;
+    col.appendChild(fill); col.appendChild(lbl);
+    chart.appendChild(col);
+  });
+
+  renderOrdersList();
+}
+
+function payBadgeHtml(o) {
+  if(!o.pagoEstado || o.pagoEstado==="contado") return '<span class="pay-badge pagado">✓ PAGADO</span>';
+  const now = new Date(); now.setHours(0,0,0,0);
+  const isVencido = o.pagoVence && new Date(o.pagoVence) < now;
+  const isParcial = (o.pagos||[]).length > 0 && o.deuda > 0;
+  if(isVencido) return '<span class="pay-badge vencido">⚠ VENCIDO</span>';
+  if(isParcial) return '<span class="pay-badge parcial">● PARCIAL</span>';
+  return '<span class="pay-badge pendiente">● PENDIENTE</span>';
+}
+
+function renderOrdersList() {
+  const all=getOrders();
+  const now=new Date();
+  let filtered=all;
+  if(currentFilter==="week"){
+    const ws=new Date(now); ws.setDate(now.getDate()-now.getDay());
+    filtered=all.filter(o=>new Date(o.createdAt)>=ws);
+  } else if(currentFilter==="month"){
+    filtered=all.filter(o=>{ const d=new Date(o.createdAt); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); });
+  }
+
+  const list=document.getElementById("ordersList");
+  if(!filtered.length){
+    list.innerHTML=`<div class="empty-state"><div class="big">📋</div><p>No hay órdenes en este período</p></div>`;
+    return;
+  }
+  list.innerHTML="";
+  filtered.forEach(o=>{
+    const div=document.createElement("div"); div.className="order-item";
+    const d=new Date(o.createdAt);
+    const dateStr=d.toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"});
+    const timeStr=d.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
+    div.innerHTML=`
+      <button class="order-item-del" onclick="deleteOrder('${o.num}',event)" title="Eliminar">✕</button>
+      <div class="order-item-top">
+        <span class="order-item-num">${o.num}</span>
+        <span class="order-item-total">${fmt(o.money)}</span>
+      </div>
+      <div class="order-item-client">${o.cliente||"Sin nombre"}</div>
+      <div class="order-item-meta" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px">
+        <span>${dateStr} ${timeStr} · ${o.packs} packs</span>
+        ${payBadgeHtml(o)}
+      </div>
+      <div class="order-item-actions">
+        <button class="oia-btn" onclick="reloadOrder('${o.num}',event)">👁 Ver</button>
+        <button class="oia-btn" onclick="reloadOrderAndDownload('${o.num}',event)">⬇ PNG</button>
+        <button class="oia-btn" onclick="reloadOrderAndPrint('${o.num}',event)">🖨 Ticket</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function deleteOrder(num, e) {
+  e.stopPropagation();
+  if(!confirm(`¿Eliminar la orden ${num}?`)) return;
+  const orders=getOrders().filter(o=>o.num!==num);
+  saveOrders(orders);
+  renderStats();
+}
+
+// ── RELOAD ORDER FROM HISTORY ──
+function buildCardFromOrder(o) {
+  const scaleLabels={"10-19":"10–19 PACKS","20-49":"20–49 PACKS","50+":"50+ PACKS"};
+  const scaleDescs={"10-19":"Precio estándar · Pedido mínimo 10 packs","20-49":"Precio intermedio · Envío gratis CABA/GBA","50+":"Mejor precio · Envío gratis CABA/GBA"};
+
+  currentOrderNum = o.num;
+  document.getElementById("cardOrderNum").textContent = o.num;
+  const d = new Date(o.createdAt);
+  document.getElementById("cardOrderDate").textContent = d.toLocaleString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  document.getElementById("cardScaleTag").textContent  = scaleLabels[o.scale]||o.scale;
+  document.getElementById("cardScaleDesc").textContent = scaleDescs[o.scale]||"";
+  document.getElementById("cardCliente").textContent   = o.cliente||"—";
+  document.getElementById("cardFecha").textContent     = fmtDate(o.fecha)||"—";
+
+  const tbody=document.getElementById("cardTableBody");
+  tbody.innerHTML="";
+  o.items.forEach(item=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td class="pname">${item.name}<small>${item.desc||""}</small></td><td class="pqty">${item.qty}</td><td class="pprice">${fmt(item.price)}</td><td class="psub">${fmt(item.subtotal)}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("cardPacks").textContent = o.packs+" packs";
+  document.getElementById("cardUnits").textContent = o.units+" unidades";
+  document.getElementById("cardEnvio").textContent = o.envio;
+  document.getElementById("cardTotal").textContent = fmt(o.money);
+
+  if(o.nota){
+    document.getElementById("cardNota").textContent="📝 "+o.nota;
+    document.getElementById("cardNotaWrap").style.display="block";
+  } else {
+    document.getElementById("cardNotaWrap").style.display="none";
+  }
+
+  // ticket
+  document.getElementById("tkNum").textContent     = o.num;
+  document.getElementById("tkFecha").textContent   = fmtDate(o.fecha)||d.toLocaleDateString("es-AR");
+  document.getElementById("tkCliente").textContent = o.cliente||"—";
+  document.getElementById("tkPacks").textContent   = o.packs+" packs";
+  document.getElementById("tkUnits").textContent   = o.units+" unidades";
+  document.getElementById("tkEnvio").textContent   = o.envio;
+  document.getElementById("tkTotal").textContent   = fmt(o.money);
+  const tkItems=document.getElementById("tkItems");
+  tkItems.innerHTML="";
+  o.items.forEach(item=>{
+    tkItems.innerHTML+=`<div class="tk-row"><span>${item.qty}x ${item.name}</span><span>${fmt(item.subtotal)}</span></div>`;
+  });
+  if(o.nota){
+    document.getElementById("tkNota").textContent="Nota: "+o.nota;
+    document.getElementById("tkNota").style.display="block";
+  } else {
+    document.getElementById("tkNota").style.display="none";
+  }
+}
+
+function reloadOrder(num, e) {
+  e && e.stopPropagation();
+  const o = getOrders().find(x=>x.num===num);
+  if(!o) return;
+  buildCardFromOrder(o);
+  document.getElementById("ticket").style.display="none";
+  showPage('pgPreview');
+}
+
+async function reloadOrderAndDownload(num, e) {
+  e && e.stopPropagation();
+  const o = getOrders().find(x=>x.num===num);
+  if(!o) return;
+  buildCardFromOrder(o);
+  document.getElementById("ticket").style.display="none";
+  showPage('pgPreview');
+  await new Promise(r=>setTimeout(r,200));
+  const card=document.getElementById("card");
+  const canvas=await html2canvas(card,{scale:3,backgroundColor:"#111111",useCORS:true,logging:false,width:card.offsetWidth,windowWidth:card.offsetWidth});
+  const link=document.createElement("a");
+  const clienteSlug=(o.cliente||"pedido").replace(/\s+/g,"_");
+  link.download=`${o.num}_${clienteSlug}.png`;
+  link.href=canvas.toDataURL("image/png");
+  link.click();
+}
+
+function reloadOrderAndPrint(num, e) {
+  e && e.stopPropagation();
+  const o = getOrders().find(x=>x.num===num);
+  if(!o) return;
+  buildCardFromOrder(o);
+  showPage('pgPreview');
+  setTimeout(()=>{
+    document.getElementById("ticket").style.display="block";
+    setTimeout(()=>window.print(), 300);
+  }, 200);
+}
+
+// ── PAYMENT FORM TOGGLES ──
+function togglePagoFields() {
+  const est = document.getElementById("pagoEstado").value;
+  document.getElementById("pagoVenceWrap").style.display   = est==="credito"||est==="parcial" ? "block" : "none";
+  document.getElementById("pagoAdelantoWrap").style.display = est==="parcial" ? "block" : "none";
+  updateAdelantoCalc();
+}
+
+function updateAdelantoCalc() {
+  const adelanto = parseFloat(document.getElementById("pagoAdelanto").value)||0;
+  const totalEl = document.getElementById("sumTotal").textContent;
+  const total = parseInt(totalEl.replace(/[^0-9]/g,""));
+  const saldo = total - adelanto;
+  const pct = total>0 ? Math.round(adelanto/total*100) : 0;
+  document.getElementById("adelantoCalc").textContent = adelanto>0 ? `Saldo pendiente: ${fmt(saldo)} (${pct}% adelantado)` : "";
+}
+
+// ── COBROS PAGE ──
+function renderCobros() {
+  const orders = getOrders();
+  const pendientes = orders.filter(o => o.pagoEstado !== "contado" && o.deuda > 0);
+  const now = new Date(); now.setHours(0,0,0,0);
+
+  let totalCalle = 0, totalVencido = 0, vencidosCount = 0;
+  pendientes.forEach(o => {
+    totalCalle += o.deuda;
+    if(o.pagoVence) {
+      const v = new Date(o.pagoVence); v.setHours(0,0,0,0);
+      if(v < now) { totalVencido += o.deuda; vencidosCount++; }
+    }
+  });
+
+  document.getElementById("calleTotal").textContent = fmt(totalCalle);
+  const alertBox = document.getElementById("vencidosAlert");
+  if(vencidosCount > 0) {
+    alertBox.style.display="flex";
+    document.getElementById("vencidosMonto").textContent = fmt(totalVencido);
+    document.getElementById("vencidosCount").textContent = vencidosCount + " orden" + (vencidosCount>1?"es":"") + " vencida" + (vencidosCount>1?"s":"");
+  } else {
+    alertBox.style.display="none";
+  }
+
+  const list = document.getElementById("cobrosList");
+  const empty = document.getElementById("cobrosEmpty");
+
+  if(!pendientes.length) {
+    list.innerHTML=""; empty.style.display="block"; return;
+  }
+  empty.style.display="none";
+  list.innerHTML="";
+
+  // sort: vencidos first, then by vence date
+  pendientes.sort((a,b) => {
+    const av = a.pagoVence ? new Date(a.pagoVence) : new Date("9999-12-31");
+    const bv = b.pagoVence ? new Date(b.pagoVence) : new Date("9999-12-31");
+    return av - bv;
+  });
+
+  pendientes.forEach(o => {
+    const isVencido = o.pagoVence && new Date(o.pagoVence) < now;
+    const isParcial = (o.pagos||[]).length > 0 && o.deuda > 0;
+    const div = document.createElement("div");
+    div.className = "cobro-item" + (isVencido?" vencido":isParcial?" parcial":"");
+
+    let venceStr = "";
+    if(o.pagoVence) {
+      const v = new Date(o.pagoVence); v.setHours(12,0,0,0);
+      const diff = Math.round((v-now)/(1000*60*60*24));
+      if(isVencido) venceStr = `<span class="cobro-vence">⚠ Vencido hace ${Math.abs(diff)} día${Math.abs(diff)!==1?"s":""}</span>`;
+      else if(diff===0) venceStr = `<span class="cobro-vence ok">Vence HOY</span>`;
+      else venceStr = `<span class="cobro-vence ok">Vence en ${diff} día${diff!==1?"s":""} (${fmtDate(o.pagoVence)})</span>`;
+    }
+
+    let pagosHtml = "";
+    if((o.pagos||[]).length > 0) {
+      pagosHtml = `<div class="pagos-list">
+        <div style="font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;margin-bottom:3px">Pagos registrados</div>
+        ${o.pagos.map(p=>`<div class="pago-item"><span>${fmtDate(p.fecha)} · ${p.nota||""}</span><span>${fmt(p.monto)} <span class="pm">${p.medio}</span></span></div>`).join("")}
+      </div>`;
+    }
+
+    const estadoBadge = isVencido ? `<span class="pay-badge vencido">● VENCIDO</span>` :
+                        isParcial ? `<span class="pay-badge parcial">● PARCIAL</span>` :
+                                    `<span class="pay-badge pendiente">● PENDIENTE</span>`;
+
+    div.innerHTML = `
+      <div class="cobro-item-top">
+        <div>
+          <div class="cobro-cliente">${o.cliente||"Sin nombre"}</div>
+          <div class="cobro-num">${o.num} · ${fmtDate(o.fecha)} · ${estadoBadge}</div>
+        </div>
+        <div class="cobro-montos">
+          <div class="cobro-deuda ${isParcial?"parcial":""}">${fmt(o.deuda)}</div>
+          <div class="cobro-total-sm">de ${fmt(o.money)} total</div>
+        </div>
+      </div>
+      <div class="cobro-meta">
+        ${venceStr}
+        <span>💳 ${o.pagoMedio||"—"}</span>
+      </div>
+      ${pagosHtml}
+      <div class="cobro-actions" style="margin-top:10px">
+        <button class="cobro-btn pagar" onclick="abrirModalPago('${o.num}', false)">✓ Cobrado completo</button>
+        <button class="cobro-btn parcial-btn" onclick="abrirModalPago('${o.num}', true)">+ Abono parcial</button>
+        <button class="cobro-btn ver-btn" onclick="reloadOrder('${o.num}')">👁 Ver</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+// ── MODAL PAGO ──
+let modalOrderNum = null;
+let modalIsParcial = false;
+
+function abrirModalPago(num, isParcial) {
+  const o = getOrders().find(x=>x.num===num);
+  if(!o) return;
+  modalOrderNum = num;
+  modalIsParcial = isParcial;
+  document.getElementById("modalTitle").textContent = isParcial ? "REGISTRAR ABONO" : "COBRO COMPLETO";
+  document.getElementById("modalSub").textContent = `${o.num} · ${o.cliente||"Sin nombre"} · Deuda: ${fmt(o.deuda)}`;
+  document.getElementById("modalMonto").value = isParcial ? "" : o.deuda;
+  document.getElementById("modalNota").value = "";
+  document.getElementById("pagoModal").classList.add("open");
+}
+
+function closePagoModal(e) {
+  if(e && e.target !== document.getElementById("pagoModal")) return;
+  document.getElementById("pagoModal").classList.remove("open");
+}
+
+function confirmarPago() {
+  const monto = parseFloat(document.getElementById("modalMonto").value)||0;
+  const medio = document.getElementById("modalMedio").value;
+  const nota  = document.getElementById("modalNota").value.trim();
+  if(monto<=0) { alert("Ingresá un monto válido"); return; }
+
+  const orders = getOrders();
+  const o = orders.find(x=>x.num===modalOrderNum);
+  if(!o) return;
+
+  if(!o.pagos) o.pagos = [];
+  o.pagos.push({ monto, medio, fecha:new Date().toISOString().split("T")[0], nota });
+  const totalPagado = o.pagos.reduce((a,p)=>a+p.monto, 0);
+  o.deuda = Math.max(0, o.money - totalPagado);
+  o.pagoEstado = o.deuda <= 0 ? "contado" : "parcial";
+
+  saveOrders(orders);
+  document.getElementById("pagoModal").classList.remove("open");
+  renderCobros();
+}
+
+// ── INIT ──
+document.getElementById("fechaInput").valueAsDate=new Date();
+updateOrderNum();
+renderRows();
+recalc();
+</script>
+</body>
+</html>
