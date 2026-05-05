@@ -257,6 +257,13 @@ input.qty-input {
 .order-item-meta { font-size:10px; color:var(--muted); margin-top:2px; }
 .order-item-del { background:none; border:none; color:#333; font-size:14px; cursor:pointer; padding:4px; float:right; }
 .order-item-del:hover { color:var(--red); }
+.order-item-actions { display:flex; gap:6px; margin-top:10px; }
+.oia-btn {
+  flex:1; background:rgba(255,199,44,0.07); border:1px solid var(--gold-border);
+  border-radius:6px; color:var(--gold); font-size:11px; font-family:'Fira Sans',sans-serif;
+  font-weight:600; padding:6px 4px; cursor:pointer; transition:all 0.15s; text-align:center;
+}
+.oia-btn:hover { background:rgba(255,199,44,0.18); }
 
 .empty-state { text-align:center; padding:40px 20px; color:var(--muted); }
 .empty-state .big { font-size:40px; margin-bottom:10px; }
@@ -797,6 +804,11 @@ function renderOrdersList() {
       </div>
       <div class="order-item-client">${o.cliente||"Sin nombre"}</div>
       <div class="order-item-meta">${dateStr} ${timeStr} · ${o.packs} packs · ${o.units} unidades · Escala ${o.scale}</div>
+      <div class="order-item-actions">
+        <button class="oia-btn" onclick="reloadOrder('${o.num}',event)">👁 Ver</button>
+        <button class="oia-btn" onclick="reloadOrderAndDownload('${o.num}',event)">⬇ PNG</button>
+        <button class="oia-btn" onclick="reloadOrderAndPrint('${o.num}',event)">🖨 Ticket</button>
+      </div>
     `;
     list.appendChild(div);
   });
@@ -808,6 +820,99 @@ function deleteOrder(num, e) {
   const orders=getOrders().filter(o=>o.num!==num);
   saveOrders(orders);
   renderStats();
+}
+
+// ── RELOAD ORDER FROM HISTORY ──
+function buildCardFromOrder(o) {
+  const scaleLabels={"10-19":"10–19 PACKS","20-49":"20–49 PACKS","50+":"50+ PACKS"};
+  const scaleDescs={"10-19":"Precio estándar · Pedido mínimo 10 packs","20-49":"Precio intermedio · Envío gratis CABA/GBA","50+":"Mejor precio · Envío gratis CABA/GBA"};
+
+  currentOrderNum = o.num;
+  document.getElementById("cardOrderNum").textContent = o.num;
+  const d = new Date(o.createdAt);
+  document.getElementById("cardOrderDate").textContent = d.toLocaleString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  document.getElementById("cardScaleTag").textContent  = scaleLabels[o.scale]||o.scale;
+  document.getElementById("cardScaleDesc").textContent = scaleDescs[o.scale]||"";
+  document.getElementById("cardCliente").textContent   = o.cliente||"—";
+  document.getElementById("cardFecha").textContent     = fmtDate(o.fecha)||"—";
+
+  const tbody=document.getElementById("cardTableBody");
+  tbody.innerHTML="";
+  o.items.forEach(item=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td class="pname">${item.name}<small>${item.desc||""}</small></td><td class="pqty">${item.qty}</td><td class="pprice">${fmt(item.price)}</td><td class="psub">${fmt(item.subtotal)}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("cardPacks").textContent = o.packs+" packs";
+  document.getElementById("cardUnits").textContent = o.units+" unidades";
+  document.getElementById("cardEnvio").textContent = o.envio;
+  document.getElementById("cardTotal").textContent = fmt(o.money);
+
+  if(o.nota){
+    document.getElementById("cardNota").textContent="📝 "+o.nota;
+    document.getElementById("cardNotaWrap").style.display="block";
+  } else {
+    document.getElementById("cardNotaWrap").style.display="none";
+  }
+
+  // ticket
+  document.getElementById("tkNum").textContent     = o.num;
+  document.getElementById("tkFecha").textContent   = fmtDate(o.fecha)||d.toLocaleDateString("es-AR");
+  document.getElementById("tkCliente").textContent = o.cliente||"—";
+  document.getElementById("tkPacks").textContent   = o.packs+" packs";
+  document.getElementById("tkUnits").textContent   = o.units+" unidades";
+  document.getElementById("tkEnvio").textContent   = o.envio;
+  document.getElementById("tkTotal").textContent   = fmt(o.money);
+  const tkItems=document.getElementById("tkItems");
+  tkItems.innerHTML="";
+  o.items.forEach(item=>{
+    tkItems.innerHTML+=`<div class="tk-row"><span>${item.qty}x ${item.name}</span><span>${fmt(item.subtotal)}</span></div>`;
+  });
+  if(o.nota){
+    document.getElementById("tkNota").textContent="Nota: "+o.nota;
+    document.getElementById("tkNota").style.display="block";
+  } else {
+    document.getElementById("tkNota").style.display="none";
+  }
+}
+
+function reloadOrder(num, e) {
+  e && e.stopPropagation();
+  const o = getOrders().find(x=>x.num===num);
+  if(!o) return;
+  buildCardFromOrder(o);
+  document.getElementById("ticket").style.display="none";
+  showPage('pgPreview');
+}
+
+async function reloadOrderAndDownload(num, e) {
+  e && e.stopPropagation();
+  const o = getOrders().find(x=>x.num===num);
+  if(!o) return;
+  buildCardFromOrder(o);
+  document.getElementById("ticket").style.display="none";
+  showPage('pgPreview');
+  await new Promise(r=>setTimeout(r,200));
+  const card=document.getElementById("card");
+  const canvas=await html2canvas(card,{scale:3,backgroundColor:"#111111",useCORS:true,logging:false,width:card.offsetWidth,windowWidth:card.offsetWidth});
+  const link=document.createElement("a");
+  const clienteSlug=(o.cliente||"pedido").replace(/\s+/g,"_");
+  link.download=`${o.num}_${clienteSlug}.png`;
+  link.href=canvas.toDataURL("image/png");
+  link.click();
+}
+
+function reloadOrderAndPrint(num, e) {
+  e && e.stopPropagation();
+  const o = getOrders().find(x=>x.num===num);
+  if(!o) return;
+  buildCardFromOrder(o);
+  showPage('pgPreview');
+  setTimeout(()=>{
+    document.getElementById("ticket").style.display="block";
+    setTimeout(()=>window.print(), 300);
+  }, 200);
 }
 
 // ── INIT ──
