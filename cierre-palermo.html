@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cierre Palermo · Teque Onda</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #FFC72C; --dark: #111009; --surface: #1a1810; --card: #221f12;
+    --border: #332e18; --red: #e8412a; --orange: #f07d1a; --green: #3dba6e;
+    --text: #f0e8cc; --muted: #8a8060;
+    --font-head: 'Bebas Neue', sans-serif; --font-body: 'Fira Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark); color: var(--text); font-family: var(--font-body); min-height: 100vh; padding: 0 0 80px; }
+
+  /* HEADER */
+  header { background: var(--surface); border-bottom: 2px solid var(--gold); padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  header h1 { font-family: var(--font-head); font-size: 1.7rem; letter-spacing: 2px; color: var(--gold); line-height: 1; }
+  header .sub { font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .date-badge { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+  .btn-settings { background: var(--card); border: 1px solid var(--gold); border-radius: 8px; color: var(--gold); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 7px 12px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; white-space: nowrap; font-family: var(--font-body); }
+  .btn-settings:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* TOOLBAR */
+  .toolbar { display: flex; gap: 8px; padding: 14px 16px; flex-wrap: wrap; align-items: center; }
+  .filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); font-family: var(--font-body); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-btn.active     { background: var(--gold);   border-color: var(--gold);   color: var(--dark); }
+  .filter-btn.red.active { background: var(--red);    border-color: var(--red);    color: #fff; }
+  .filter-btn.orange.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+  .filter-btn.green.active  { background: var(--green);  border-color: var(--green);  color: #fff; }
+  .filter-btn.grey.active   { background: var(--muted);  border-color: var(--muted);  color: var(--dark); }
+
+  /* CATEGORIES & ROWS */
+  .category { margin: 12px 16px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card); }
+  .cat-header { background: var(--surface); padding: 10px 16px; font-family: var(--font-head); font-size: 1.05rem; letter-spacing: 2px; color: var(--gold); display: flex; align-items: center; gap: 10px; }
+  .cat-count { margin-left: auto; font-family: var(--font-body); font-size: 0.65rem; background: var(--border); border-radius: 10px; padding: 2px 8px; color: var(--muted); font-weight: 500; }
+  .product-row { display: flex; align-items: center; padding: 10px 16px; border-top: 1px solid var(--border); gap: 10px; transition: background 0.1s; }
+  .product-row:hover { background: rgba(255,199,44,0.03); }
+  .product-row.hidden { display: none !important; }
+  .product-row.confirmed { opacity: 0.5; background: rgba(255,255,255,0.015); }
+  .product-row.confirmed .prod-name { text-decoration: line-through; color: var(--muted); }
+  .prod-name { font-size: 0.82rem; font-weight: 500; flex: 1; color: var(--text); }
+  .prod-abbr { font-size: 0.65rem; color: var(--muted); font-weight: 400; margin-left: 4px; }
+  .qty-wrap { display: flex; align-items: center; background: var(--dark); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .qty-btn { background: transparent; border: none; color: var(--muted); font-size: 1rem; width: 28px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; transition: color 0.1s; }
+  .qty-btn:hover { color: var(--gold); }
+  .qty-btn:disabled { pointer-events: none; opacity: 0.3; }
+  .qty-input { background: transparent; border: none; color: var(--text); font-family: var(--font-body); font-size: 0.88rem; font-weight: 600; width: 54px; text-align: center; outline: none; height: 32px; }
+  .qty-input::-webkit-inner-spin-button { display: none; }
+  .qty-input:disabled { color: var(--muted); }
+  .unit-label { font-size: 0.65rem; color: var(--muted); min-width: 28px; }
+  .status-badge { font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; min-width: 60px; text-align: center; }
+  .status-badge.critical { background: rgba(232,65,42,0.18);  color: var(--red);    border: 1px solid rgba(232,65,42,0.3); }
+  .status-badge.warning  { background: rgba(240,125,26,0.15); color: var(--orange); border: 1px solid rgba(240,125,26,0.25); }
+  .status-badge.ok       { background: rgba(61,186,110,0.12); color: var(--green);  border: 1px solid rgba(61,186,110,0.2); }
+  .status-badge.done     { background: rgba(138,128,96,0.12); color: var(--muted);  border: 1px solid rgba(138,128,96,0.2); font-size: 0.58rem; }
+  .btn-confirm { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 0.72rem; padding: 5px 11px; border-radius: 6px; cursor: pointer; font-family: var(--font-body); font-weight: 600; transition: all 0.15s; white-space: nowrap; }
+  .btn-confirm:hover { border-color: var(--green); color: var(--green); }
+  .btn-edit { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 0.68rem; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-family: var(--font-body); transition: all 0.15s; white-space: nowrap; }
+  .btn-edit:hover { border-color: var(--gold); color: var(--gold); }
+  .product-row.freetext { flex-wrap: wrap; gap: 8px; }
+  .freetext-input { background: var(--dark); border: 1px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: 0.82rem; padding: 6px 10px; border-radius: 8px; width: 130px; outline: none; }
+  .freetext-input:focus { border-color: var(--gold); }
+  .freetext-input:disabled { color: var(--muted); pointer-events: none; }
+  .divider-confirmed { border: none; border-top: 1px dashed var(--border); margin: 0 16px; opacity: 0.5; }
+  .thresh-note { font-size: 0.67rem; color: var(--muted); text-align: center; padding: 10px 16px 0; }
+
+  /* BOTTOM BAR */
+  .summary-panel { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 2px solid var(--gold); padding: 12px 16px; display: flex; gap: 10px; z-index: 200; align-items: center; }
+  .summary-stats { display: flex; gap: 14px; align-items: center; flex: 1; flex-wrap: wrap; }
+  .stat-pill { font-size: 0.72rem; }
+  .btn-generate { background: var(--gold); color: var(--dark); border: none; font-family: var(--font-head); font-size: 1rem; letter-spacing: 1.5px; padding: 10px 20px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+  .btn-generate:hover { background: #e6b220; }
+
+  /* MODAL WHATSAPP */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 300; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--gold); border-bottom: none; border-radius: 16px 16px 0 0; width: 100%; max-width: 600px; padding: 20px 20px 30px; animation: slideUp 0.25s ease; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-title { font-family: var(--font-head); font-size: 1.3rem; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; }
+  .modal-text { background: var(--dark); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 0.78rem; line-height: 1.7; white-space: pre-wrap; font-family: 'Courier New', monospace; color: var(--text); max-height: 50vh; overflow-y: auto; margin-bottom: 14px; }
+  .modal-actions { display: flex; gap: 10px; }
+  .btn-copy { flex: 1; background: var(--gold); color: var(--dark); border: none; font-family: var(--font-head); font-size: 1rem; letter-spacing: 1px; padding: 11px; border-radius: 8px; cursor: pointer; }
+  .btn-close { background: var(--card); color: var(--text); border: 1px solid var(--border); font-family: var(--font-body); font-size: 0.82rem; padding: 11px 18px; border-radius: 8px; cursor: pointer; }
+
+  /* SETTINGS PANEL */
+  .settings-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 400; flex-direction: column; }
+  .settings-overlay.open { display: flex; }
+  .settings-header { background: var(--surface); border-bottom: 2px solid var(--gold); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .settings-header h2 { font-family: var(--font-head); font-size: 1.4rem; letter-spacing: 2px; color: var(--gold); }
+  .settings-subtitle { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+  .btn-close-settings { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--font-body); font-size: 0.8rem; padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .btn-close-settings:hover { border-color: var(--gold); color: var(--gold); }
+  .settings-body { flex: 1; overflow-y: auto; padding: 12px 16px 30px; }
+
+  .settings-cat { margin-bottom: 4px; }
+  .settings-cat-title { font-family: var(--font-head); font-size: 0.95rem; letter-spacing: 2px; color: var(--gold); padding: 12px 0 6px; display: flex; align-items: center; gap: 8px; }
+  .settings-row { display: flex; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); gap: 10px; }
+  .settings-prod-name { font-size: 0.8rem; font-weight: 500; flex: 1; color: var(--text); }
+  .settings-prod-abbr { font-size: 0.62rem; color: var(--muted); display: block; margin-top: 1px; }
+
+  .thresh-group { display: flex; align-items: center; gap: 6px; }
+  .thresh-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; min-width: 36px; }
+  .thresh-label.crit { color: var(--red); }
+  .thresh-label.warn { color: var(--orange); }
+  .thresh-input { background: var(--dark); border: 1px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; width: 52px; text-align: center; padding: 5px 4px; border-radius: 6px; outline: none; }
+  .thresh-input:focus { border-color: var(--gold); }
+  .thresh-input::-webkit-inner-spin-button { display: none; }
+  .thresh-input.disabled-input { opacity: 0.3; pointer-events: none; background: transparent; border-color: transparent; }
+
+  .free-thresh-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .free-thresh-badge { font-size: 0.62rem; color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; }
+
+  .settings-save-note { font-size: 0.68rem; color: var(--muted); text-align: center; padding: 16px 0 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>TEQUE ONDA</h1>
+    <div class="sub">Cierre · Palermo Bonpland</div>
+  </div>
+  <div class="header-right">
+    <div class="date-badge" id="dateBadge"></div>
+    <button class="btn-settings" onclick="openSettings()" title="Configurar umbrales">⚙ Config</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <button class="filter-btn active" data-filter="all"      onclick="setFilter('all',this)">Todo</button>
+  <button class="filter-btn red"    data-filter="critical" onclick="setFilter('critical',this)">🔴 Crítico</button>
+  <button class="filter-btn orange" data-filter="warning"  onclick="setFilter('warning',this)">🟡 Bajo</button>
+  <button class="filter-btn green"  data-filter="ok"       onclick="setFilter('ok',this)">🟢 OK</button>
+  <button class="filter-btn grey"   data-filter="pending"  onclick="setFilter('pending',this)">⬜ Pendientes</button>
+</div>
+
+<div id="app"></div>
+<p class="thresh-note">Confirmá cada ítem al contarlo · ✎ editar para corregir · ⚙️ para ajustar umbrales</p>
+
+<div class="summary-panel">
+  <div class="summary-stats">
+    <span class="stat-pill">🔴 <b id="cCrit">0</b></span>
+    <span class="stat-pill">🟡 <b id="cWarn">0</b></span>
+    <span class="stat-pill">🟢 <b id="cOk">0</b></span>
+    <span class="stat-pill" style="color:var(--muted)">✅ <b id="cDone">0</b>/<b id="cTotal">0</b></span>
+  </div>
+  <button class="btn-generate" onclick="openModal()">📋 GENERAR</button>
+</div>
+
+<!-- WHATSAPP MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">📲 MENSAJE WHATSAPP</div>
+    <div class="modal-text" id="modalText"></div>
+    <div class="modal-actions">
+      <button class="btn-copy" onclick="copyText()">📋 COPIAR</button>
+      <button class="btn-close" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS PANEL -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-header">
+    <div>
+      <h2>⚙️ UMBRALES DE STOCK</h2>
+      <div class="settings-subtitle">Los cambios se aplican al instante</div>
+    </div>
+    <button class="btn-close-settings" onclick="closeSettings()">✓ Listo</button>
+  </div>
+  <div class="settings-body" id="settingsBody"></div>
+</div>
+
+<script>
+// ── CATALOG ────────────────────────────────────────────────────────────────
+const catalog = [
+  { id:'choco',    cat:'POSTRES',        label:'Chocolate',               abbr:'CHOCO',          unit:'unid', val:0,   critAt:3,  warnAt:10 },
+  { id:'leches',   cat:'POSTRES',        label:'Leches',                  abbr:'LECHES',         unit:'unid', val:15,  critAt:5,  warnAt:20 },
+  { id:'cachitos', cat:'CACHITOS',       label:'Cachitos',                abbr:'CACHITOS',       unit:'und',  val:0,   critAt:5,  warnAt:20 },
+  { id:'eme',      cat:'MINI EMPANADAS', label:'Empanada Mechada',        abbr:'EME',            unit:'und',  val:0,   critAt:5,  warnAt:25 },
+  { id:'emo',      cat:'MINI EMPANADAS', label:'Empanada Molida',         abbr:'EMO',            unit:'und',  val:38,  critAt:5,  warnAt:25 },
+  { id:'epo',      cat:'MINI EMPANADAS', label:'Empanada Pollo',          abbr:'EPO',            unit:'und',  val:0,   critAt:5,  warnAt:25 },
+  { id:'ejq',      cat:'MINI EMPANADAS', label:'Empanada Jamón y Queso',  abbr:'EJQ',            unit:'und',  val:37,  critAt:5,  warnAt:25 },
+  { id:'eq',       cat:'MINI EMPANADAS', label:'Empanada Queso',          abbr:'EQ',             unit:'und',  val:69,  critAt:10, warnAt:40 },
+  { id:'edm',      cat:'MINI EMPANADAS', label:'Empanada Dominó',         abbr:'EDM',            unit:'und',  val:51,  critAt:10, warnAt:40 },
+  { id:'epa',      cat:'MINI EMPANADAS', label:'Empanada Pabellón',       abbr:'EPA',            unit:'und',  val:20,  critAt:5,  warnAt:30 },
+  { id:'pme',      cat:'PASTELITOS',     label:'Pastelito Mechada',       abbr:'PME',            unit:'und',  val:50,  critAt:10, warnAt:30 },
+  { id:'pmo',      cat:'PASTELITOS',     label:'Pastelito Molida',        abbr:'PMO',            unit:'und',  val:26,  critAt:10, warnAt:30 },
+  { id:'ppo',      cat:'PASTELITOS',     label:'Pastelito Pollo',         abbr:'PPO',            unit:'und',  val:0,   critAt:5,  warnAt:25 },
+  { id:'ppz',      cat:'PASTELITOS',     label:'Pastelito Pizza',         abbr:'PPZ',            unit:'und',  val:68,  critAt:10, warnAt:35 },
+  { id:'pq',       cat:'PASTELITOS',     label:'Pastelito Queso',         abbr:'PQ',             unit:'und',  val:11,  critAt:5,  warnAt:25 },
+  { id:'ppa',      cat:'PASTELITOS',     label:'Pastelito Papa y Queso',  abbr:'PPA',            unit:'und',  val:111, critAt:10, warnAt:40 },
+  { id:'pjq',      cat:'PASTELITOS',     label:'Pastelito Jamón y Queso', abbr:'PJQ',            unit:'und',  val:47,  critAt:10, warnAt:30 },
+  { id:'to',       cat:'TEQUEÑOS',       label:'Tequeño Original',        abbr:'TO',             unit:'und',  val:83,  critAt:20, warnAt:50, isFree:true },
+  { id:'tf',       cat:'TEQUEÑOS',       label:'Tequeño Fiestero',        abbr:'TF',             unit:'und',  val:18,  critAt:10, warnAt:30 },
+  { id:'tjq',      cat:'TEQUEÑOS',       label:'Tequeño Jamón y Queso',   abbr:'TJQ',            unit:'und',  val:7,   critAt:5,  warnAt:20, isFree:true },
+  { id:'tyo',      cat:'TEQUEÑOS',       label:'Tequeño Plátano y Queso', abbr:'TYO',            unit:'und',  val:16,  critAt:5,  warnAt:25 },
+  { id:'malta58',  cat:'BEBIDAS',        label:'Malta 58',                abbr:'MALTAS 58',      unit:'und',  val:44,  critAt:10, warnAt:20 },
+  { id:'maltapeq', cat:'BEBIDAS',        label:'Malta Reko Pequeña',      abbr:'MALTA REKO Peq', unit:'und',  val:9,   critAt:5,  warnAt:15 },
+  { id:'maltagde', cat:'BEBIDAS',        label:'Malta Reko Grande',       abbr:'MALTA REKO Gde', unit:'und',  val:0,   critAt:3,  warnAt:10 },
+  { id:'te',       cat:'BEBIDAS',        label:'Té',                      abbr:'TE',             unit:'und',  val:56,  critAt:10, warnAt:25 },
+  { id:'mayo',     cat:'SALSAS',         label:'Mayonesa',                abbr:'MAYONESA',       unit:'',     val:null, isFree:true, freeVal:'', critAt:null, warnAt:null, freeCritAt:2,  freeUnit:'bolsas' },
+  { id:'mojito',   cat:'SALSAS',         label:'Mojito Ajo 🧄',           abbr:'MOJITO',         unit:'',     val:null, isFree:true, freeVal:'', critAt:null, warnAt:null, freeCritAt:0.25, freeUnit:'taza' },
+  { id:'picante',  cat:'SALSAS',         label:'Picante 🌶️',              abbr:'PICANTE',        unit:'und',  val:8,   critAt:5,  warnAt:15 },
+  { id:'cajap',    cat:'CAJAS',          label:'Caja Pequeña',            abbr:'CAJA P',         unit:'und',  val:85,  critAt:20, warnAt:100 },
+  { id:'cajag',    cat:'CAJAS',          label:'Caja Grande',             abbr:'CAJA G',         unit:'und',  val:68,  critAt:20, warnAt:80 },
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let thresholds = {};
+catalog.forEach(p => {
+  thresholds[p.id] = { critAt: p.critAt, warnAt: p.warnAt, freeCritAt: p.freeCritAt ?? null };
+});
+
+let state = {};
+catalog.forEach(p => { state[p.id] = { val: p.val ?? 0, freeVal: p.freeVal || '', confirmed: false }; });
+
+let currentFilter = 'all';
+
+// ── PARSERS ────────────────────────────────────────────────────────────────
+function parseMayonesa(fv) {
+  if (!fv) return 0;
+  fv = fv.toLowerCase().replace(/bolsas?/gi,'').replace(/\s+/g,' ').trim();
+  const fracMap = {'1/2':0.5,'1/3':0.33,'2/3':0.67,'1/4':0.25,'3/4':0.75};
+  let total = 0;
+  for (const [k,v] of Object.entries(fracMap)) { if (fv.includes(k)) { total += v; fv = fv.replace(k,''); } }
+  fv = fv.replace(/\bb\b/gi,'').replace(/b$/i,'').trim();
+  const num = parseFloat(fv.replace(/[^0-9.]/g,''));
+  if (!isNaN(num)) total += num;
+  return total;
+}
+
+function parseMojito(fv) {
+  if (!fv) return 0;
+  fv = fv.toLowerCase().replace(/tazas?/g,'').trim();
+  const fracMap = {'1/8':0.125,'1/4':0.25,'3/8':0.375,'1/2':0.5,'3/4':0.75,'1/3':0.33,'2/3':0.67};
+  for (const [k,v] of Object.entries(fracMap)) { if (fv.includes(k)) return v; }
+  const num = parseFloat(fv);
+  return isNaN(num) ? 0 : num;
+}
+
+// ── STATUS ─────────────────────────────────────────────────────────────────
+function getStatus(p) {
+  const t = thresholds[p.id];
+  if (t.critAt === null) {
+    const fv = (state[p.id].freeVal || '').trim();
+    if (!fv || fv === '0') return 'critical';
+    const critAt = t.freeCritAt ?? 0;
+    let parsed = 0;
+    if (p.id === 'mayo')   parsed = parseMayonesa(fv);
+    if (p.id === 'mojito') parsed = parseMojito(fv);
+    return parsed <= critAt ? 'critical' : 'ok';
+  }
+  const v = Number(state[p.id].val);
+  if (v <= t.critAt) return 'critical';
+  if (v <= t.warnAt) return 'warning';
+  return 'ok';
+}
+
+function badgeText(st) {
+  return st==='critical' ? '🔴 CRÍTICO' : st==='warning' ? '🟡 BAJO' : '🟢 OK';
+}
+
+// ── MAIN ACTIONS ───────────────────────────────────────────────────────────
+function confirmItem(id) { state[id].confirmed = true; render(); }
+function editItem(id) {
+  state[id].confirmed = false; render();
+  setTimeout(() => { const inp = document.getElementById('input-'+id); if (inp) { inp.focus(); inp.select(); } }, 50);
+}
+function updateQty(id, val) { state[id].val = val==='' ? 0 : Number(val); updateStats(); }
+function adjustQty(id, delta) {
+  state[id].val = Math.max(0, (Number(state[id].val)||0)+delta);
+  const inp = document.getElementById('input-'+id); if (inp) inp.value = state[id].val;
+  updateStats();
+}
+function updateFree(id, val) {
+  state[id].freeVal = val;
+  const p = catalog.find(x=>x.id===id);
+  const st = getStatus(p);
+  const badge = document.getElementById('badge-'+id);
+  if (badge && !state[id].confirmed) { badge.className='status-badge '+st; badge.textContent=badgeText(st); }
+  const row = document.querySelector('[data-id="'+id+'"]');
+  if (row) row.dataset.status = st;
+  updateStats();
+}
+
+// ── FILTER ─────────────────────────────────────────────────────────────────
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+function applyFilter() {
+  document.querySelectorAll('.product-row').forEach(row => {
+    const st=row.dataset.status, done=row.dataset.confirmed==='true';
+    let show = currentFilter==='all' ? true : currentFilter==='pending' ? !done : st===currentFilter;
+    row.classList.toggle('hidden',!show);
+  });
+}
+
+// ── STATS ──────────────────────────────────────────────────────────────────
+function updateStats() {
+  let crit=0,warn=0,ok=0,done=0;
+  catalog.forEach(p => {
+    const st=getStatus(p);
+    if(st==='critical')crit++; else if(st==='warning')warn++; else ok++;
+    if(state[p.id].confirmed)done++;
+  });
+  document.getElementById('cCrit').textContent=crit;
+  document.getElementById('cWarn').textContent=warn;
+  document.getElementById('cOk').textContent=ok;
+  document.getElementById('cDone').textContent=done;
+  document.getElementById('cTotal').textContent=catalog.length;
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function catIcon(cat) {
+  return {POSTRES:'🍫',CACHITOS:'🥐','MINI EMPANADAS':'🥟',PASTELITOS:'🫓',TEQUEÑOS:'🧀',BEBIDAS:'🍺',SALSAS:'🫙',CAJAS:'📦'}[cat]||'📌';
+}
+
+function buildRow(p) {
+  const st=getStatus(p), done=state[p.id].confirmed;
+  const isNoThresh = p.isFree && thresholds[p.id].critAt===null;
+  const badge = done
+    ? `<span class="status-badge done">✓ listo</span>`
+    : `<span class="status-badge ${st}" id="badge-${p.id}">${badgeText(st)}</span>`;
+  const actionBtn = done
+    ? `<button class="btn-edit" onclick="editItem('${p.id}')">✎ editar</button>`
+    : `<button class="btn-confirm" onclick="confirmItem('${p.id}')">✓ listo</button>`;
+
+  if (isNoThresh) {
+    return `<div class="product-row freetext ${done?'confirmed':''}" data-status="${st}" data-confirmed="${done}" data-id="${p.id}">
+      <div class="prod-name">${p.label} <span class="prod-abbr">${p.abbr}</span></div>
+      <input class="freetext-input" type="text" placeholder="ej: 5B y 1/2" value="${state[p.id].freeVal}"
+        oninput="updateFree('${p.id}',this.value)" ${done?'disabled':''}>${badge}${actionBtn}</div>`;
+  }
+  const dis=done?'disabled':'';
+  return `<div class="product-row ${done?'confirmed':''}" data-status="${st}" data-confirmed="${done}" data-id="${p.id}">
+    <div class="prod-name">${p.label} <span class="prod-abbr">${p.abbr}</span></div>
+    <div class="qty-wrap">
+      <button class="qty-btn" onclick="adjustQty('${p.id}',-1)" ${dis}>−</button>
+      <input class="qty-input" type="number" min="0" value="${state[p.id].val??0}"
+        oninput="updateQty('${p.id}',this.value)" id="input-${p.id}" ${dis}>
+      <button class="qty-btn" onclick="adjustQty('${p.id}',1)" ${dis}>+</button>
+    </div>
+    <span class="unit-label">${p.unit}</span>${badge}${actionBtn}</div>`;
+}
+
+function render() {
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  let html='';
+  cats.forEach(cat => {
+    const products=catalog.filter(p=>p.cat===cat);
+    const pending=products.filter(p=>!state[p.id].confirmed);
+    const confirmed=products.filter(p=>state[p.id].confirmed);
+    html+=`<div class="category"><div class="cat-header"><span>${catIcon(cat)}</span><span>${cat}</span><span class="cat-count">${products.length} items</span></div>`;
+    pending.forEach(p=>{html+=buildRow(p);});
+    if(confirmed.length){html+=`<hr class="divider-confirmed">`;confirmed.forEach(p=>{html+=buildRow(p);});}
+    html+=`</div>`;
+  });
+  document.getElementById('app').innerHTML=html;
+  applyFilter(); updateStats();
+}
+
+// ── SETTINGS ───────────────────────────────────────────────────────────────
+function openSettings() {
+  renderSettings();
+  document.getElementById('settingsOverlay').classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settingsOverlay').classList.remove('open');
+  render(); // refresh main view with new thresholds
+}
+
+function renderSettings() {
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  let html='';
+  cats.forEach(cat => {
+    html+=`<div class="settings-cat"><div class="settings-cat-title">${catIcon(cat)} ${cat}</div>`;
+    catalog.filter(p=>p.cat===cat).forEach(p => {
+      const t=thresholds[p.id];
+      const isNoThresh = p.isFree && t.critAt===null;
+
+      if (isNoThresh) {
+        // Campos libres: mostrar umbral en su unidad nativa
+        let critLabel='', critVal='', unitHint='';
+        if (p.id==='mayo') {
+          critLabel='Crítico ≤';
+          critVal=t.freeCritAt??2;
+          unitHint='bolsas';
+        } else if (p.id==='mojito') {
+          critLabel='Crítico ≤';
+          const fracs={0.125:'1/8',0.25:'1/4',0.375:'3/8',0.5:'1/2',0.75:'3/4'};
+          critVal=t.freeCritAt??0.25;
+          unitHint='taza';
+        }
+        html+=`<div class="settings-row">
+          <div class="settings-prod-name">${p.label}<span class="settings-prod-abbr">${p.abbr}</span></div>
+          <div class="free-thresh-row">
+            <span class="thresh-label crit" style="min-width:auto">${critLabel}</span>
+            <select id="st-free-${p.id}" onchange="updateFreeThresh('${p.id}',this.value)"
+              style="background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:0.8rem;padding:5px 8px;border-radius:6px;outline:none;">
+              ${p.id==='mayo' ? `
+                <option value="1" ${(t.freeCritAt??2)<=1?'selected':''}>1 bolsa</option>
+                <option value="2" ${(t.freeCritAt??2)===2?'selected':''}>2 bolsas</option>
+                <option value="3" ${(t.freeCritAt??2)===3?'selected':''}>3 bolsas</option>
+                <option value="4" ${(t.freeCritAt??2)===4?'selected':''}>4 bolsas</option>
+              ` : `
+                <option value="0.125" ${(t.freeCritAt??0.25)<=0.125?'selected':''}>1/8 taza</option>
+                <option value="0.25"  ${(t.freeCritAt??0.25)===0.25?'selected':''}>1/4 taza</option>
+                <option value="0.375" ${(t.freeCritAt??0.25)===0.375?'selected':''}>3/8 taza</option>
+                <option value="0.5"   ${(t.freeCritAt??0.25)===0.5?'selected':''}>1/2 taza</option>
+              `}
+            </select>
+          </div>
+        </div>`;
+      } else {
+        html+=`<div class="settings-row">
+          <div class="settings-prod-name">${p.label}<span class="settings-prod-abbr">${p.abbr} · ${p.unit}</span></div>
+          <div class="thresh-group">
+            <span class="thresh-label crit">🔴</span>
+            <input class="thresh-input" type="number" min="0" value="${t.critAt??0}"
+              onchange="updateThresh('${p.id}','critAt',this.value)" title="Crítico: menor o igual a este valor">
+            <span class="thresh-label warn">🟡</span>
+            <input class="thresh-input" type="number" min="0" value="${t.warnAt??0}"
+              onchange="updateThresh('${p.id}','warnAt',this.value)" title="Bajo: menor o igual a este valor">
+          </div>
+        </div>`;
+      }
+    });
+    html+=`</div>`;
+  });
+  html+=`<p class="settings-save-note">🔴 Crítico = stock ≤ ese valor · 🟡 Bajo = stock ≤ ese valor<br>Los cambios se guardan automáticamente</p>`;
+  document.getElementById('settingsBody').innerHTML=html;
+}
+
+function updateThresh(id, field, val) {
+  thresholds[id][field] = Number(val);
+  // swap if critAt > warnAt
+  if (thresholds[id].critAt > thresholds[id].warnAt) {
+    thresholds[id].warnAt = thresholds[id].critAt;
+  }
+  updateStats();
+}
+
+function updateFreeThresh(id, val) {
+  thresholds[id].freeCritAt = parseFloat(val);
+  updateStats();
+}
+
+// ── GENERATE WHATSAPP ──────────────────────────────────────────────────────
+function generateMsg() {
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  const dateStr=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  let msg=`🏪 *CIERRE PALERMO · ${dateStr.toUpperCase()}*\n\n`;
+  cats.forEach(cat => {
+    msg+=`*${cat}*\n`;
+    catalog.filter(p=>p.cat===cat).forEach(p => {
+      const st=getStatus(p);
+      const icon=st==='critical'?'❌':st==='warning'?'⚠️':'✅';
+      if(thresholds[p.id].critAt===null) msg+=`${icon} ${p.abbr}: ${state[p.id].freeVal||'—'}\n`;
+      else msg+=`${icon} ${p.abbr}: ${state[p.id].val??0}${p.unit?' '+p.unit:''}\n`;
+    });
+    msg+='\n';
+  });
+  const crits=catalog.filter(p=>getStatus(p)==='critical');
+  const warns=catalog.filter(p=>getStatus(p)==='warning');
+  if(crits.length||warns.length){
+    msg+=`📋 *PRIORIDAD REPOSICIÓN*\n`;
+    if(crits.length){
+      msg+=`\n❌ *CRíTICO*\n`;
+      crits.forEach(p=>{
+        const val = thresholds[p.id].critAt===null
+          ? (state[p.id].freeVal||'—')
+          : `${state[p.id].val??0}${p.unit?' '+p.unit:''}`;
+        msg+=`   • ${p.abbr}: ${val}\n`;
+      });
+    }
+    if(warns.length){
+      msg+=`\n⚠️ *BAJO*\n`;
+      warns.forEach(p=>{
+        const val = thresholds[p.id].critAt===null
+          ? (state[p.id].freeVal||'—')
+          : `${state[p.id].val??0}${p.unit?' '+p.unit:''}`;
+        msg+=`   • ${p.abbr}: ${val}\n`;
+      });
+    }
+  }
+  return msg;
+}
+
+function openModal()  { document.getElementById('modalText').textContent=generateMsg(); document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function copyText() {
+  const text=document.getElementById('modalText').textContent;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(flashCopied).catch(()=>fallbackCopy(text));
+  } else { fallbackCopy(text); }
+}
+function fallbackCopy(text) {
+  const ta=document.createElement('textarea');
+  ta.value=text; ta.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); flashCopied(); }catch(e){ alert('Copiá el texto manualmente:\n\n'+text); }
+  document.body.removeChild(ta);
+}
+function flashCopied() {
+  const btn=document.querySelector('.btn-copy');
+  btn.textContent='✅ COPIADO'; setTimeout(()=>btn.textContent='📋 COPIAR',2500);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'});
+render();
+</script>
+</body>
+</html>
