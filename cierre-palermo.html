@@ -14,17 +14,13 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--dark); color: var(--text); font-family: var(--font-body); min-height: 100vh; padding: 0 0 80px; }
-
-  /* HEADER */
   header { background: var(--surface); border-bottom: 2px solid var(--gold); padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
   header h1 { font-family: var(--font-head); font-size: 1.7rem; letter-spacing: 2px; color: var(--gold); line-height: 1; }
   header .sub { font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
   .header-right { display: flex; align-items: center; gap: 10px; }
   .date-badge { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 0.75rem; color: var(--muted); font-weight: 500; }
   .btn-settings { background: var(--card); border: 1px solid var(--gold); border-radius: 8px; color: var(--gold); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 7px 12px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; white-space: nowrap; font-family: var(--font-body); }
-  .btn-settings:hover { border-color: var(--gold); color: var(--gold); }
-
-  /* TOOLBAR */
+  .btn-settings:hover { background: var(--gold); color: var(--dark); }
   .toolbar { display: flex; gap: 8px; padding: 14px 16px; flex-wrap: wrap; align-items: center; }
   .filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); font-family: var(--font-body); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
   .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
@@ -33,8 +29,6 @@
   .filter-btn.orange.active { background: var(--orange); border-color: var(--orange); color: #fff; }
   .filter-btn.green.active  { background: var(--green);  border-color: var(--green);  color: #fff; }
   .filter-btn.grey.active   { background: var(--muted);  border-color: var(--muted);  color: var(--dark); }
-
-  /* CATEGORIES & ROWS */
   .category { margin: 12px 16px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card); }
   .cat-header { background: var(--surface); padding: 10px 16px; font-family: var(--font-head); font-size: 1.05rem; letter-spacing: 2px; color: var(--gold); display: flex; align-items: center; gap: 10px; }
   .cat-count { margin-left: auto; font-family: var(--font-body); font-size: 0.65rem; background: var(--border); border-radius: 10px; padding: 2px 8px; color: var(--muted); font-weight: 500; }
@@ -68,15 +62,11 @@
   .freetext-input:disabled { color: var(--muted); pointer-events: none; }
   .divider-confirmed { border: none; border-top: 1px dashed var(--border); margin: 0 16px; opacity: 0.5; }
   .thresh-note { font-size: 0.67rem; color: var(--muted); text-align: center; padding: 10px 16px 0; }
-
-  /* BOTTOM BAR */
   .summary-panel { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 2px solid var(--gold); padding: 12px 16px; display: flex; gap: 10px; z-index: 200; align-items: center; }
   .summary-stats { display: flex; gap: 14px; align-items: center; flex: 1; flex-wrap: wrap; }
   .stat-pill { font-size: 0.72rem; }
   .btn-generate { background: var(--gold); color: var(--dark); border: none; font-family: var(--font-head); font-size: 1rem; letter-spacing: 1.5px; padding: 10px 20px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
   .btn-generate:hover { background: #e6b220; }
-
-  /* MODAL WHATSAPP */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 300; align-items: flex-end; justify-content: center; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border: 1px solid var(--gold); border-bottom: none; border-radius: 16px 16px 0 0; width: 100%; max-width: 600px; padding: 20px 20px 30px; animation: slideUp 0.25s ease; }
@@ -86,35 +76,23 @@
   .modal-actions { display: flex; gap: 10px; }
   .btn-copy { flex: 1; background: var(--gold); color: var(--dark); border: none; font-family: var(--font-head); font-size: 1rem; letter-spacing: 1px; padding: 11px; border-radius: 8px; cursor: pointer; }
   .btn-close { background: var(--card); color: var(--text); border: 1px solid var(--border); font-family: var(--font-body); font-size: 0.82rem; padding: 11px 18px; border-radius: 8px; cursor: pointer; }
-
-  /* SETTINGS PANEL */
   .settings-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 400; flex-direction: column; }
   .settings-overlay.open { display: flex; }
   .settings-header { background: var(--surface); border-bottom: 2px solid var(--gold); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .settings-header h2 { font-family: var(--font-head); font-size: 1.4rem; letter-spacing: 2px; color: var(--gold); }
   .settings-subtitle { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-  .btn-close-settings { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--font-body); font-size: 0.8rem; padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .btn-close-settings { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--font-body); font-size: 0.8rem; padding: 7px 14px; border-radius: 8px; cursor: pointer; }
   .btn-close-settings:hover { border-color: var(--gold); color: var(--gold); }
   .settings-body { flex: 1; overflow-y: auto; padding: 12px 16px 30px; }
-
-  .settings-cat { margin-bottom: 4px; }
   .settings-cat-title { font-family: var(--font-head); font-size: 0.95rem; letter-spacing: 2px; color: var(--gold); padding: 12px 0 6px; display: flex; align-items: center; gap: 8px; }
   .settings-row { display: flex; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); gap: 10px; }
   .settings-prod-name { font-size: 0.8rem; font-weight: 500; flex: 1; color: var(--text); }
   .settings-prod-abbr { font-size: 0.62rem; color: var(--muted); display: block; margin-top: 1px; }
-
   .thresh-group { display: flex; align-items: center; gap: 6px; }
-  .thresh-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; min-width: 36px; }
-  .thresh-label.crit { color: var(--red); }
-  .thresh-label.warn { color: var(--orange); }
+  .thresh-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; min-width: 18px; }
   .thresh-input { background: var(--dark); border: 1px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; width: 52px; text-align: center; padding: 5px 4px; border-radius: 6px; outline: none; }
   .thresh-input:focus { border-color: var(--gold); }
   .thresh-input::-webkit-inner-spin-button { display: none; }
-  .thresh-input.disabled-input { opacity: 0.3; pointer-events: none; background: transparent; border-color: transparent; }
-
-  .free-thresh-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .free-thresh-badge { font-size: 0.62rem; color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; }
-
   .settings-save-note { font-size: 0.68rem; color: var(--muted); text-align: center; padding: 16px 0 0; }
 </style>
 </head>
@@ -127,7 +105,7 @@
   </div>
   <div class="header-right">
     <div class="date-badge" id="dateBadge"></div>
-    <button class="btn-settings" onclick="openSettings()" title="Configurar umbrales">⚙ Config</button>
+    <button class="btn-settings" onclick="openSettings()">⚙ Config</button>
   </div>
 </header>
 
@@ -140,7 +118,7 @@
 </div>
 
 <div id="app"></div>
-<p class="thresh-note">Confirmá cada ítem al contarlo · ✎ editar para corregir · ⚙️ para ajustar umbrales</p>
+<p class="thresh-note">Confirmá cada ítem al contarlo · ✎ editar para corregir · ⚙ Config para ajustar umbrales</p>
 
 <div class="summary-panel">
   <div class="summary-stats">
@@ -152,7 +130,6 @@
   <button class="btn-generate" onclick="openModal()">📋 GENERAR</button>
 </div>
 
-<!-- WHATSAPP MODAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-title">📲 MENSAJE WHATSAPP</div>
@@ -164,7 +141,6 @@
   </div>
 </div>
 
-<!-- SETTINGS PANEL -->
 <div class="settings-overlay" id="settingsOverlay">
   <div class="settings-header">
     <div>
@@ -177,7 +153,6 @@
 </div>
 
 <script>
-// ── CATALOG ────────────────────────────────────────────────────────────────
 const catalog = [
   { id:'choco',    cat:'POSTRES',        label:'Chocolate',               abbr:'CHOCO',          unit:'unid', val:0,   critAt:3,  warnAt:10 },
   { id:'leches',   cat:'POSTRES',        label:'Leches',                  abbr:'LECHES',         unit:'unid', val:15,  critAt:5,  warnAt:20 },
@@ -204,25 +179,71 @@ const catalog = [
   { id:'maltapeq', cat:'BEBIDAS',        label:'Malta Reko Pequeña',      abbr:'MALTA REKO Peq', unit:'und',  val:9,   critAt:5,  warnAt:15 },
   { id:'maltagde', cat:'BEBIDAS',        label:'Malta Reko Grande',       abbr:'MALTA REKO Gde', unit:'und',  val:0,   critAt:3,  warnAt:10 },
   { id:'te',       cat:'BEBIDAS',        label:'Té',                      abbr:'TE',             unit:'und',  val:56,  critAt:10, warnAt:25 },
-  { id:'mayo',     cat:'SALSAS',         label:'Mayonesa',                abbr:'MAYONESA',       unit:'',     val:null, isFree:true, freeVal:'', critAt:null, warnAt:null, freeCritAt:2,  freeUnit:'bolsas' },
+  { id:'mayo',     cat:'SALSAS',         label:'Mayonesa',                abbr:'MAYONESA',       unit:'',     val:null, isFree:true, freeVal:'', critAt:null, warnAt:null, freeCritAt:2,    freeUnit:'bolsas' },
   { id:'mojito',   cat:'SALSAS',         label:'Mojito Ajo 🧄',           abbr:'MOJITO',         unit:'',     val:null, isFree:true, freeVal:'', critAt:null, warnAt:null, freeCritAt:0.25, freeUnit:'taza' },
   { id:'picante',  cat:'SALSAS',         label:'Picante 🌶️',              abbr:'PICANTE',        unit:'und',  val:8,   critAt:5,  warnAt:15 },
   { id:'cajap',    cat:'CAJAS',          label:'Caja Pequeña',            abbr:'CAJA P',         unit:'und',  val:85,  critAt:20, warnAt:100 },
   { id:'cajag',    cat:'CAJAS',          label:'Caja Grande',             abbr:'CAJA G',         unit:'und',  val:68,  critAt:20, warnAt:80 },
 ];
 
-// ── STATE ──────────────────────────────────────────────────────────────────
 let thresholds = {};
-catalog.forEach(p => {
-  thresholds[p.id] = { critAt: p.critAt, warnAt: p.warnAt, freeCritAt: p.freeCritAt ?? null };
-});
+catalog.forEach(p => { thresholds[p.id] = { critAt: p.critAt, warnAt: p.warnAt, freeCritAt: p.freeCritAt ?? null }; });
 
 let state = {};
 catalog.forEach(p => { state[p.id] = { val: p.val ?? 0, freeVal: p.freeVal || '', confirmed: false }; });
 
+// ── PRE-LOADED FROM WHATSAPP ───────────────────────────────────────────────
+state['choco'].val    = 0;
+state['leches'].val   = 10;
+state['cachitos'].val = 5;
+state['eme'].val      = 93;
+state['emo'].val      = 30;
+state['epo'].val      = 50;
+state['ejq'].val      = 26;
+state['eq'].val       = 49;
+state['edm'].val      = 43;
+state['epa'].val      = 9;
+state['pme'].val      = 51;
+state['pmo'].val      = 1;
+state['ppo'].val      = 46;
+state['ppz'].val      = 47;
+state['pq'].val       = 70;
+state['ppa'].val      = 76;
+state['pjq'].val      = 28;
+state['to'].val       = 103;  // 97 + 6
+state['tf'].val       = 21;
+state['tjq'].freeVal  = '16 pack y 5 und';
+state['tyo'].val      = 42;
+state['malta58'].val  = 40;
+state['maltapeq'].val = 5;
+state['maltagde'].val = 0;
+state['te'].val       = 48;
+state['mayo'].freeVal = '4B';
+state['mojito'].freeVal = '0 Taza';
+state['picante'].val  = 0;
+state['cajap'].val    = 150;
+state['cajag'].val    = 50;
+// ──────────────────────────────────────────────────────────────────────────
+
+// ── PERSIST THRESHOLDS ────────────────────────────────────────────────────
+function saveThresholds() {
+  try { localStorage.setItem('tequeonda_thresholds', JSON.stringify(thresholds)); } catch(e) {}
+}
+function loadThresholds() {
+  try {
+    const saved = localStorage.getItem('tequeonda_thresholds');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      Object.keys(parsed).forEach(id => {
+        if (thresholds[id]) thresholds[id] = parsed[id];
+      });
+    }
+  } catch(e) {}
+}
+loadThresholds();
+
 let currentFilter = 'all';
 
-// ── PARSERS ────────────────────────────────────────────────────────────────
 function parseMayonesa(fv) {
   if (!fv) return 0;
   fv = fv.toLowerCase().replace(/bolsas?/gi,'').replace(/\s+/g,' ').trim();
@@ -244,7 +265,6 @@ function parseMojito(fv) {
   return isNaN(num) ? 0 : num;
 }
 
-// ── STATUS ─────────────────────────────────────────────────────────────────
 function getStatus(p) {
   const t = thresholds[p.id];
   if (t.critAt === null) {
@@ -266,7 +286,6 @@ function badgeText(st) {
   return st==='critical' ? '🔴 CRÍTICO' : st==='warning' ? '🟡 BAJO' : '🟢 OK';
 }
 
-// ── MAIN ACTIONS ───────────────────────────────────────────────────────────
 function confirmItem(id) { state[id].confirmed = true; render(); }
 function editItem(id) {
   state[id].confirmed = false; render();
@@ -289,7 +308,6 @@ function updateFree(id, val) {
   updateStats();
 }
 
-// ── FILTER ─────────────────────────────────────────────────────────────────
 function setFilter(f, btn) {
   currentFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
@@ -304,7 +322,6 @@ function applyFilter() {
   });
 }
 
-// ── STATS ──────────────────────────────────────────────────────────────────
 function updateStats() {
   let crit=0,warn=0,ok=0,done=0;
   catalog.forEach(p => {
@@ -319,7 +336,6 @@ function updateStats() {
   document.getElementById('cTotal').textContent=catalog.length;
 }
 
-// ── RENDER ─────────────────────────────────────────────────────────────────
 function catIcon(cat) {
   return {POSTRES:'🍫',CACHITOS:'🥐','MINI EMPANADAS':'🥟',PASTELITOS:'🫓',TEQUEÑOS:'🧀',BEBIDAS:'🍺',SALSAS:'🫙',CAJAS:'📦'}[cat]||'📌';
 }
@@ -333,7 +349,6 @@ function buildRow(p) {
   const actionBtn = done
     ? `<button class="btn-edit" onclick="editItem('${p.id}')">✎ editar</button>`
     : `<button class="btn-confirm" onclick="confirmItem('${p.id}')">✓ listo</button>`;
-
   if (isNoThresh) {
     return `<div class="product-row freetext ${done?'confirmed':''}" data-status="${st}" data-confirmed="${done}" data-id="${p.id}">
       <div class="prod-name">${p.label} <span class="prod-abbr">${p.abbr}</span></div>
@@ -368,93 +383,60 @@ function render() {
   applyFilter(); updateStats();
 }
 
-// ── SETTINGS ───────────────────────────────────────────────────────────────
-function openSettings() {
-  renderSettings();
-  document.getElementById('settingsOverlay').classList.add('open');
-}
-function closeSettings() {
-  document.getElementById('settingsOverlay').classList.remove('open');
-  render(); // refresh main view with new thresholds
-}
+function openSettings() { renderSettings(); document.getElementById('settingsOverlay').classList.add('open'); }
+function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); render(); }
 
 function renderSettings() {
   const cats=[...new Set(catalog.map(p=>p.cat))];
   let html='';
   cats.forEach(cat => {
-    html+=`<div class="settings-cat"><div class="settings-cat-title">${catIcon(cat)} ${cat}</div>`;
+    html+=`<div><div class="settings-cat-title">${catIcon(cat)} ${cat}</div>`;
     catalog.filter(p=>p.cat===cat).forEach(p => {
       const t=thresholds[p.id];
       const isNoThresh = p.isFree && t.critAt===null;
-
       if (isNoThresh) {
-        // Campos libres: mostrar umbral en su unidad nativa
-        let critLabel='', critVal='', unitHint='';
-        if (p.id==='mayo') {
-          critLabel='Crítico ≤';
-          critVal=t.freeCritAt??2;
-          unitHint='bolsas';
-        } else if (p.id==='mojito') {
-          critLabel='Crítico ≤';
-          const fracs={0.125:'1/8',0.25:'1/4',0.375:'3/8',0.5:'1/2',0.75:'3/4'};
-          critVal=t.freeCritAt??0.25;
-          unitHint='taza';
-        }
         html+=`<div class="settings-row">
           <div class="settings-prod-name">${p.label}<span class="settings-prod-abbr">${p.abbr}</span></div>
-          <div class="free-thresh-row">
-            <span class="thresh-label crit" style="min-width:auto">${critLabel}</span>
-            <select id="st-free-${p.id}" onchange="updateFreeThresh('${p.id}',this.value)"
-              style="background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:0.8rem;padding:5px 8px;border-radius:6px;outline:none;">
-              ${p.id==='mayo' ? `
-                <option value="1" ${(t.freeCritAt??2)<=1?'selected':''}>1 bolsa</option>
-                <option value="2" ${(t.freeCritAt??2)===2?'selected':''}>2 bolsas</option>
-                <option value="3" ${(t.freeCritAt??2)===3?'selected':''}>3 bolsas</option>
-                <option value="4" ${(t.freeCritAt??2)===4?'selected':''}>4 bolsas</option>
-              ` : `
-                <option value="0.125" ${(t.freeCritAt??0.25)<=0.125?'selected':''}>1/8 taza</option>
-                <option value="0.25"  ${(t.freeCritAt??0.25)===0.25?'selected':''}>1/4 taza</option>
-                <option value="0.375" ${(t.freeCritAt??0.25)===0.375?'selected':''}>3/8 taza</option>
-                <option value="0.5"   ${(t.freeCritAt??0.25)===0.5?'selected':''}>1/2 taza</option>
-              `}
-            </select>
-          </div>
+          <select id="st-free-${p.id}" onchange="updateFreeThresh('${p.id}',this.value)"
+            style="background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:0.8rem;padding:5px 8px;border-radius:6px;outline:none;">
+            ${p.id==='mayo' ? `
+              <option value="1" ${(t.freeCritAt??2)<=1?'selected':''}>≤ 1 bolsa</option>
+              <option value="2" ${(t.freeCritAt??2)===2?'selected':''}>≤ 2 bolsas</option>
+              <option value="3" ${(t.freeCritAt??2)===3?'selected':''}>≤ 3 bolsas</option>
+              <option value="4" ${(t.freeCritAt??2)===4?'selected':''}>≤ 4 bolsas</option>
+            ` : `
+              <option value="0.125" ${(t.freeCritAt??0.25)<=0.125?'selected':''}>≤ 1/8 taza</option>
+              <option value="0.25"  ${(t.freeCritAt??0.25)===0.25?'selected':''}>≤ 1/4 taza</option>
+              <option value="0.375" ${(t.freeCritAt??0.25)===0.375?'selected':''}>≤ 3/8 taza</option>
+              <option value="0.5"   ${(t.freeCritAt??0.25)===0.5?'selected':''}>≤ 1/2 taza</option>
+            `}
+          </select>
         </div>`;
       } else {
         html+=`<div class="settings-row">
           <div class="settings-prod-name">${p.label}<span class="settings-prod-abbr">${p.abbr} · ${p.unit}</span></div>
           <div class="thresh-group">
-            <span class="thresh-label crit">🔴</span>
-            <input class="thresh-input" type="number" min="0" value="${t.critAt??0}"
-              onchange="updateThresh('${p.id}','critAt',this.value)" title="Crítico: menor o igual a este valor">
-            <span class="thresh-label warn">🟡</span>
-            <input class="thresh-input" type="number" min="0" value="${t.warnAt??0}"
-              onchange="updateThresh('${p.id}','warnAt',this.value)" title="Bajo: menor o igual a este valor">
+            <span class="thresh-label">🔴</span>
+            <input class="thresh-input" type="number" min="0" value="${t.critAt??0}" onchange="updateThresh('${p.id}','critAt',this.value)">
+            <span class="thresh-label">🟡</span>
+            <input class="thresh-input" type="number" min="0" value="${t.warnAt??0}" onchange="updateThresh('${p.id}','warnAt',this.value)">
           </div>
         </div>`;
       }
     });
     html+=`</div>`;
   });
-  html+=`<p class="settings-save-note">🔴 Crítico = stock ≤ ese valor · 🟡 Bajo = stock ≤ ese valor<br>Los cambios se guardan automáticamente</p>`;
+  html+=`<p class="settings-save-note">🔴 Crítico ≤ valor · 🟡 Bajo ≤ valor · Cambios instantáneos</p>`;
   document.getElementById('settingsBody').innerHTML=html;
 }
 
 function updateThresh(id, field, val) {
   thresholds[id][field] = Number(val);
-  // swap if critAt > warnAt
-  if (thresholds[id].critAt > thresholds[id].warnAt) {
-    thresholds[id].warnAt = thresholds[id].critAt;
-  }
-  updateStats();
+  if (thresholds[id].critAt > thresholds[id].warnAt) thresholds[id].warnAt = thresholds[id].critAt;
+  saveThresholds(); updateStats();
 }
+function updateFreeThresh(id, val) { thresholds[id].freeCritAt = parseFloat(val); saveThresholds(); updateStats(); }
 
-function updateFreeThresh(id, val) {
-  thresholds[id].freeCritAt = parseFloat(val);
-  updateStats();
-}
-
-// ── GENERATE WHATSAPP ──────────────────────────────────────────────────────
 function generateMsg() {
   const cats=[...new Set(catalog.map(p=>p.cat))];
   const dateStr=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
@@ -474,20 +456,16 @@ function generateMsg() {
   if(crits.length||warns.length){
     msg+=`📋 *PRIORIDAD REPOSICIÓN*\n`;
     if(crits.length){
-      msg+=`\n❌ *CRíTICO*\n`;
+      msg+=`\n❌ *CRÍTICO*\n`;
       crits.forEach(p=>{
-        const val = thresholds[p.id].critAt===null
-          ? (state[p.id].freeVal||'—')
-          : `${state[p.id].val??0}${p.unit?' '+p.unit:''}`;
+        const val=thresholds[p.id].critAt===null?(state[p.id].freeVal||'—'):`${state[p.id].val??0}${p.unit?' '+p.unit:''}`;
         msg+=`   • ${p.abbr}: ${val}\n`;
       });
     }
     if(warns.length){
       msg+=`\n⚠️ *BAJO*\n`;
       warns.forEach(p=>{
-        const val = thresholds[p.id].critAt===null
-          ? (state[p.id].freeVal||'—')
-          : `${state[p.id].val??0}${p.unit?' '+p.unit:''}`;
+        const val=thresholds[p.id].critAt===null?(state[p.id].freeVal||'—'):`${state[p.id].val??0}${p.unit?' '+p.unit:''}`;
         msg+=`   • ${p.abbr}: ${val}\n`;
       });
     }
@@ -497,7 +475,6 @@ function generateMsg() {
 
 function openModal()  { document.getElementById('modalText').textContent=generateMsg(); document.getElementById('modalOverlay').classList.add('open'); }
 function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-
 function copyText() {
   const text=document.getElementById('modalText').textContent;
   if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -516,7 +493,6 @@ function flashCopied() {
   btn.textContent='✅ COPIADO'; setTimeout(()=>btn.textContent='📋 COPIAR',2500);
 }
 
-// ── INIT ───────────────────────────────────────────────────────────────────
 document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'});
 render();
 </script>
