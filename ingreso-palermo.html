@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orden de Ingreso · Teque Onda</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --gold: #FFC72C; --gold-dim: #c99a1a; --dark: #111009; --surface: #1a1810;
+  --card: #221f12; --border: #332e18; --red: #e8412a; --green: #3dba6e;
+  --text: #f0e8cc; --muted: #8a8060;
+  --fh: 'Bebas Neue', sans-serif; --fb: 'Fira Sans', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--dark); color: var(--text); font-family: var(--fb); min-height: 100vh; }
+
+/* ── TABS ── */
+.tabs { display: flex; background: var(--surface); border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 100; }
+.tab { flex: 1; padding: 14px 8px; font-family: var(--fh); font-size: 0.9rem; letter-spacing: 1.5px; color: var(--muted); text-align: center; cursor: pointer; border: none; background: transparent; transition: all 0.15s; }
+.tab.active { color: var(--gold); border-bottom: 3px solid var(--gold); }
+.tab:hover { color: var(--text); }
+.page { display: none; padding-bottom: 40px; }
+.page.active { display: block; }
+
+/* ── HEADER ── */
+.page-header { padding: 20px 16px 12px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border); }
+.page-title { font-family: var(--fh); font-size: 1.6rem; letter-spacing: 2px; color: var(--gold); line-height: 1; }
+.page-sub { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+
+/* ── FORM META ── */
+.meta-row { display: flex; gap: 10px; padding: 14px 16px 0; flex-wrap: wrap; }
+.meta-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 130px; }
+.meta-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 600; }
+.meta-input { background: var(--card); border: 1px solid var(--border); color: var(--text); font-family: var(--fb); font-size: 0.85rem; padding: 8px 10px; border-radius: 8px; outline: none; }
+.meta-input:focus { border-color: var(--gold); }
+.meta-select { background: var(--card); border: 1px solid var(--border); color: var(--text); font-family: var(--fb); font-size: 0.85rem; padding: 8px 10px; border-radius: 8px; outline: none; width: 100%; }
+
+/* ── CATEGORIES ── */
+.section-wrap { margin: 14px 16px 0; }
+.cat-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: var(--card); }
+.cat-toggle { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; background: var(--surface); user-select: none; }
+.cat-toggle:hover { background: rgba(255,199,44,0.04); }
+.cat-icon { font-size: 1rem; }
+.cat-name { font-family: var(--fh); font-size: 1rem; letter-spacing: 2px; color: var(--gold); flex: 1; }
+.cat-summary { font-size: 0.68rem; color: var(--muted); font-weight: 500; }
+.cat-chevron { font-size: 0.7rem; color: var(--muted); transition: transform 0.2s; }
+.cat-block.open .cat-chevron { transform: rotate(180deg); }
+.cat-body { display: none; }
+.cat-block.open .cat-body { display: block; }
+
+/* ── PRODUCT ROWS ── */
+.prod-row { display: flex; align-items: center; padding: 9px 14px; border-top: 1px solid var(--border); gap: 8px; }
+.prod-name { font-size: 0.8rem; font-weight: 500; flex: 1; }
+.prod-abbr { font-size: 0.6rem; color: var(--muted); margin-left: 3px; }
+.price-input { background: var(--dark); border: 1px solid var(--border); color: var(--text); font-family: var(--fb); font-size: 0.8rem; font-weight: 600; width: 72px; text-align: center; padding: 5px 4px; border-radius: 6px; outline: none; }
+.price-input:focus { border-color: var(--gold); }
+.price-input::-webkit-inner-spin-button { display: none; }
+.qty-wrap { display: flex; align-items: center; background: var(--dark); border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }
+.qty-btn { background: transparent; border: none; color: var(--muted); font-size: 1rem; width: 26px; height: 30px; cursor: pointer; font-weight: 700; }
+.qty-btn:hover { color: var(--gold); }
+.qty-num { background: transparent; border: none; color: var(--text); font-family: var(--fb); font-size: 0.85rem; font-weight: 700; width: 42px; text-align: center; height: 30px; outline: none; }
+.qty-num::-webkit-inner-spin-button { display: none; }
+.col-label { font-size: 0.58rem; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
+.col-headers { display: flex; align-items: center; padding: 5px 14px; border-top: 1px solid var(--border); gap: 8px; background: rgba(0,0,0,0.2); }
+.col-headers .prod-name { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ── TOTALS BAR ── */
+.totals-bar { position: sticky; bottom: 0; background: var(--surface); border-top: 2px solid var(--gold); padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 50; }
+.totals-info { flex: 1; display: flex; gap: 16px; flex-wrap: wrap; }
+.total-pill { font-size: 0.72rem; }
+.total-pill b { color: var(--gold); }
+.btn-preview { background: var(--gold); color: var(--dark); border: none; font-family: var(--fh); font-size: 1rem; letter-spacing: 1.5px; padding: 10px 18px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+.btn-preview:hover { background: #e6b220; }
+
+/* ── PREVIEW / TICKET ── */
+#previewPage { background: var(--dark); }
+.preview-actions { display: flex; gap: 10px; padding: 14px 16px; flex-wrap: wrap; }
+.btn-action { flex: 1; padding: 11px; border-radius: 8px; border: none; font-family: var(--fh); font-size: 0.95rem; letter-spacing: 1px; cursor: pointer; min-width: 100px; }
+.btn-back   { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+.btn-png    { background: var(--card); color: var(--gold); border: 1px solid var(--gold); }
+.btn-print  { background: var(--gold); color: var(--dark); }
+
+/* ── TICKET CARD ── */
+.ticket-wrap { padding: 0 16px 20px; }
+.ticket {
+  background: #fff; color: #111; border-radius: 10px; overflow: hidden;
+  font-family: 'Courier New', monospace; font-size: 12px; max-width: 400px; margin: 0 auto;
+}
+.ticket-header { background: #111; color: #FFC72C; padding: 14px 16px 10px; text-align: center; }
+.ticket-brand { font-family: var(--fh); font-size: 1.8rem; letter-spacing: 3px; }
+.ticket-sub { font-size: 0.65rem; letter-spacing: 2px; color: #aaa; margin-top: 2px; }
+.ticket-from-to { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 11px; background: #f5f5f5; border-bottom: 1px dashed #ccc; }
+.ticket-from-to .arrow { color: #999; font-size: 14px; }
+.ticket-meta { padding: 8px 14px; border-bottom: 1px dashed #ccc; display: flex; justify-content: space-between; font-size: 11px; color: #555; }
+.ticket-cat-header { background: #111; color: #FFC72C; padding: 4px 14px; font-size: 10px; letter-spacing: 2px; font-family: var(--fh); }
+.ticket-line { display: flex; padding: 4px 14px; border-bottom: 1px solid #eee; gap: 4px; }
+.ticket-line .tl-name { flex: 1; font-size: 11px; }
+.ticket-line .tl-qty  { width: 36px; text-align: right; font-size: 11px; }
+.ticket-line .tl-price{ width: 56px; text-align: right; font-size: 11px; color: #555; }
+.ticket-line .tl-sub  { width: 62px; text-align: right; font-size: 11px; font-weight: 700; }
+.ticket-col-header { display: flex; padding: 3px 14px; background: #eee; gap: 4px; }
+.ticket-col-header span { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+.ticket-col-header .tl-name { flex:1; }
+.ticket-totals { padding: 10px 14px; border-top: 2px solid #111; }
+.ticket-total-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; }
+.ticket-total-row.grand { font-size: 15px; font-weight: 700; border-top: 1px dashed #ccc; padding-top: 6px; margin-top: 4px; }
+.ticket-confirm { display: flex; border-top: 2px dashed #111; }
+.ticket-confirm-box { flex: 1; padding: 10px 14px; text-align: center; }
+.ticket-confirm-box:first-child { border-right: 1px dashed #ccc; }
+.ticket-confirm-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 20px; }
+.ticket-confirm-name { font-size: 10px; font-weight: 700; border-top: 1px solid #333; padding-top: 4px; margin-top: 20px; }
+.ticket-footer { background: #111; color: #555; text-align: center; padding: 8px; font-size: 9px; letter-spacing: 1px; }
+.ticket-orden-num { font-size: 10px; color: #888; text-align: center; padding: 4px 0; }
+.copy-label { background: #FFC72C; color: #111; text-align: center; font-size: 9px; font-weight: 700; letter-spacing: 2px; padding: 3px; }
+
+/* ── HISTORY ── */
+.hist-empty { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 40px 20px; }
+.hist-card { margin: 12px 16px 0; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.hist-card-header { padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+.hist-orden { font-family: var(--fh); font-size: 1rem; letter-spacing: 1px; color: var(--gold); }
+.hist-date { font-size: 0.7rem; color: var(--muted); }
+.hist-total { margin-left: auto; font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.hist-status { font-size: 0.6rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; }
+.hist-status.pendiente { background: rgba(240,125,26,0.15); color: #f07d1a; border: 1px solid rgba(240,125,26,0.3); }
+.hist-status.confirmada { background: rgba(61,186,110,0.12); color: var(--green); border: 1px solid rgba(61,186,110,0.2); }
+.hist-actions { display: flex; gap: 8px; padding: 0 14px 12px; }
+.hist-btn { flex: 1; padding: 7px; border-radius: 7px; font-family: var(--fh); font-size: 0.8rem; letter-spacing: 1px; border: none; cursor: pointer; text-align: center; }
+.hist-btn.view   { background: var(--surface); color: var(--gold); border: 1px solid var(--border); }
+.hist-btn.confirm{ background: rgba(61,186,110,0.15); color: var(--green); border: 1px solid rgba(61,186,110,0.3); }
+.hist-btn.del    { background: rgba(232,65,42,0.1); color: var(--red); border: 1px solid rgba(232,65,42,0.2); max-width: 44px; }
+.hist-items-preview { padding: 0 14px 10px; font-size: 0.72rem; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 8px; }
+
+@media print {
+  body * { visibility: hidden; }
+  .ticket, .ticket * { visibility: visible; }
+  .ticket { position: fixed; top: 0; left: 0; width: 100%; border-radius: 0; }
+  .ticket-wrap { padding: 0; }
+  .copy-label { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <button class="tab active" onclick="showPage('nueva')">📦 NUEVA</button>
+  <button class="tab" onclick="showPage('preview')" id="tabPreview" style="display:none">🧾 ORDEN</button>
+  <button class="tab" onclick="showPage('historial')">📋 HISTORIAL</button>
+</div>
+
+<!-- ══ NUEVA ORDEN ══════════════════════════════════════════════════════ -->
+<div id="nueva" class="page active">
+  <div class="page-header">
+    <div>
+      <div class="page-title">ORDEN DE INGRESO</div>
+      <div class="page-sub">Fábrica → Palermo Bonpland 1708</div>
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-field">
+      <div class="meta-label">N° Orden</div>
+      <input class="meta-input" id="numOrden" type="text" placeholder="OI-001" readonly>
+    </div>
+    <div class="meta-field">
+      <div class="meta-label">Fecha</div>
+      <input class="meta-input" id="fechaOrden" type="date">
+    </div>
+  </div>
+  <div class="meta-row">
+    <div class="meta-field">
+      <div class="meta-label">Entrega (fábrica)</div>
+      <input class="meta-input" id="entregaInput" type="text" placeholder="Nombre quien entrega">
+    </div>
+    <div class="meta-field">
+      <div class="meta-label">Recibe (sucursal)</div>
+      <input class="meta-input" id="recibeInput" type="text" placeholder="Nombre quien recibe">
+    </div>
+  </div>
+  <div class="meta-row">
+    <div class="meta-field" style="flex:2">
+      <div class="meta-label">Observaciones</div>
+      <input class="meta-input" id="obsInput" type="text" placeholder="Opcional">
+    </div>
+  </div>
+
+  <div class="section-wrap" id="catList"></div>
+
+  <div class="totals-bar">
+    <div class="totals-info">
+      <div class="total-pill">Items: <b id="totalItems">0</b></div>
+      <div class="total-pill">Líneas: <b id="totalLineas">0</b></div>
+      <div class="total-pill">Total: <b id="totalMonto">$0</b></div>
+    </div>
+    <button class="btn-preview" onclick="generarOrden()">🧾 GENERAR</button>
+  </div>
+</div>
+
+<!-- ══ PREVIEW ══════════════════════════════════════════════════════════ -->
+<div id="preview" class="page">
+  <div class="preview-actions">
+    <button class="btn-action btn-back"  onclick="volverEditar()">← VOLVER</button>
+    <button class="btn-action btn-png"   onclick="descargarPNG()">📸 PNG</button>
+    <button class="btn-action btn-print" onclick="imprimir()">🖨️ IMPRIMIR</button>
+  </div>
+  <div class="ticket-wrap" id="ticketWrap"></div>
+</div>
+
+<!-- ══ HISTORIAL ════════════════════════════════════════════════════════ -->
+<div id="historial" class="page">
+  <div class="page-header">
+    <div>
+      <div class="page-title">HISTORIAL</div>
+      <div class="page-sub">Órdenes de ingreso emitidas</div>
+    </div>
+  </div>
+  <div id="histList"></div>
+</div>
+
+<script>
+// ── CATALOG (mismo que cierre) ────────────────────────────────────────────
+const catalog = [
+  { id:'choco',    cat:'POSTRES',        label:'Chocolate',               abbr:'CHOCO',          unit:'unid' },
+  { id:'leches',   cat:'POSTRES',        label:'Leches',                  abbr:'LECHES',         unit:'unid' },
+  { id:'cachitos', cat:'CACHITOS',       label:'Cachitos',                abbr:'CACHITOS',       unit:'und'  },
+  { id:'eme',      cat:'MINI EMPANADAS', label:'Empanada Mechada',        abbr:'EME',            unit:'und'  },
+  { id:'emo',      cat:'MINI EMPANADAS', label:'Empanada Molida',         abbr:'EMO',            unit:'und'  },
+  { id:'epo',      cat:'MINI EMPANADAS', label:'Empanada Pollo',          abbr:'EPO',            unit:'und'  },
+  { id:'ejq',      cat:'MINI EMPANADAS', label:'Empanada Jamón y Queso',  abbr:'EJQ',            unit:'und'  },
+  { id:'eq',       cat:'MINI EMPANADAS', label:'Empanada Queso',          abbr:'EQ',             unit:'und'  },
+  { id:'edm',      cat:'MINI EMPANADAS', label:'Empanada Dominó',         abbr:'EDM',            unit:'und'  },
+  { id:'epa',      cat:'MINI EMPANADAS', label:'Empanada Pabellón',       abbr:'EPA',            unit:'und'  },
+  { id:'pme',      cat:'PASTELITOS',     label:'Pastelito Mechada',       abbr:'PME',            unit:'und'  },
+  { id:'pmo',      cat:'PASTELITOS',     label:'Pastelito Molida',        abbr:'PMO',            unit:'und'  },
+  { id:'ppo',      cat:'PASTELITOS',     label:'Pastelito Pollo',         abbr:'PPO',            unit:'und'  },
+  { id:'ppz',      cat:'PASTELITOS',     label:'Pastelito Pizza',         abbr:'PPZ',            unit:'und'  },
+  { id:'pq',       cat:'PASTELITOS',     label:'Pastelito Queso',         abbr:'PQ',             unit:'und'  },
+  { id:'ppa',      cat:'PASTELITOS',     label:'Pastelito Papa y Queso',  abbr:'PPA',            unit:'und'  },
+  { id:'pjq',      cat:'PASTELITOS',     label:'Pastelito Jamón y Queso', abbr:'PJQ',            unit:'und'  },
+  { id:'to',       cat:'TEQUEÑOS',       label:'Tequeño Original',        abbr:'TO',             unit:'und'  },
+  { id:'tf',       cat:'TEQUEÑOS',       label:'Tequeño Fiestero',        abbr:'TF',             unit:'und'  },
+  { id:'tjq',      cat:'TEQUEÑOS',       label:'Tequeño Jamón y Queso',   abbr:'TJQ',            unit:'und'  },
+  { id:'tyo',      cat:'TEQUEÑOS',       label:'Tequeño Plátano y Queso', abbr:'TYO',            unit:'und'  },
+  { id:'malta58',  cat:'BEBIDAS',        label:'Malta 58',                abbr:'MALTAS 58',      unit:'und'  },
+  { id:'maltapeq', cat:'BEBIDAS',        label:'Malta Reko Pequeña',      abbr:'MALTA REKO Peq', unit:'und'  },
+  { id:'maltagde', cat:'BEBIDAS',        label:'Malta Reko Grande',       abbr:'MALTA REKO Gde', unit:'und'  },
+  { id:'te',       cat:'BEBIDAS',        label:'Té',                      abbr:'TE',             unit:'und'  },
+  { id:'mayo',     cat:'SALSAS',         label:'Mayonesa',                abbr:'MAYONESA',       unit:'bolsa'},
+  { id:'mojito',   cat:'SALSAS',         label:'Mojito Ajo',              abbr:'MOJITO',         unit:'und'  },
+  { id:'picante',  cat:'SALSAS',         label:'Picante',                 abbr:'PICANTE',        unit:'und'  },
+  { id:'cajap',    cat:'CAJAS',          label:'Caja Pequeña',            abbr:'CAJA P',         unit:'und'  },
+  { id:'cajag',    cat:'CAJAS',          label:'Caja Grande',             abbr:'CAJA G',         unit:'und'  },
+];
+
+const catIcons = {POSTRES:'🍫',CACHITOS:'🥐','MINI EMPANADAS':'🥟',PASTELITOS:'🫓',TEQUEÑOS:'🧀',BEBIDAS:'🍺',SALSAS:'🫙',CAJAS:'📦'};
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let qtys   = {};
+let prices = {};
+catalog.forEach(p => { qtys[p.id]=0; prices[p.id]=loadPrice(p.id); });
+
+function loadPrice(id) {
+  try { return parseFloat(localStorage.getItem('to_price_'+id)||'0')||0; } catch(e){return 0;}
+}
+function savePrice(id,v) {
+  try { localStorage.setItem('to_price_'+id, v); } catch(e){}
+}
+
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem('to_ingreso_history')||'[]'); } catch(e){return [];}
+}
+function saveHistory(h) {
+  try { localStorage.setItem('to_ingreso_history', JSON.stringify(h)); } catch(e){}
+}
+
+function getNextNum() {
+  const h=loadHistory();
+  const nums=h.map(o=>parseInt((o.num||'0').replace(/[^0-9]/g,''))||0);
+  const next=(nums.length?Math.max(...nums):0)+1;
+  return 'OI-'+String(next).padStart(3,'0');
+}
+
+// ── RENDER FORM ───────────────────────────────────────────────────────────
+function fmt(n){ return '$'+Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+function buildForm() {
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  let html='';
+  cats.forEach(cat=>{
+    const prods=catalog.filter(p=>p.cat===cat);
+    html+=`<div class="cat-block" id="cat-${cat.replace(/\s/g,'_')}">
+      <div class="cat-toggle" onclick="toggleCat(this)">
+        <span class="cat-icon">${catIcons[cat]||'📌'}</span>
+        <span class="cat-name">${cat}</span>
+        <span class="cat-summary" id="sum-${cat.replace(/\s/g,'_')}"></span>
+        <span class="cat-chevron">▼</span>
+      </div>
+      <div class="cat-body">
+        <div class="col-headers">
+          <div class="prod-name">Producto</div>
+          <div style="width:72px;text-align:center" class="col-label">Precio</div>
+          <div style="width:94px;text-align:center" class="col-label">Cantidad</div>
+          <div style="width:62px;text-align:right" class="col-label">Subtotal</div>
+        </div>`;
+    prods.forEach(p=>{
+      html+=`<div class="prod-row">
+        <div class="prod-name">${p.label} <span class="prod-abbr">${p.abbr}</span></div>
+        <input class="price-input" type="number" min="0" placeholder="$0"
+          value="${prices[p.id]||''}" id="price-${p.id}"
+          oninput="onPriceChange('${p.id}',this.value)" title="Precio unitario">
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="adj('${p.id}',-1)">−</button>
+          <input class="qty-num" type="number" min="0" value="${qtys[p.id]}"
+            id="qty-${p.id}" oninput="onQtyChange('${p.id}',this.value)">
+          <button class="qty-btn" onclick="adj('${p.id}',1)">+</button>
+        </div>
+        <div style="width:62px;text-align:right;font-size:0.75rem;font-weight:600;color:var(--gold)" id="sub-${p.id}">—</div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  document.getElementById('catList').innerHTML=html;
+  recalc();
+}
+
+function toggleCat(el){ el.parentElement.classList.toggle('open'); }
+
+function onQtyChange(id,v){
+  qtys[id]=Math.max(0,parseInt(v)||0);
+  updateSub(id); recalcTotals();
+}
+function onPriceChange(id,v){
+  prices[id]=parseFloat(v)||0;
+  savePrice(id,prices[id]);
+  updateSub(id); recalcTotals();
+}
+function adj(id,d){
+  qtys[id]=Math.max(0,(qtys[id]||0)+d);
+  const inp=document.getElementById('qty-'+id);
+  if(inp)inp.value=qtys[id];
+  updateSub(id); recalcTotals();
+}
+function updateSub(id){
+  const el=document.getElementById('sub-'+id);
+  if(!el)return;
+  const s=qtys[id]*prices[id];
+  el.textContent = qtys[id]>0&&prices[id]>0 ? fmt(s) : qtys[id]>0 ? qtys[id]+' und' : '—';
+}
+function recalcTotals(){
+  let items=0,lineas=0,monto=0;
+  catalog.forEach(p=>{
+    if(qtys[p.id]>0){ items+=qtys[p.id]; lineas++; monto+=qtys[p.id]*prices[p.id]; }
+  });
+  document.getElementById('totalItems').textContent=items;
+  document.getElementById('totalLineas').textContent=lineas;
+  document.getElementById('totalMonto').textContent=fmt(monto);
+  // update cat summaries
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  cats.forEach(cat=>{
+    const el=document.getElementById('sum-'+cat.replace(/\s/g,'_'));
+    if(!el)return;
+    const prods=catalog.filter(p=>p.cat===cat);
+    const catItems=prods.reduce((a,p)=>a+(qtys[p.id]||0),0);
+    el.textContent = catItems>0 ? catItems+' und' : '';
+  });
+}
+function recalc(){ catalog.forEach(p=>updateSub(p.id)); recalcTotals(); }
+
+// ── GENERATE TICKET ───────────────────────────────────────────────────────
+function buildTicketHTML(orden, copy){
+  const copyLbl = copy===1?'COPIA FÁBRICA':'COPIA SUCURSAL';
+  const lines=catalog.filter(p=>qtys[p.id]>0);
+  const cats=[...new Set(lines.map(p=>p.cat))];
+  let totalMonto=0, totalItems=0;
+  lines.forEach(p=>{totalMonto+=qtys[p.id]*prices[p.id]; totalItems+=qtys[p.id];});
+  const subtotalSinCosto=lines.filter(p=>prices[p.id]===0).reduce((a,p)=>a+qtys[p.id],0);
+
+  let html=`<div class="ticket" id="ticket-${copy}">
+    <div class="copy-label">${copyLbl}</div>
+    <div class="ticket-header">
+      <div class="ticket-brand">TEQUE ONDA</div>
+      <div class="ticket-sub">ORDEN DE INGRESO · PALERMO</div>
+    </div>
+    <div class="ticket-from-to">
+      <div><b>FÁBRICA</b><br>${orden.entrega||'—'}</div>
+      <div class="arrow">→</div>
+      <div style="text-align:right"><b>PALERMO</b><br>Bonpland 1708<br>${orden.recibe||'—'}</div>
+    </div>
+    <div class="ticket-meta">
+      <span><b>N°</b> ${orden.num}</span>
+      <span><b>Fecha</b> ${orden.fecha}</span>
+    </div>
+    ${orden.obs?`<div style="padding:5px 14px;font-size:10px;color:#555;border-bottom:1px dashed #ccc">📝 ${orden.obs}</div>`:''}
+    <div class="ticket-col-header">
+      <span class="tl-name">Producto</span>
+      <span class="tl-qty" style="width:36px;text-align:right">Cant</span>
+      <span class="tl-price" style="width:56px;text-align:right">Precio</span>
+      <span class="tl-sub" style="width:62px;text-align:right">Subtotal</span>
+    </div>`;
+
+  cats.forEach(cat=>{
+    const catLines=lines.filter(p=>p.cat===cat);
+    html+=`<div class="ticket-cat-header">${catIcons[cat]||''} ${cat}</div>`;
+    catLines.forEach(p=>{
+      const sub=qtys[p.id]*prices[p.id];
+      html+=`<div class="ticket-line">
+        <span class="tl-name">${p.label}</span>
+        <span class="tl-qty">${qtys[p.id]}</span>
+        <span class="tl-price">${prices[p.id]>0?fmt(prices[p.id]):'—'}</span>
+        <span class="tl-sub">${prices[p.id]>0?fmt(sub):'—'}</span>
+      </div>`;
+    });
+  });
+
+  html+=`<div class="ticket-totals">
+    <div class="ticket-total-row"><span>Total unidades</span><span>${totalItems}</span></div>
+    <div class="ticket-total-row"><span>Líneas</span><span>${lines.length}</span></div>
+    ${subtotalSinCosto>0?`<div class="ticket-total-row" style="color:#888"><span>Sin precio cargado</span><span>${subtotalSinCosto} und</span></div>`:''}
+    <div class="ticket-total-row grand"><span>TOTAL</span><span>${fmt(totalMonto)}</span></div>
+  </div>
+  <div class="ticket-confirm">
+    <div class="ticket-confirm-box">
+      <div class="ticket-confirm-label">Entrega conforme</div>
+      <div class="ticket-confirm-name">${orden.entrega||'_____________'}</div>
+    </div>
+    <div class="ticket-confirm-box">
+      <div class="ticket-confirm-label">Recibe conforme</div>
+      <div class="ticket-confirm-name">${orden.recibe||'_____________'}</div>
+    </div>
+  </div>
+  <div class="ticket-footer">TEQUEONDA.COM.AR · PALERMO BONPLAND 1708</div>
+</div>`;
+  return html;
+}
+
+function generarOrden(){
+  const lines=catalog.filter(p=>qtys[p.id]>0);
+  if(!lines.length){ alert('Agregá al menos un producto.'); return; }
+  const num=document.getElementById('numOrden').value||getNextNum();
+  const orden={
+    num, fecha: document.getElementById('fechaOrden').value,
+    entrega: document.getElementById('entregaInput').value.trim(),
+    recibe:  document.getElementById('recibeInput').value.trim(),
+    obs:     document.getElementById('obsInput').value.trim(),
+    items:   catalog.filter(p=>qtys[p.id]>0).map(p=>({id:p.id,label:p.label,abbr:p.abbr,qty:qtys[p.id],price:prices[p.id],sub:qtys[p.id]*prices[p.id]})),
+    total:   catalog.reduce((a,p)=>a+qtys[p.id]*prices[p.id],0),
+    status:  'pendiente',
+    ts:      Date.now()
+  };
+  // render 2 copies
+  document.getElementById('ticketWrap').innerHTML=
+    `<div style="margin-bottom:12px">${buildTicketHTML(orden,1)}</div>
+     <div style="margin-top:4px">${buildTicketHTML(orden,2)}</div>`;
+
+  window._currentOrden=orden;
+  document.getElementById('tabPreview').style.display='';
+  showPage('preview');
+}
+
+function volverEditar(){ showPage('nueva'); }
+
+// ── SAVE ──────────────────────────────────────────────────────────────────
+function saveOrden(){
+  const orden=window._currentOrden; if(!orden)return;
+  const h=loadHistory();
+  const idx=h.findIndex(o=>o.num===orden.num);
+  if(idx>=0) h[idx]=orden; else h.unshift(orden);
+  saveHistory(h);
+  renderHistory();
+}
+
+// ── DOWNLOAD & PRINT ─────────────────────────────────────────────────────
+async function descargarPNG(){
+  saveOrden();
+  const el=document.getElementById('ticket-2'); // sucursal copy
+  if(!el)return;
+  const canvas=await html2canvas(el,{scale:3,backgroundColor:'#fff',useCORS:true,logging:false});
+  const link=document.createElement('a');
+  link.download=`ingreso_${window._currentOrden.num}.png`;
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+}
+
+function imprimir(){
+  saveOrden();
+  window.print();
+}
+
+// ── HISTORY ──────────────────────────────────────────────────────────────
+function renderHistory(){
+  const h=loadHistory();
+  const el=document.getElementById('histList');
+  if(!h.length){ el.innerHTML=`<div class="hist-empty">No hay órdenes emitidas todavía.</div>`; return; }
+  let html='';
+  h.forEach((o,i)=>{
+    const statusCls=o.status==='confirmada'?'confirmada':'pendiente';
+    const statusTxt=o.status==='confirmada'?'CONFIRMADA':'PENDIENTE';
+    const preview=o.items.slice(0,3).map(it=>`${it.abbr} ×${it.qty}`).join(' · ')+(o.items.length>3?` +${o.items.length-3} más`:'');
+    html+=`<div class="hist-card">
+      <div class="hist-card-header">
+        <span class="hist-orden">${o.num}</span>
+        <span class="hist-date">${o.fecha}</span>
+        <span class="hist-status ${statusCls}">${statusTxt}</span>
+        <span class="hist-total">${fmt(o.total)}</span>
+      </div>
+      <div class="hist-items-preview">${preview}</div>
+      <div class="hist-actions">
+        <button class="hist-btn view" onclick="verOrden(${i})">👁 VER</button>
+        ${o.status!=='confirmada'?`<button class="hist-btn confirm" onclick="confirmarOrden(${i})">✓ CONFIRMAR</button>`:''}
+        <button class="hist-btn del" onclick="eliminarOrden(${i})">✕</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+function verOrden(i){
+  const o=loadHistory()[i];
+  // restore state to re-render ticket
+  catalog.forEach(p=>{ qtys[p.id]=0; });
+  o.items.forEach(it=>{ qtys[it.id]=it.qty; prices[it.id]=it.price; });
+  window._currentOrden=o;
+  document.getElementById('ticketWrap').innerHTML=
+    `<div style="margin-bottom:12px">${buildTicketHTML(o,1)}</div>
+     <div style="margin-top:4px">${buildTicketHTML(o,2)}</div>`;
+  document.getElementById('tabPreview').style.display='';
+  showPage('preview');
+}
+
+function confirmarOrden(i){
+  const h=loadHistory();
+  h[i].status='confirmada';
+  saveHistory(h);
+  renderHistory();
+}
+
+function eliminarOrden(i){
+  if(!confirm('¿Eliminar esta orden?'))return;
+  const h=loadHistory(); h.splice(i,1); saveHistory(h); renderHistory();
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const tabMap={nueva:0,preview:1,historial:2};
+  const tabs=document.querySelectorAll('.tab');
+  if(tabMap[id]!==undefined) tabs[tabMap[id]].classList.add('active');
+  if(id==='historial') renderHistory();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.getElementById('numOrden').value=getNextNum();
+document.getElementById('fechaOrden').value=new Date().toISOString().split('T')[0];
+buildForm();
+</script>
+</body>
+</html>
