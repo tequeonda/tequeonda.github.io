@@ -85,35 +85,36 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 /* ── TICKET CARD ── */
 .ticket-wrap { padding: 0 16px 20px; }
 .ticket {
-  background: #fff; color: #111; border-radius: 10px; overflow: hidden;
+  background: #fff; color: #111; border-radius: 4px; overflow: hidden;
   font-family: 'Courier New', monospace; font-size: 12px; max-width: 400px; margin: 0 auto;
+  border: 1px solid #ccc;
 }
-.ticket-header { background: #111; color: #FFC72C; padding: 14px 16px 10px; text-align: center; }
-.ticket-brand { font-family: var(--fh); font-size: 1.8rem; letter-spacing: 3px; }
-.ticket-sub { font-size: 0.65rem; letter-spacing: 2px; color: #aaa; margin-top: 2px; }
-.ticket-from-to { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 11px; background: #f5f5f5; border-bottom: 1px dashed #ccc; }
-.ticket-from-to .arrow { color: #999; font-size: 14px; }
-.ticket-meta { padding: 8px 14px; border-bottom: 1px dashed #ccc; display: flex; justify-content: space-between; font-size: 11px; color: #555; }
-.ticket-cat-header { background: #111; color: #FFC72C; padding: 4px 14px; font-size: 10px; letter-spacing: 2px; font-family: var(--fh); }
-.ticket-line { display: flex; padding: 4px 14px; border-bottom: 1px solid #eee; gap: 4px; }
+.ticket-header { background: #fff; color: #111; padding: 12px 16px 8px; text-align: center; border-bottom: 2px solid #111; }
+.ticket-brand { font-family: var(--fh); font-size: 1.8rem; letter-spacing: 4px; color: #111; }
+.ticket-sub { font-size: 0.65rem; letter-spacing: 2px; color: #555; margin-top: 2px; }
+.ticket-from-to { display: flex; justify-content: space-between; padding: 8px 14px 6px; font-size: 11px; background: #fff; border-bottom: 1px dashed #aaa; }
+.ticket-from-to .arrow { color: #555; font-size: 13px; }
+.ticket-meta { padding: 6px 14px; border-bottom: 1px dashed #aaa; display: flex; justify-content: space-between; font-size: 11px; color: #444; }
+.ticket-cat-header { background: #fff; color: #111; padding: 5px 14px 3px; font-size: 10px; letter-spacing: 2px; font-family: var(--fh); border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+.ticket-line { display: flex; padding: 4px 14px; border-bottom: 1px dotted #ddd; gap: 4px; }
 .ticket-line .tl-name { flex: 1; font-size: 11px; }
 .ticket-line .tl-qty  { width: 36px; text-align: right; font-size: 11px; }
 .ticket-line .tl-price{ width: 56px; text-align: right; font-size: 11px; color: #555; }
 .ticket-line .tl-sub  { width: 62px; text-align: right; font-size: 11px; font-weight: 700; }
-.ticket-col-header { display: flex; padding: 3px 14px; background: #eee; gap: 4px; }
-.ticket-col-header span { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+.ticket-col-header { display: flex; padding: 3px 14px; background: #f5f5f5; gap: 4px; border-bottom: 1px solid #ddd; }
+.ticket-col-header span { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
 .ticket-col-header .tl-name { flex:1; }
-.ticket-totals { padding: 10px 14px; border-top: 2px solid #111; }
+.ticket-totals { padding: 8px 14px; border-top: 1px solid #111; }
 .ticket-total-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; }
-.ticket-total-row.grand { font-size: 15px; font-weight: 700; border-top: 1px dashed #ccc; padding-top: 6px; margin-top: 4px; }
-.ticket-confirm { display: flex; border-top: 2px dashed #111; }
+.ticket-total-row.grand { font-size: 14px; font-weight: 700; border-top: 1px dashed #aaa; padding-top: 6px; margin-top: 4px; }
+.ticket-confirm { display: flex; border-top: 1px dashed #aaa; }
 .ticket-confirm-box { flex: 1; padding: 10px 14px; text-align: center; }
-.ticket-confirm-box:first-child { border-right: 1px dashed #ccc; }
-.ticket-confirm-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 20px; }
-.ticket-confirm-name { font-size: 10px; font-weight: 700; border-top: 1px solid #333; padding-top: 4px; margin-top: 20px; }
-.ticket-footer { background: #111; color: #555; text-align: center; padding: 8px; font-size: 9px; letter-spacing: 1px; }
-.ticket-orden-num { font-size: 10px; color: #888; text-align: center; padding: 4px 0; }
-.copy-label { background: #FFC72C; color: #111; text-align: center; font-size: 9px; font-weight: 700; letter-spacing: 2px; padding: 3px; }
+.ticket-confirm-box:first-child { border-right: 1px dashed #aaa; }
+.ticket-confirm-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #666; margin-bottom: 20px; }
+.ticket-confirm-name { font-size: 10px; font-weight: 700; border-top: 1px solid #555; padding-top: 4px; margin-top: 20px; }
+.ticket-footer { background: #fff; color: #888; text-align: center; padding: 6px; font-size: 9px; letter-spacing: 1px; border-top: 1px dashed #aaa; }
+.ticket-orden-num { font-size: 10px; color: #666; text-align: center; padding: 4px 0; }
+.copy-label { border: 1px dashed #aaa; color: #444; text-align: center; font-size: 9px; font-weight: 700; letter-spacing: 2px; padding: 3px; margin-bottom: 4px; }
 
 /* ── HISTORY ── */
 .hist-empty { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 40px 20px; }
@@ -139,6 +140,28 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
   .ticket-wrap { padding: 0; }
   .copy-label { display: block !important; }
 }
+
+/* ── REPORT STYLES ── */
+.rep-summary { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.rep-kpi { flex:1; min-width:100px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+.rep-kpi-val { font-family:var(--fh); font-size:1.5rem; letter-spacing:1px; color:var(--gold); }
+.rep-kpi-label { font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+.rep-cat { margin-top:12px; background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.rep-cat-header { background:var(--surface); padding:10px 14px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+.rep-cat-name { font-family:var(--fh); font-size:1rem; letter-spacing:2px; color:var(--gold); flex:1; }
+.rep-cat-totals { font-size:0.72rem; color:var(--muted); text-align:right; line-height:1.5; }
+.rep-cat-body { display:none; }
+.rep-cat.open .rep-cat-body { display:block; }
+.rep-prod-row { display:flex; align-items:center; padding:8px 14px; border-top:1px solid var(--border); gap:8px; }
+.rep-prod-name { flex:1; font-size:0.8rem; font-weight:500; }
+.rep-prod-abbr { font-size:0.6rem; color:var(--muted); margin-left:3px; }
+.rep-prod-qty { width:60px; text-align:right; font-size:0.78rem; color:var(--muted); }
+.rep-prod-monto { width:80px; text-align:right; font-size:0.78rem; font-weight:700; color:var(--gold); }
+.rep-bar-wrap { flex:1; height:4px; background:var(--border); border-radius:2px; margin:0 8px; }
+.rep-bar { height:4px; background:var(--gold); border-radius:2px; transition:width 0.4s; }
+.rep-empty { text-align:center; color:var(--muted); font-size:0.85rem; padding:40px 20px; }
+.rep-col-header { display:flex; padding:4px 14px; background:rgba(0,0,0,0.2); gap:8px; }
+.rep-col-header span { font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
 </style>
 </head>
 <body>
@@ -147,6 +170,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
   <button class="tab active" onclick="showPage('nueva')">📦 NUEVA</button>
   <button class="tab" onclick="showPage('preview')" id="tabPreview" style="display:none">🧾 ORDEN</button>
   <button class="tab" onclick="showPage('historial')">📋 HISTORIAL</button>
+  <button class="tab" onclick="showPage('reportes')">📊 REPORTES</button>
 </div>
 
 <!-- ══ NUEVA ORDEN ══════════════════════════════════════════════════════ -->
@@ -218,6 +242,40 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
   <div id="histList"></div>
 </div>
 
+
+<!-- ══ REPORTES ════════════════════════════════════════════════════════ -->
+<div id="reportes" class="page">
+  <div class="page-header">
+    <div>
+      <div class="page-title">REPORTES</div>
+      <div class="page-sub">Acumulado de ingresos por período</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;padding:14px 16px 0;flex-wrap:wrap;align-items:flex-end">
+    <div class="meta-field" style="min-width:110px">
+      <div class="meta-label">Período</div>
+      <select class="meta-select" id="repPeriodo" onchange="renderReporte()">
+        <option value="week">Esta semana</option>
+        <option value="lastweek">Semana anterior</option>
+        <option value="month" selected>Este mes</option>
+        <option value="lastmonth">Mes anterior</option>
+        <option value="all">Todo</option>
+        <option value="custom">Rango personalizado</option>
+      </select>
+    </div>
+    <div class="meta-field" id="customRange" style="display:none;flex-direction:row;gap:8px;align-items:flex-end">
+      <div>
+        <div class="meta-label">Desde</div>
+        <input class="meta-input" type="date" id="repDesde" onchange="renderReporte()">
+      </div>
+      <div>
+        <div class="meta-label">Hasta</div>
+        <input class="meta-input" type="date" id="repHasta" onchange="renderReporte()">
+      </div>
+    </div>
+  </div>
+  <div id="repContent" style="padding:0 16px 20px"></div>
+</div>
 <script>
 // ── CATALOG (mismo que cierre) ────────────────────────────────────────────
 const catalog = [
@@ -545,10 +603,99 @@ function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  const tabMap={nueva:0,preview:1,historial:2};
+  const tabMap={nueva:0,preview:1,historial:2,reportes:3};
   const tabs=document.querySelectorAll('.tab');
   if(tabMap[id]!==undefined) tabs[tabMap[id]].classList.add('active');
   if(id==='historial') renderHistory();
+  if(id==='reportes') renderReporte();
+}
+
+function getDateRange(periodo){
+  const now=new Date(); const y=now.getFullYear(); const m=now.getMonth();
+  const d=now.getDay(); // 0=sun
+  let from,to;
+  if(periodo==='week'){
+    const diff=d===0?6:d-1; // Monday start
+    from=new Date(now); from.setDate(now.getDate()-diff); from.setHours(0,0,0,0);
+    to=new Date(now); to.setHours(23,59,59,999);
+  } else if(periodo==='lastweek'){
+    const diff=d===0?6:d-1;
+    to=new Date(now); to.setDate(now.getDate()-diff-1); to.setHours(23,59,59,999);
+    from=new Date(to); from.setDate(to.getDate()-6); from.setHours(0,0,0,0);
+  } else if(periodo==='month'){
+    from=new Date(y,m,1); to=new Date(y,m+1,0,23,59,59,999);
+  } else if(periodo==='lastmonth'){
+    from=new Date(y,m-1,1); to=new Date(y,m,0,23,59,59,999);
+  } else if(periodo==='custom'){
+    const fd=document.getElementById('repDesde').value;
+    const td=document.getElementById('repHasta').value;
+    from=fd?new Date(fd+'T00:00:00'):new Date(0);
+    to=td?new Date(td+'T23:59:59'):new Date();
+  } else { // all
+    from=new Date(0); to=new Date();
+  }
+  return {from,to};
+}
+
+function renderReporte(){
+  const periodo=document.getElementById('repPeriodo').value;
+  document.getElementById('customRange').style.display=periodo==='custom'?'flex':'none';
+  const {from,to}=getDateRange(periodo);
+  const history=loadHistory().filter(o=>{
+    const d=new Date(o.ts||0); return d>=from&&d<=to;
+  });
+  const el=document.getElementById('repContent');
+  if(!history.length){ el.innerHTML='<div class="rep-empty">Sin órdenes en este período.</div>'; return; }
+
+  // Aggregate
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  const aggCat={}; const aggProd={};
+  cats.forEach(c=>{ aggCat[c]={qty:0,monto:0}; });
+  catalog.forEach(p=>{ aggProd[p.id]={qty:0,monto:0}; });
+  let totalQty=0,totalMonto=0,totalOrdenes=history.length;
+  history.forEach(o=>{
+    (o.items||[]).forEach(it=>{
+      const p=catalog.find(x=>x.id===it.id); if(!p)return;
+      aggCat[p.cat].qty+=it.qty; aggCat[p.cat].monto+=it.sub||0;
+      aggProd[p.id].qty+=it.qty; aggProd[p.id].monto+=it.sub||0;
+      totalQty+=it.qty; totalMonto+=it.sub||0;
+    });
+  });
+
+  const maxCatMonto=Math.max(...Object.values(aggCat).map(c=>c.monto),1);
+
+  let html='<div class="rep-summary">';
+  html+='<div class="rep-kpi"><div class="rep-kpi-val">'+totalOrdenes+'</div><div class="rep-kpi-label">Órdenes</div></div>';
+  html+='<div class="rep-kpi"><div class="rep-kpi-val">'+totalQty.toLocaleString('es-AR')+'</div><div class="rep-kpi-label">Unidades</div></div>';
+  html+='<div class="rep-kpi"><div class="rep-kpi-val">'+fmt(totalMonto)+'</div><div class="rep-kpi-label">Total</div></div>';
+  html+='</div>';
+
+  // categories
+  cats.forEach(cat=>{
+    const c=aggCat[cat]; if(c.qty===0)return;
+    const barW=Math.round((c.monto/maxCatMonto)*100);
+    const prods=catalog.filter(p=>p.cat===cat&&aggProd[p.id].qty>0);
+    const maxProdMonto=Math.max(...prods.map(p=>aggProd[p.id].monto),1);
+    html+='<div class="rep-cat" id="rcat-'+cat.replace(/\s/g,'_')+'">';
+    html+='<div class="rep-cat-header" onclick="this.parentElement.classList.toggle(\'open\')">';
+    html+='<span>'+catIcons[cat]+'</span><span class="rep-cat-name">'+cat+'</span>';
+    html+='<div class="rep-cat-totals"><div>'+c.qty.toLocaleString('es-AR')+' und</div><div>'+fmt(c.monto)+'</div></div>';
+    html+='</div><div class="rep-cat-body">';
+    html+='<div class="rep-col-header"><span style="flex:1">Producto</span><span style="width:60px;text-align:right">Cant</span><span style="width:80px;text-align:right">Monto</span></div>';
+    prods.sort((a,b)=>aggProd[b.id].monto-aggProd[a.id].monto).forEach(p=>{
+      const pd=aggProd[p.id];
+      const bw=Math.round((pd.monto/maxProdMonto)*100);
+      html+='<div class="rep-prod-row">';
+      html+='<div class="rep-prod-name">'+p.label+' <span class="rep-prod-abbr">'+p.abbr+'</span></div>';
+      html+='<div class="rep-bar-wrap"><div class="rep-bar" style="width:'+bw+'%"></div></div>';
+      html+='<div class="rep-prod-qty">'+pd.qty+' und</div>';
+      html+='<div class="rep-prod-monto">'+fmt(pd.monto)+'</div>';
+      html+='</div>';
+    });
+    html+='</div></div>';
+  });
+
+  el.innerHTML=html;
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────
