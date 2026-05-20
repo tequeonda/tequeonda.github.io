@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Mi Juego. Mi Camino.</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#F0F4FA;
+  --white:#FFFFFF;
+  --surface:#FFFFFF;
+  --surface2:#F5F8FF;
+  --border:#E2E8F4;
+  --text:#0A1628;
+  --text-sub:#64748B;
+  --blue:#034694;
+  --blue-mid:#1565C0;
+  --blue-light:#E8EFFC;
+  --blue-glow:rgba(3,70,148,0.12);
+  --shadow:0 2px 12px rgba(3,70,148,0.08);
+  --shadow-lg:0 8px 32px rgba(3,70,148,0.14);
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit',-apple-system,sans-serif;overflow:hidden;}
+#app{height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* HEADER */
+.app-header{
+  padding:52px 20px 16px;
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+  position:relative;
+}
+.app-header::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--blue) 0%,#1E88E5 50%,#90CAF9 100%);
+}
+.header-tag{
+  font-size:10px;font-weight:600;letter-spacing:2.5px;
+  color:var(--blue);text-transform:uppercase;margin-bottom:4px;
+}
+.header-name{
+  font-size:30px;font-weight:900;letter-spacing:-0.5px;
+  color:var(--text);line-height:1.05;
+}
+.header-name span{color:var(--blue);}
+.header-sub{font-size:12px;color:var(--text-sub);margin-top:3px;font-weight:500;}
+.header-badge{
+  display:inline-flex;align-items:center;gap:5px;margin-top:10px;
+  background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 11px;border-radius:5px;
+}
+
+/* GRID */
+.areas-grid{
+  flex:1;overflow-y:auto;padding:14px 14px 32px;
+  display:grid;grid-template-columns:1fr 1fr;gap:11px;
+  background:var(--bg);
+}
+.areas-grid::-webkit-scrollbar{display:none;}
+
+.area-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:15px 13px 13px;
+  cursor:pointer;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:transform .13s ease,box-shadow .13s ease;
+  min-height:118px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.area-card:active{transform:scale(.96);box-shadow:none;}
+.area-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0;
+}
+.area-card.c1::before{background:var(--blue);}
+.area-card.c2::before{background:#0288D1;}
+.area-card.c3::before{background:#D32F2F;}
+.area-card.c4::before{background:#2E7D32;}
+.area-card.c5::before{background:#5E35B1;}
+.area-card.c6::before{background:#E65100;}
+
+.area-num{
+  font-size:9px;font-weight:700;letter-spacing:2px;
+  color:var(--text-sub);text-transform:uppercase;margin-bottom:6px;
+}
+.area-title{font-size:18px;font-weight:800;line-height:1.1;color:var(--text);}
+.area-sub{font-size:11px;color:var(--text-sub);margin-top:2px;font-weight:500;}
+.area-urgente{
+  display:inline-block;margin-top:6px;
+  font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 7px;border-radius:4px;
+}
+.area-arrow{align-self:flex-end;font-size:13px;opacity:.2;margin-top:6px;color:var(--text);}
+
+/* OVERLAY */
+#overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(10,22,40,0.55);
+  display:none;align-items:flex-end;
+  backdrop-filter:blur(4px);
+}
+#overlay.open{display:flex;}
+#panel{
+  width:100%;max-height:93dvh;
+  background:var(--white);
+  border-radius:24px 24px 0 0;
+  display:flex;flex-direction:column;
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.32,.72,0,1);
+  overflow:hidden;
+  box-shadow:0 -8px 40px rgba(3,70,148,0.15);
+}
+#overlay.open #panel{transform:translateY(0);}
+
+.handle{
+  width:36px;height:4px;border-radius:2px;
+  background:var(--border);margin:12px auto 0;flex-shrink:0;
+}
+.panel-header{
+  padding:12px 18px 15px;flex-shrink:0;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+  position:relative;
+}
+.panel-header::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+}
+.back-btn{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  width:36px;height:36px;border-radius:50%;font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-weight:600;
+}
+.panel-title{font-size:23px;font-weight:900;line-height:1;}
+.panel-sub{font-size:12px;color:var(--text-sub);margin-top:1px;font-weight:500;}
+
+.panel-body{flex:1;overflow-y:auto;padding:4px 18px 40px;background:var(--bg);}
+.panel-body::-webkit-scrollbar{display:none;}
+
+/* SECTIONS */
+.sec{margin-top:20px;}
+.sec-label{
+  font-size:9px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--text-sub);margin-bottom:9px;
+}
+.info-card{
+  background:var(--white);border:1px solid var(--border);border-radius:13px;
+  padding:14px 15px;font-size:13.5px;line-height:1.65;color:var(--text);
+  box-shadow:var(--shadow);
+}
+.mt8{margin-top:8px;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.stat-card{
+  background:var(--white);border:1px solid var(--border);border-radius:13px;
+  padding:13px 10px;text-align:center;box-shadow:var(--shadow);
+}
+.stat-num{font-size:24px;font-weight:900;line-height:1;}
+.stat-lbl{font-size:10px;color:var(--text-sub);margin-top:3px;line-height:1.35;font-weight:500;}
+
+/* TOOLS */
+.tool-card{
+  background:var(--white);border:1px solid var(--border);border-radius:13px;
+  padding:14px 15px;margin-bottom:8px;box-shadow:var(--shadow);
+}
+.tool-title{font-size:12px;font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;}
+.steps{list-style:none;}
+.step{
+  display:flex;gap:10px;align-items:flex-start;
+  font-size:13px;line-height:1.55;padding:7px 0;
+  border-bottom:1px solid var(--border);color:var(--text);
+}
+.step:last-child{border-bottom:none;}
+.step-l{font-size:17px;font-weight:900;min-width:18px;flex-shrink:0;}
+
+/* STOP */
+.stop-wrap{background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:var(--shadow);}
+.stop-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg);}
+.s-tab{
+  flex:1;padding:11px 4px;text-align:center;cursor:pointer;
+  border:none;background:none;color:var(--text-sub);
+  font-family:'Outfit',sans-serif;font-size:21px;font-weight:800;
+  border-bottom:3px solid transparent;transition:all .2s;margin-bottom:-1px;
+}
+.s-tab.active{background:var(--white);color:var(--text);}
+.stop-body{padding:16px;font-size:13.5px;line-height:1.65;min-height:90px;color:var(--text);}
+
+/* BREATHING */
+.breath-wrap{
+  background:var(--white);border:1px solid var(--border);border-radius:13px;
+  padding:22px;text-align:center;box-shadow:var(--shadow);
+}
+.b-ring{
+  width:90px;height:90px;border-radius:50%;border:2.5px solid currentColor;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 10px;transition:transform .8s ease;
+}
+.b-num{font-size:30px;font-weight:900;}
+.b-phase{font-size:12px;color:var(--text-sub);margin-bottom:13px;font-weight:500;}
+.b-btn{
+  border:none;border-radius:10px;padding:10px 24px;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;
+  transition:opacity .2s;
+}
+.b-btn:active{opacity:.75;}
+
+/* ROUTINE */
+.routine{list-style:none;}
+.r-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 0;border-bottom:1px solid var(--border);
+  font-size:13px;line-height:1.5;color:var(--text);
+}
+.r-item:last-child{border-bottom:none;}
+.r-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+
+/* CHECKLIST */
+.checklist-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;
+}
+.checklist-item:last-child{border-bottom:none;}
+.c-box{
+  width:23px;height:23px;border-radius:7px;
+  border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;flex-shrink:0;transition:all .15s;
+  color:var(--white);
+}
+.c-box.done{border-color:currentColor;background:currentColor;}
+.c-box.done::after{content:'✓';}
+.c-txt{font-size:13px;line-height:1.4;color:var(--text);font-weight:500;}
+.c-txt.done{text-decoration:line-through;opacity:.4;}
+
+/* PHRASES */
+.phrase{
+  background:var(--blue-light);border-radius:11px;
+  padding:12px 14px;margin-bottom:8px;
+  font-size:13.5px;font-style:italic;line-height:1.55;
+  color:var(--text);border-left:3px solid currentColor;
+}
+
+/* JOURNAL */
+.j-date{font-size:10px;color:var(--text-sub);margin-bottom:7px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.j-area{
+  width:100%;min-height:95px;
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:13px;padding:13px;resize:none;
+  font-family:'Outfit',sans-serif;font-size:14px;line-height:1.6;
+  color:var(--text);outline:none;transition:border-color .2s;
+}
+.j-area:focus{border-color:var(--blue);}
+.j-area::placeholder{color:var(--text-sub);}
+.j-save{
+  width:100%;margin-top:8px;padding:13px;border:none;
+  border-radius:11px;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;
+  color:#fff;transition:opacity .2s;
+}
+.j-save:active{opacity:.8;}
+.j-ok{font-size:11px;text-align:center;margin-top:5px;opacity:0;transition:opacity .3s;font-weight:600;}
+.j-ok.show{opacity:1;}
+.past-header{
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-sub);margin:16px 0 8px;
+}
+.past-entry{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:11px;padding:12px 13px;margin-bottom:7px;
+}
+.past-entry-date{font-size:10px;color:var(--text-sub);margin-bottom:3px;font-weight:600;}
+.past-entry-txt{font-size:13px;line-height:1.5;color:var(--text);}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="app-header">
+    <div class="header-tag">⚽ Proyecto Élite · Diego Osorio</div>
+    <div class="header-name">Mi Juego.<br><span>Mi Camino.</span></div>
+    <div class="header-sub">Extremo Zurdo · 18 años · Venezuela</div>
+    <div class="header-badge">CAMINO A LA ÉLITE</div>
+  </div>
+  <div class="areas-grid" id="grid"></div>
+</div>
+
+<div id="overlay">
+  <div id="panel">
+    <div class="handle"></div>
+    <div class="panel-header" id="panelHeader">
+      <button class="back-btn" onclick="close_()">←</button>
+      <div>
+        <div class="panel-title" id="pTitle"></div>
+        <div class="panel-sub" id="pSub"></div>
+      </div>
+    </div>
+    <div class="panel-body" id="pBody"></div>
+  </div>
+</div>
+
+<script>
+const TODAY=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+const TODAY_KEY=new Date().toISOString().split('T')[0];
+
+const AREAS=[
+  {id:'psico',title:'Psicología',sub:'& Mentalidad',cls:'c1',c:'#034694',urgente:true,fn:buildPsico},
+  {id:'tecnica',title:'Técnica',sub:'& Táctica',cls:'c2',c:'#0277BD',fn:buildTecnica},
+  {id:'fisica',title:'Preparación',sub:'Física',cls:'c3',c:'#C62828',fn:buildFisica},
+  {id:'nutri',title:'Nutrición',sub:'& Recuperación',cls:'c4',c:'#2E7D32',fn:buildNutri},
+  {id:'entorno',title:'Entorno',sub:'& Familia',cls:'c5',c:'#4527A0',fn:buildEntorno},
+  {id:'proyec',title:'Proyección',sub:'Profesional',cls:'c6',c:'#E65100',fn:buildProyec},
+];
+
+const grid=document.getElementById('grid');
+AREAS.forEach((a,i)=>{
+  const d=document.createElement('div');
+  d.className=`area-card ${a.cls}`;
+  d.innerHTML=`<div><div class="area-num">Área 0${i+1}</div><div class="area-title">${a.title}</div><div class="area-sub">${a.sub}</div>${a.urgente?`<div class="area-urgente" style="background:${a.c}18;color:${a.c}">PRIORITARIO</div>`:''}</div><div class="area-arrow">→</div>`;
+  d.onclick=()=>open_(a);
+  grid.appendChild(d);
+});
+
+let breathT=null;
+function open_(a){
+  if(breathT){clearInterval(breathT);breathT=null;}
+  document.getElementById('pTitle').textContent=a.title;
+  document.getElementById('pTitle').style.color=a.c;
+  document.getElementById('pSub').textContent=a.sub;
+  document.getElementById('panelHeader').style.borderBottomColor=a.c+'33';
+  const bar=document.querySelector('#panelHeader::after');
+  const b=document.getElementById('pBody');
+  b.innerHTML='';
+  a.fn(b,a);
+  const ov=document.getElementById('overlay');
+  ov.style.display='flex';
+  setTimeout(()=>ov.classList.add('open'),10);
+  b.scrollTop=0;
+}
+function close_(){
+  if(breathT){clearInterval(breathT);breathT=null;}
+  const ov=document.getElementById('overlay');
+  ov.classList.remove('open');
+  setTimeout(()=>ov.style.display='none',350);
+}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))close_();});
+let ts=0;
+document.getElementById('panel').addEventListener('touchstart',e=>{ts=e.touches[0].clientY;},{passive:true});
+document.getElementById('panel').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-ts>80)close_();},{passive:true});
+
+// Helpers
+const sec=(lbl,html)=>`<div class="sec"><div class="sec-label">${lbl}</div>${html}</div>`;
+const info=(t)=>`<div class="info-card">${t}</div>`;
+const stat=(n,l,c)=>`<div class="stat-card"><div class="stat-num" style="color:${c}">${n}</div><div class="stat-lbl">${l}</div></div>`;
+const ph=(t,c)=>`<div class="phrase" style="color:${c};border-left-color:${c};background:${c}0D">${t}</div>`;
+const ri=(t,c)=>`<li class="r-item"><span class="r-dot" style="background:${c}"></span><span>${t}</span></li>`;
+
+// Journal
+const jKey=(id,d=TODAY_KEY)=>`deo_j_${id}_${d}`;
+const jGet=(id)=>localStorage.getItem(jKey(id))||'';
+const jPast=(id)=>{const r=[];for(let i=1;i<=14;i++){const d=new Date();d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0];const v=localStorage.getItem(jKey(id,k));if(v)r.push({date:d.toLocaleDateString('es-AR',{day:'numeric',month:'long'}),text:v});}return r;};
+function jSave(id,c){
+  const v=document.getElementById(`jt_${id}`).value;
+  localStorage.setItem(jKey(id),v);
+  const m=document.getElementById(`jok_${id}`);
+  m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2000);
+}
+function journal(id,c){
+  const past=jPast(id);
+  return sec('Mi Diario',`<div class="j-date">${TODAY}</div><textarea class="j-area" id="jt_${id}" placeholder="¿Cómo me sentí hoy con esta área? ¿Qué pasó? ¿Qué aprendí?...">${jGet(id)}</textarea><button class="j-save" style="background:${c}" onclick="jSave('${id}','${c}')">Guardar entrada</button><div class="j-ok" id="jok_${id}" style="color:${c}">✓ Guardado</div>${past.length?`<div class="past-header">Entradas anteriores</div>${past.slice(0,3).map(e=>`<div class="past-entry"><div class="past-entry-date">${e.date}</div><div class="past-entry-txt">${e.text}</div></div>`).join('')}`:''}`);
+}
+
+// Checklist
+const ckKey=(id)=>`deo_ck_${id}_${TODAY_KEY}`;
+const ckGet=(id)=>{const s=localStorage.getItem(ckKey(id));return s?JSON.parse(s):{};};
+function ckToggle(id,i){
+  const st=ckGet(id);st[i]=!st[i];
+  localStorage.setItem(ckKey(id),JSON.stringify(st));
+  const box=document.getElementById(`cb_${id}_${i}`);
+  const txt=document.getElementById(`ct_${id}_${i}`);
+  st[i]?(box.classList.add('done'),txt.classList.add('done')):(box.classList.remove('done'),txt.classList.remove('done'));
+}
+
+// ======= BUILDERS =======
+
+window._sd=[];
+function buildPsico(el,a){
+  const c=a.c;
+  window._sd=[
+    {l:'S',t:'STOP — Parás',d:`<strong>Parás el cuerpo.</strong> No respondás, no gesticulás, no movás la cara. Esa reacción inmediata es la que te cierra. Solo respirá hondo una vez y quedate quieto.`},
+    {l:'T',t:'TOMAR aire',d:`Inhalás <strong>4 segundos.</strong> Retenés <strong>7 segundos.</strong> Exhalás <strong>8 segundos</strong> por la boca. UN solo ciclo. Esto hackea tu sistema nervioso y apaga la alarma.`},
+    {l:'O',t:'OBSERVAR',d:`Separás tono de contenido. El tono molesta — no es información. El contenido puede ser útil. Preguntate: <em style="color:${c}">¿Hay algo acá que me sirva para mejorar?</em>`},
+    {l:'P',t:'PROCEDER',d:`<strong style="color:${c}">"Sí, profe."</strong> Dos palabras. Sin discusión, sin justificación, sin cara. La cuenta interna la hacés después, en frío, con papá.`},
+  ];
+  el.innerHTML=`
+  ${sec('Por qué importa',info(`Cuando alguien te habla en tono alto, el cerebro activa la amígdala y bloquea la parte que piensa. <strong style="color:${c}">Eso no es debilidad — es fisiología.</strong> Le pasa a Messi, a Cristiano, a todos. La diferencia es que los profesionales entrenaron para volver en 30 segundos.`))}
+  ${sec('Objetivo',info(`Recibir un regaño del técnico, una voz alta, un reclamo de un compañero — <strong style="color:${c}">y volver a tu juego en menos de 30 segundos.</strong> Eso se entrena como cualquier jugada.`))}
+  ${sec('Protocolo STOP — Tocá cada letra',`
+    <div class="stop-wrap">
+      <div class="stop-tabs">
+        ${window._sd.map((s,i)=>`<button class="s-tab${i===0?' active':''}" style="${i===0?`color:${c};border-bottom-color:${c}`:''}" onclick="activateStop(${i},'${c}')" id="st_${i}">${s.l}</button>`).join('')}
+      </div>
+      <div class="stop-body" id="stopBody"><strong style="color:${c}">${window._sd[0].t}</strong><br><br>${window._sd[0].d}</div>
+    </div>`)}
+  ${sec('Respiración 4-7-8',`
+    <div class="breath-wrap">
+      <div class="b-ring" style="color:${c}" id="bRing"><span class="b-num" id="bNum">4</span></div>
+      <div class="b-phase" id="bPhase">Tap para iniciar · Técnica 4-7-8</div>
+      <button class="b-btn" style="background:${c};color:#fff" id="bBtn" onclick="startBreath('${c}')">Iniciar respiración</button>
+    </div>`)}
+  ${sec('Las 5 primeras pelotas',info(`Las primeras <strong style="color:${c}">5 pelotas</strong> que tocás: simples y rápidas. Pase corto, devolución limpia. Construís crédito.<br><br>Con crédito ganado, encarás — y si la perdés igual te la vuelven a dar.`))}
+  ${sec('Rutina diaria',`<ul class="routine">${ri('<strong>Al despertar:</strong> Respiración 4-7-8 × 4 ciclos (3 min)',c)}${ri('<strong>Antes del entreno:</strong> "¿Qué puede pasar hoy? ¿Cómo respondo?"',c)}${ri('<strong>Primeras 5 pelotas:</strong> Simple y rápido, siempre',c)}${ri('<strong>Post entreno:</strong> "¿Hubo situación difícil? ¿Qué haría diferente?"',c)}${ri('<strong>Antes de dormir:</strong> Respiración 4-7-8 × 4 ciclos',c)}</ul>`)}
+  ${sec('Frases',ph('"El tono molesta. El contenido puede ser información útil.",',c)+ph('"No desaparezcas del partido aunque salga mal. Seguí participando.",',c)+ph('"Mi reputación se construye en las pelotas simples, no en las gambetas."',c))}
+  ${journal(a.id,c)}`;
+}
+
+function activateStop(i,c){
+  for(let j=0;j<4;j++){const t=document.getElementById(`st_${j}`);if(t){t.classList.remove('active');t.style.color='';t.style.borderBottomColor='';}}
+  const t=document.getElementById(`st_${i}`);if(t){t.classList.add('active');t.style.color=c;t.style.borderBottomColor=c;}
+  const d=window._sd[i];
+  document.getElementById('stopBody').innerHTML=`<strong style="color:${c}">${d.t}</strong><br><br>${d.d}`;
+}
+
+function startBreath(c){
+  if(breathT){clearInterval(breathT);breathT=null;document.getElementById('bBtn').textContent='Iniciar respiración';document.getElementById('bPhase').textContent='Tap para iniciar · Técnica 4-7-8';document.getElementById('bRing').style.transform='';return;}
+  const ph=[{l:'Inhalá',dur:4,sc:1.35},{l:'Retené',dur:7,sc:1.35},{l:'Exhalá',dur:8,sc:1.0}];
+  let pi=0,cnt=ph[0].dur;
+  const ne=document.getElementById('bNum'),le=document.getElementById('bPhase'),re=document.getElementById('bRing'),be=document.getElementById('bBtn');
+  be.textContent='Detener';
+  function tick(){re.style.transform=`scale(${ph[pi].sc})`;re.style.color=c;le.textContent=ph[pi].l;ne.textContent=cnt;cnt--;if(cnt<0){pi=(pi+1)%3;cnt=ph[pi].dur;}}
+  tick();breathT=setInterval(tick,1000);
+}
+
+function buildTecnica(el,a){
+  const c=a.c;
+  el.innerHTML=`
+  ${sec('Por qué importa',info(`Sos técnico, creativo, zurdo con visión de juego. <strong style="color:${c}">Eso es un diferencial real.</strong> Hay que potenciarlo con trabajo específico FUERA del club — no esperar que el técnico lo desarrolle.`))}
+  ${sec('Objetivo',info(`Dominar <strong style="color:${c}">3 movimientos de regate</strong> que ejecutés automáticamente bajo presión. Mejorar el remate con la derecha. Saber cuándo encarar y cuándo asociarte.`))}
+  ${sec('Los que llegaron trabajaron extra',`<div class="stats-grid">${stat('Vinicius','Técnica individual diaria desde los 15 años',c)}${stat('Neymar','Freestyle + destreza propia fuera del club',c)}${stat('Nico Williams','Trabajó la bilateralidad 2 años extra',c)}${stat('Saka','El que más metros recorre defendiendo en la PL',c)}</div>`)}
+  ${sec('Rutina extra (30 min · 4× semana)',`<ul class="routine">${ri('<strong>10 min:</strong> Control orientado + conducción en velocidad con conos',c)}${ri('<strong>10 min:</strong> Remate con zurda (10 rep) + remate con derecha (10 rep)',c)}${ri('<strong>10 min:</strong> Regate 1vs1 — dominar 2 movimientos propios al 100%',c)}</ul>`)}
+  ${sec('Táctica del extremo moderno',`<div class="tool-card"><ul class="steps"><li class="step"><span class="step-l" style="color:${c}">→</span><span><strong>¿Cuándo encarar?</strong> Cuando tenés espacio detrás del lateral y el defensor está parado o viene hacia vos.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span><strong>¿Cuándo asociarte?</strong> Cuando el defensor está bien posicionado. Devolvés simple y buscás la pared.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span><strong>Sin balón:</strong> Siempre ofrecerte, generar espacios, estirar la línea defensiva.</span></li></ul></div>`)}
+  ${sec('Frases',ph('"Tu estilo puede llevarte más lejos. No hay que cambiarlo — hay que protegerlo con trabajo."',c)+ph('"Las 5 primeras pelotas simples te dan el crédito para intentar el regate después."',c))}
+  ${journal(a.id,c)}`;
+}
+
+function buildFisica(el,a){
+  const c=a.c;
+  el.innerHTML=`
+  ${sec('Por qué importa',info(`Como extremo hacés <strong style="color:${c}">40–50 sprints por partido.</strong> Si tu cuerpo no está preparado, al minuto 60 el técnico te saca. Cuando un extremo aguanta los 90 minutos, el técnico lo banca siempre.`))}
+  ${sec('Números que importan',`<div class="stats-grid">${stat('11-13km','Recorre un extremo por partido',c)}${stat('40-50','Sprints explosivos por partido',c)}${stat('10m','Primeros 10m = donde ganás o perdés el 1vs1',c)}${stat('3×/sem','Sesiones extra fuera del entreno',c)}</div>`)}
+  ${sec('Vos vs referentes élite',info(`Vinicius Jr: <strong>1.76m / 73kg</strong>. Nico Williams: <strong>1.76m / 67kg</strong>.<br>Vos: <strong style="color:${c}">1.68m / 65kg.</strong> Estás dentro del rango. La diferencia no es el físico — es la preparación específica.`))}
+  ${sec('Rutina parque o gym (45 min · 3× semana)',`<ul class="routine">${ri('<strong>EXPLOSIVIDAD:</strong> Sprint 6×20m · Descanso 45 seg entre cada uno',c)}${ri('<strong>FUERZA:</strong> Sentadillas 3×12 · Saltos verticales 3×10 · Lunges 3×10',c)}${ri('<strong>CORE:</strong> Plancha 3×45 seg · Abdominales 3×20',c)}${ri('<strong>RESISTENCIA:</strong> Trote continuo 20-25 minutos',c)}</ul>`)}
+  ${sec('Frases',ph('"Cuando tu cabeza dice que llegaste al límite, tu cuerpo puede dar una más."',c)+ph('"El que entrena extra fuera del club llega distinto al partido. Siempre."',c))}
+  ${journal(a.id,c)}`;
+}
+
+function buildNutri(el,a){
+  const c=a.c;
+  const cks=ckGet(a.id);
+  const items=['¿Dormí 8 horas o más?','¿Tomé 2.5 litros de agua hoy?','¿Comí proteína en cada comida?','¿Comí carbohidratos antes del entrenamiento?','¿Dejé el celular 1h antes de dormir?','¿Hice 10 min de estiramientos?'];
+  const cl=`<div style="background:var(--white);border:1px solid var(--border);border-radius:13px;padding:4px 14px;box-shadow:var(--shadow);">${items.map((it,i)=>`<div class="checklist-item" onclick="ckToggle('${a.id}',${i})" style="color:${c}"><div class="c-box${cks[i]?' done':''}" id="cb_${a.id}_${i}" style="color:${c}"></div><span class="c-txt${cks[i]?' done':''}" id="ct_${a.id}_${i}">${it}</span></div>`).join('')}</div>`;
+  el.innerHTML=`
+  ${sec('Sueño — el más subestimado',`<div class="stats-grid">${stat('8-9h','Horas para rendir al máximo',c)}${stat('-30%','Rendimiento con solo 6h de sueño',c)}${stat('-40%','Calidad del sueño con pantallas antes de dormir',c)}${stat('8-10h','Duermen Ronaldo, Messi y LeBron',c)}</div><div class="info-card mt8">Sin sueño no hay músculo, no hay foco, no hay recuperación. <strong style="color:${c}">Ningún suplemento compensa el mal sueño.</strong></div>`)}
+  ${sec('Hidratación',`<div class="stats-grid">${stat('2.5-3L','Agua por día mínimo',c)}${stat('2%','Deshidratación que ya baja tu rendimiento',c)}${stat('10-20%','Rendimiento que perdés deshidratado',c)}${stat('🟡','Orina amarillo claro = bien hidratado',c)}</div>`)}
+  ${sec('Redes sociales y sueño',info(`Más de <strong style="color:${c}">1 hora de redes antes de dormir</strong> fragmenta el sueño y baja el rendimiento del día siguiente. Celular fuera del cuarto o en modo avión al dormir.`))}
+  ${sec('Comidas clave',`<ul class="routine">${ri('<strong>Al despertar:</strong> 1 vaso de agua ANTES del celular',c)}${ri('<strong>Cada comida:</strong> proteína — pollo, huevo, atún, legumbres',c)}${ri('<strong>Pre-entreno (2h antes):</strong> carbohidratos — arroz, pasta, avena',c)}${ri('<strong>Post-entreno (30 min):</strong> proteína + agua',c)}${ri('<strong>Evitar:</strong> ultraprocesados, gaseosas, comida rápida',c)}</ul>`)}
+  ${sec('Checklist de hoy · '+new Date().toLocaleDateString('es-AR',{day:'numeric',month:'long'}),cl)}
+  ${journal(a.id,c)}`;
+}
+
+function buildEntorno(el,a){
+  const c=a.c;
+  el.innerHTML=`
+  ${sec('Por qué importa',info(`El técnico, los compañeros y el club son un sistema de incentivos. Si no lo entendés, sos víctima de él. <strong style="color:${c}">Si lo entendés, lo usás a tu favor.</strong>`))}
+  ${sec('Con el técnico',`<div class="tool-card"><ul class="steps"><li class="step"><span class="step-l" style="color:${c}">→</span><span>No te bajó de categoría porque te odia. <strong>Necesita resultados.</strong> ¿Qué valora? Actitud táctica, intensidad, las 5 primeras pelotas bien ejecutadas.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span>Ante una voz alta: <strong>Protocolo STOP.</strong> "Sí, profe." La cuenta interna la hacés después con papá.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span>"El técnico no es el juez de mi carrera. Es <strong>información</strong> sobre lo que debo mejorar hoy."</span></li></ul></div>`)}
+  ${sec('Con compañeros difíciles',`<div class="tool-card"><ul class="steps"><li class="step"><span class="step-l" style="color:${c}">→</span><span>No argumentes. <strong>Respondé con el juego,</strong> no con palabras.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span>Reducí el tiempo con el grupo negativo. Sin explicaciones, sin drama.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span>"Mis compañeros no definen lo que voy a ser."</span></li></ul></div>`)}
+  ${sec('Tu equipo de base',`<div class="stats-grid">${stat('Papá','Tu estratega a largo plazo',c)}${stat('Mamá','Tu ancla emocional',c)}${stat('Pedro','Tu aliado sin agenda',c)}${stat('Casa','Tu base segura siempre',c)}</div><div class="info-card mt8">Cuando algo difícil pase afuera: <strong style="color:${c}">hablalo en casa primero, no lo guardés.</strong></div>`)}
+  ${sec('Frases',ph('"El técnico no es el juez de mi carrera. Es información sobre lo que debo mejorar hoy."',c)+ph('"La familia es mi base. El club es mi trabajo."',c)+ph('"No lucho contra el sistema. Lo leo y me muevo dentro de él."',c))}
+  ${journal(a.id,c)}`;
+}
+
+function buildProyec(el,a){
+  const c=a.c;
+  el.innerHTML=`
+  ${sec('Por qué importa',info(`El talento sin visibilidad no existe en el fútbol moderno. Los scouts escanean dos listas: jugadores en Argentina y <strong style="color:${c}">venezolanos en ligas competitivas.</strong> Estás en Argentina — eso ya es ventaja.`))}
+  ${sec('El camino venezolano a la élite',`<div class="tool-card"><ul class="steps"><li class="step"><span class="step-l" style="color:${c}">→</span><span><strong>Rondón:</strong> España, Inglaterra, Rusia. Pasó por ligas exigentes, no por Venezuela.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span><strong>Soteldo:</strong> Se hizo conocido en Chile y Brasil. Después vino Europa.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span><strong>Rincón:</strong> Hamburgo, Génova, Juventus, Torino. Liga argentina primero.</span></li><li class="step"><span class="step-l" style="color:${c}">→</span><span><strong>Vos:</strong> Ya estás en Argentina. Es exactamente el camino correcto.</span></li></ul></div>`)}
+  ${sec('Video-resumen (acción esta semana)',`<ul class="routine">${ri('Pedile a alguien que te filme en <strong>cada partido</strong> de ahora en adelante',c)}${ri('Seleccioná las 5-7 mejores jugadas por partido',c)}${ri('Subí a YouTube "No listado" para compartir con representantes',c)}${ri('Actualizá el video-resumen una vez por mes',c)}</ul>`)}
+  ${sec('Inglés — 15 min diarios',info(`Los scouts europeos y el mercado internacional requieren inglés. <strong style="color:${c}">15 minutos al día = conversación básica en 6 meses.</strong><br><br>Fórmula: Duolingo 10 min + serie o video en inglés sin subtítulos en español.`))}
+  ${sec('Redes sociales inteligentes',`<ul class="routine">${ri('<strong>UNA publicación por semana:</strong> entrenamiento o partido.',c)}${ri('<strong>NUNCA:</strong> quejas, dramas, indirectas. Eso borra meses de imagen.',c)}${ri('Seguí scouts, agentes y clubes. Aprendé cómo funciona el mercado.',c)}${ri('Mostrá disciplina y profesionalismo — eso es tu marca personal.',c)}</ul>`)}
+  ${sec('Frases',ph('"El talento sin visibilidad no existe. Empezá a construir tu marca hoy."',c)+ph('"Ya estás en Argentina. Ese es el camino correcto. Ahora hay que hacerse visible."',c))}
+  ${journal(a.id,c)}`;
+}
+</script>
+</body>
+</html>
