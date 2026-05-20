@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSI Tools · Diego</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a2332; }
+
+  .header { background: #1a2332; padding: 20px 16px 16px; text-align: center; }
+  .header-sub { font-size: 10px; letter-spacing: 4px; color: #7a9bb5; text-transform: uppercase; margin-bottom: 6px; }
+  .header-title { font-size: 20px; font-weight: 800; color: #fff; }
+  .header-desc { font-size: 11px; color: #5a8fa8; margin-top: 4px; }
+
+  .tool-tabs { display: flex; background: #e2eaf2; border-bottom: 1px solid #c8d8e8; }
+  .tool-tab { flex: 1; background: transparent; border: none; border-bottom: 3px solid transparent; padding: 12px 4px 10px; cursor: pointer; text-align: center; transition: all 0.15s; }
+  .tool-tab.active { background: #fff; }
+  .tool-tab .tab-emoji { font-size: 22px; display: block; }
+  .tool-tab .tab-label { font-size: 9px; font-weight: 700; color: #7a9bb5; margin-top: 3px; display: block; }
+  .tool-tab.active .tab-label { font-weight: 800; }
+
+  .tagline-bar { padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .tagline-bar .tg-emoji { font-size: 20px; }
+  .tagline-sub { font-size: 12px; font-weight: 700; color: #fff; }
+  .tagline-text { font-size: 11px; color: rgba(255,255,255,0.85); font-style: italic; }
+
+  .sec-tabs { display: flex; overflow-x: auto; background: #fff; border-bottom: 1px solid #dde8f0; padding: 0 4px; -webkit-overflow-scrolling: touch; }
+  .sec-tab { flex-shrink: 0; background: none; border: none; border-bottom: 2px solid transparent; padding: 12px 14px; font-size: 12px; color: #7a9bb5; cursor: pointer; white-space: nowrap; font-weight: 400; }
+  .sec-tab.active { font-weight: 700; border-bottom: 2px solid var(--tc); color: var(--tc); }
+
+  .content { padding: 16px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--tc); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--tc-light); }
+
+  .why-block { background: #fff; padding: 12px 14px; border-radius: 10px; border-left: 3px solid var(--tc); margin-bottom: 12px; font-size: 13px; color: #2a3a4a; line-height: 1.8; }
+
+  .elite-card { background: #fff; border: 1px solid #dde8f0; border-radius: 12px; padding: 14px; margin-bottom: 12px; border-top: 3px solid var(--tc); }
+  .elite-name { font-size: 14px; font-weight: 700; color: var(--tc); margin-bottom: 8px; }
+  .elite-gesto { font-size: 12px; color: #2a3a4a; margin-bottom: 8px; }
+  .elite-gesto span { font-size: 9px; color: #7a9bb5; letter-spacing: 2px; text-transform: uppercase; }
+  .elite-cuando { background: #f0f4f8; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #4a6a7a; font-style: italic; line-height: 1.6; }
+
+  .disc-card { display: flex; gap: 12px; margin-bottom: 14px; background: #fff; border-radius: 12px; padding: 14px; border: 1px solid #dde8f0; }
+  .disc-num { width: 30px; height: 30px; border-radius: 50%; background: var(--tc); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .disc-title { font-size: 13px; font-weight: 700; color: #1a2332; margin-bottom: 5px; }
+  .disc-body { font-size: 12px; color: #4a6a7a; line-height: 1.7; }
+
+  .inst-card { background: #fff; border: 1px solid #dde8f0; border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+  .inst-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .inst-fase { background: var(--tc); color: #fff; font-size: 9px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 1px; flex-shrink: 0; }
+  .inst-accion { font-size: 13px; font-weight: 700; color: #1a2332; }
+  .inst-como { font-size: 12px; color: #4a6a7a; line-height: 1.7; border-left: 2px solid var(--tc-light); padding-left: 10px; }
+
+  .framing-box { background: #fff; border: 2px solid var(--tc); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .framing-label { font-size: 10px; color: var(--tc); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+  .framing-text { font-size: 14px; color: #1a2332; line-height: 1.8; font-style: italic; }
+  .tip-box { background: #fff8ed; border: 1px solid #f0c070; border-radius: 12px; padding: 14px; }
+  .tip-label { font-size: 10px; color: #c07800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .tip-text { font-size: 12px; color: #4a3a1a; line-height: 1.7; }
+
+  .note { font-size: 11px; color: #7a9bb5; font-style: italic; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-sub">Área PSI · Diego Osorio</div>
+  <div class="header-title">3 HERRAMIENTAS CRÍTICAS</div>
+  <div class="header-desc">Identificación · Autodescubrimiento · Instalación</div>
+</div>
+
+<div class="tool-tabs" id="toolTabs">
+  <button class="tool-tab active" onclick="selectTool('ancla','#c0392b')" id="tab-ancla">
+    <span class="tab-emoji">✊</span>
+    <span class="tab-label" id="label-ancla">Ancla Física</span>
+  </button>
+  <button class="tool-tab" onclick="selectTool('stop','#d35400')" id="tab-stop">
+    <span class="tab-emoji">🛑</span>
+    <span class="tab-label" id="label-stop">Protocolo STOP</span>
+  </button>
+  <button class="tool-tab" onclick="selectTool('reg','#1a6b5e')" id="tab-reg">
+    <span class="tab-emoji">🌊</span>
+    <span class="tab-label" id="label-reg">Regulación</span>
+  </button>
+</div>
+
+<div class="tagline-bar" id="taglineBar" style="background:#c0392b;">
+  <span class="tg-emoji">✊</span>
+  <div>
+    <div class="tagline-sub" id="taglineSub">El interruptor de estado</div>
+    <div class="tagline-text" id="taglineText">"Un gesto que activa la mejor versión de Diego en 3 segundos."</div>
+  </div>
+</div>
+
+<div class="sec-tabs" id="secTabs" style="--tc:#c0392b; --tc-light:#f0b0a0;">
+  <button class="sec-tab active" onclick="selectSection('why')">Por qué</button>
+  <button class="sec-tab" onclick="selectSection('elite')">Élite</button>
+  <button class="sec-tab" onclick="selectSection('discovery')">Descubrimiento</button>
+  <button class="sec-tab" onclick="selectSection('install')">Instalación</button>
+  <button class="sec-tab" onclick="selectSection('framing')">Cómo decirlo</button>
+</div>
+
+<div class="content" id="secTabs" style="--tc:#c0392b; --tc-light:#f0b0a0;">
+
+<!-- ===== ANCLA ===== -->
+<div id="ancla-why" class="panel active">
+  <div class="label">¿Por qué funciona?</div>
+  <div class="why-block">Un ancla física es un gesto corporal específico que, entrenado repetidamente en momentos de alto rendimiento, queda grabado en el sistema nervioso. Cuando se ejecuta bajo presión, el cerebro recupera automáticamente ese estado de rendimiento.</div>
+  <div class="why-block">La base es neurocientífica: la memoria muscular y emocional están conectadas. El cuerpo recuerda cómo se sentía cuando rendía bien, y el gesto activa ese recuerdo de forma casi instantánea.</div>
+  <div class="why-block">En Diego: su problema no es falta de habilidad, es que cuando baja la conexión emocional, deja de competir. El ancla es el atajo físico que le salta ese bloqueo sin necesitar palabras ni pensamientos.</div>
+</div>
+<div id="ancla-elite" class="panel">
+  <div class="label">Cómo lo usan en la élite</div>
+  <div class="note">Para Diego las referencias de élite tienen más peso que cualquier argumento abstracto.</div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Cristiano Ronaldo</div>
+    <div class="elite-gesto"><span>EL GESTO · </span>Salto con giro al entrar + postura manos en caderas</div>
+    <div class="elite-cuando">Cada vez que entra o después de un error importante. Es su reset visible — lo hace igual con 0-0 o 3-0 en contra.</div>
+  </div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Rafael Nadal</div>
+    <div class="elite-gesto"><span>EL GESTO · </span>Secuencia de rituales: tirar de ropa, tocarse nariz/orejas/hombro</div>
+    <div class="elite-cuando">Entre cada punto. No es superstición — es control activo del sistema nervioso bajo presión máxima.</div>
+  </div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Neymar</div>
+    <div class="elite-gesto"><span>EL GESTO · </span>Señalar al cielo + beso en la muñeca (foto de familia)</div>
+    <div class="elite-cuando">Después de cada gol — reconecta con su origen y su porqué. Lo hace automático desde los 17 años.</div>
+  </div>
+</div>
+<div id="ancla-discovery" class="panel">
+  <div class="label">Cómo descubrirlo con Diego</div>
+  <div class="disc-card"><div class="disc-num">1</div><div><div class="disc-title">Buscar el momento pico</div><div class="disc-body">Preguntarle: "¿Recordás un momento donde te sentiste imparable en la cancha? No el partido, el momento exacto." Que lo describa. ¿Qué sintió en el cuerpo?</div></div></div>
+  <div class="disc-card"><div class="disc-num">2</div><div><div class="disc-title">Anclar al recuerdo físico</div><div class="disc-body">Una vez que lo tiene vívido: "¿Qué hizo tu cuerpo en ese momento? ¿Apretaste algo, respiraste diferente?" El gesto ya existe — solo hay que volverlo consciente.</div></div></div>
+  <div class="disc-card"><div class="disc-num">3</div><div><div class="disc-title">Elegir el gesto</div><div class="disc-body">Tiene que ser discreta (se puede hacer en la cancha), propia (que él la sienta suya), y repetible siempre igual.</div></div></div>
+  <div class="disc-card"><div class="disc-num">4</div><div><div class="disc-title">Opciones concretas si no surge solo</div><div class="disc-body">Puño cerrado 2 seg → soltar. Mano en pecho izquierdo 2 seg. Pellizco en muñeca izquierda. Agarrar cuello de la camiseta. La que él elija.</div></div></div>
+</div>
+<div id="ancla-install" class="panel">
+  <div class="label">Cómo instalarlo — paso a paso</div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">Sem 1–2</span><span class="inst-accion">Sembrar la idea</span></div><div class="inst-como">Conversación casual: "¿Sabías que Cristiano tiene un ritual antes de cada partido? No es locura — el cuerpo aprende a activarse." Nada más. Dejar reposar.</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">Sem 2–3</span><span class="inst-accion">Conectar con su momento pico</span></div><div class="inst-como">En conversación tranquila: "Contame de ese momento donde te sentiste crack. ¿Qué hacías con el cuerpo en ese momento?" Así surge el gesto de forma natural.</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">Sem 3–4</span><span class="inst-accion">Practicar fuera de la cancha</span></div><div class="inst-como">10 veces al día por 2 semanas, siempre mientras recuerda ese momento pico. En el cuarto, antes de dormir. Se graba la conexión neurológica.</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">Sem 4–5</span><span class="inst-accion">Llevar a entrenamientos</span></div><div class="inst-como">Antes de entrar. Después de un error. Al inicio del partido. Cada repetición refuerza el circuito neural.</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">Sem 5+</span><span class="inst-accion">Uso en partidos</span></div><div class="inst-como">Para entrar al cuadrante correcto. Para resetear después de error. Para activar cuando el partido se puso difícil emocionalmente. Funciona en 3 segundos.</div></div>
+</div>
+<div id="ancla-framing" class="panel">
+  <div class="label">Cómo introducirlo con Diego</div>
+  <div class="framing-box"><div class="framing-label">📣 Guión orientativo</div><div class="framing-text">"Dijiste que viste el video de tu mejor partido. ¿Qué hacías con el cuerpo cuando te salía todo? Eso es tuyo. Nadie más lo tiene. Hay atletas que tienen un gesto, como un switch — lo activan y algo en su cabeza cambia."</div></div>
+  <div class="tip-box"><div class="tip-label">⚠️ Principio clave</div><div class="tip-text">Diego responde mejor a herramientas que siente como propias. El proceso de descubrimiento ES la instalación. Si él llega a la conclusión solo, la adherencia es 3x mayor.<br><br><strong>Sembrá la idea → esperá que él pregunte → entonces desarrollás.</strong></div></div>
+</div>
+
+<!-- ===== STOP ===== -->
+<div id="stop-why" class="panel">
+  <div class="label">¿Por qué funciona?</div>
+  <div class="why-block">Diego tiene alta reactividad emocional. No es un defecto — es la misma fuente de su creatividad y pasión. El problema es que esa sensibilidad lo hace vulnerable a disparadores externos: el grito del DT, compañeros que no le dan la pelota, un error propio.</div>
+  <div class="why-block">Lo que pasa neurológicamente: cuando el DT lo grita, su amígdala se activa en 200 milisegundos — antes de que pueda pensar. Eso bloquea el córtex prefrontal, la parte que razona y decide. Diego literalmente no puede pensar bien en ese momento.</div>
+  <div class="why-block">El STOP no es "aguantarse". Es hackear el sistema nervioso antes de que el bloqueo se complete. Es una habilidad, no un rasgo de carácter.</div>
+</div>
+<div id="stop-elite" class="panel">
+  <div class="label">Cómo lo usan en la élite</div>
+  <div class="note">Para Diego las referencias de élite tienen más peso que cualquier argumento abstracto.</div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Djokovic</div>
+    <div class="elite-gesto"><span>EL GESTO · </span>Camina despacio al fondo, bota la pelota cantidad exacta de veces, respira antes de servir</div>
+    <div class="elite-cuando">Después de cada punto perdido. Convierte la transición en reset mental. Lo entrena igual que los golpes.</div>
+  </div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Iniesta</div>
+    <div class="elite-gesto"><span>EL GESTO · </span>Pausa de 1 segundo mirando al suelo post-error, luego cabeza arriba y sprint de recuperación</div>
+    <div class="elite-cuando">Su protocolo personal aprendido con su psicólogo en La Masía. Sistemático, no espontáneo.</div>
+  </div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Messi</div>
+    <div class="elite-gesto"><span>EL GESTO · </span>En tiros libres: pausa larga, manos en rodillas, respiración visible antes de arrancar</div>
+    <div class="elite-cuando">No importa el marcador — el ritual es siempre igual. Eso es lo que lo hace confiable bajo presión máxima.</div>
+  </div>
+</div>
+<div id="stop-discovery" class="panel">
+  <div class="label">Identificando los disparadores de Diego</div>
+  <div class="disc-card"><div class="disc-num">1</div><div><div class="disc-title">Mapear sus gatillos emocionales</div><div class="disc-body">Conversación tranquila: "¿Cuándo sentís que te cerrás en el partido? ¿Cuando el DT te grita? ¿Cuando un compañero no te la pasa? ¿Cuando fallás algo que creés poder?" Lista de 3–5 disparadores.</div></div></div>
+  <div class="disc-card"><div class="disc-num">2</div><div><div class="disc-title">Reconocer la señal corporal temprana</div><div class="disc-body">El cuerpo avisa antes del bloqueo: calor en el cuello, tensión en la mandíbula, puños cerrados, respiración corta. "¿Qué sentís en el cuerpo cuando algo te molesta en la cancha?" Eso es su alarma temprana.</div></div></div>
+  <div class="disc-card"><div class="disc-num">3</div><div><div class="disc-title">Conectar señal con protocolo</div><div class="disc-body">El objetivo es que cuando sienta esa señal, el STOP arranque automático. Primero consciente, luego automático — como aprender a frenar en bicicleta.</div></div></div>
+</div>
+<div id="stop-install" class="panel">
+  <div class="label">El protocolo completo</div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">S — STOP</span><span class="inst-accion">Parar el cuerpo</span></div><div class="inst-como">Cero respuesta. Cero gesto facial. Cero movimiento de brazos. Solo una respiración lenta. El silencio comunica más madurez profesional que cualquier respuesta.</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">T — TOMAR</span><span class="inst-accion">Respiración 4-7-8</span></div><div class="inst-como">Inhalar 4 seg · Retener 7 seg · Exhalar 8 seg. Solo UN ciclo en cancha es suficiente. Activa el nervio vago y apaga la alarma de la amígdala en segundos. Fisiología pura.</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">O — OBSERVAR</span><span class="inst-accion">Separar tono de contenido</span></div><div class="inst-como">Pregunta mental: "¿Lo que me dijo tiene algo útil para mi partido, sí o no?" Si sí → usarlo. Si no → soltar. El tono del DT es su problema. La información puede ser valiosa aunque llegue mal.</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">P — PROCEDER</span><span class="inst-accion">Dos palabras y seguir</span></div><div class="inst-como">"Sí, profe." Sin justificación. Sin debate. Respuesta profesional. La discusión, si hace falta, siempre después del partido y en privado. Nunca en caliente.</div></div>
+</div>
+<div id="stop-framing" class="panel">
+  <div class="label">Cómo introducirlo con Diego</div>
+  <div class="framing-box"><div class="framing-label">📣 Guión orientativo</div><div class="framing-text">"Hay algo que usan Djokovic, Iniesta, hasta Messi. Cuando algo los molesta en la cancha tienen un protocolo de 30 segundos. No para aguantarse — para no perder el hilo del partido. ¿Querés que te cuente cómo funciona?"</div></div>
+  <div class="tip-box"><div class="tip-label">⚠️ Principio clave</div><div class="tip-text">El encuadre es "los cracks lo hacen" no "vos tenés que controlarte". Diego tiene que sentir que está adoptando un hábito de élite, no corrigiendo un defecto.<br><br><strong>El cuaderno ya tiene el STOP escrito — tu trabajo es que cuando lo lea, la referencia de élite ya esté plantada.</strong></div></div>
+</div>
+
+<!-- ===== REG ===== -->
+<div id="reg-why" class="panel">
+  <div class="label">¿Por qué funciona?</div>
+  <div class="why-block">La regulación emocional no significa apagar las emociones. Significa desvincular el rendimiento del estado emocional del momento.</div>
+  <div class="why-block">Diego opera en rendimiento condicional: juega bien cuando se siente bien. Eso lo hace brillante en momentos de conexión, pero inconsistente cuando las condiciones no son ideales — y en el fútbol profesional, las condiciones ideales son la excepción.</div>
+  <div class="why-block">El salto es de jugador emocional a jugador con inteligencia emocional. No menos pasión — más control sobre esa pasión. Los mejores del mundo rinden dentro de una banda de variación mucho más estrecha. Eso es regulación.</div>
+</div>
+<div id="reg-elite" class="panel">
+  <div class="label">Cómo lo usan en la élite</div>
+  <div class="note">Para Diego las referencias de élite tienen más peso que cualquier argumento abstracto.</div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Iniesta</div>
+    <div class="elite-gesto"><span>EL CASO · </span>Psicólogo desde los 15 en La Masía. Depresión seria en 2009.</div>
+    <div class="elite-cuando">Jugó la final del Mundial 2010 con el duelo de su mejor amigo reciente. Metió el gol. Ese es el nivel de regulación al que se puede llegar con trabajo real.</div>
+  </div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Mbappé</div>
+    <div class="elite-gesto"><span>EL RITUAL · </span>Música específica, visualización y calentamiento invariable antes de cada partido</div>
+    <div class="elite-cuando">Dice que el ritual lo desconecta de lo externo y lo conecta con él mismo. No depende de cómo se siente ese día.</div>
+  </div>
+  <div class="elite-card">
+    <div class="elite-name">⭐ Zlatan Ibrahimović</div>
+    <div class="elite-gesto"><span>EL HÁBITO · </span>Meditación y visualización diaria — lo reconoció públicamente a los 35</div>
+    <div class="elite-cuando">Décadas de carrera elite sostenida. No fue solo físico. La longevidad en el alto rendimiento es mental.</div>
+  </div>
+</div>
+<div id="reg-discovery" class="panel">
+  <div class="label">El mapa emocional de Diego</div>
+  <div class="disc-card"><div class="disc-num">1</div><div><div class="disc-title">Identificar su banda de rendimiento</div><div class="disc-body">Pedirle nota del 1 al 10 en últimos 5 partidos. "¿Qué tenían en común los días arriba del 7? ¿Y los días abajo del 5?" Buscar el patrón, no la anécdota.</div></div></div>
+  <div class="disc-card"><div class="disc-num">2</div><div><div class="disc-title">Mapear sus estados internos</div><div class="disc-body">4 estados: Activado-positivo (listo), Activado-negativo (ansioso), Relajado-positivo (confiado), Relajado-negativo (apático). ¿Cuál tiene Diego más frecuente cuando rinde bien?</div></div></div>
+  <div class="disc-card"><div class="disc-num">3</div><div><div class="disc-title">Identificar sus activadores naturales</div><div class="disc-body">Para Diego probablemente: música específica, recuerdo de un momento pico, tu presencia, calentamiento con una jugada que le sale bien. Hacerlos conscientes y sistemáticos.</div></div></div>
+  <div class="disc-card"><div class="disc-num">4</div><div><div class="disc-title">Identificar sus desreguladores</div><div class="disc-body">Error propio sin resetear, DT que lo grita, compañeros que no le dan la pelota, conflicto familiar no resuelto. Al nombrarlos, pierden poder sobre él.</div></div></div>
+</div>
+<div id="reg-install" class="panel">
+  <div class="label">Las 3 herramientas prácticas</div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">Herramienta 1</span><span class="inst-accion">Rutina pre-partido invariable</span></div><div class="inst-como">15–20 minutos que siempre son iguales, sin importar cómo se siente. Música propia + calentamiento con jugada que sale bien + respiración 4-7-8 + ancla física. El ritual le dice al sistema nervioso: "esto es lo que hacemos antes de rendir".</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">Herramienta 2</span><span class="inst-accion">Reseteo post-error en 10 segundos</span></div><div class="inst-como">Error → mirada al suelo 2 seg → respiración → cabeza arriba → próxima acción. No más de 10 segundos en el error. En el fútbol hay 20–30 errores por partido en cualquier jugador elite. El que resetea más rápido gana más duelos mentales.</div></div>
+  <div class="inst-card"><div class="inst-top"><span class="inst-fase">Herramienta 3</span><span class="inst-accion">La frase ancla personal</span></div><div class="inst-como">Una frase cortísima que él elige para cuando baja la conexión. No motivacional — de identidad. Ejemplos: "Esto es lo mío." / "Siguiente jugada." / "Yo juego así." Se combina con el ancla física para reforzar el cambio de estado.</div></div>
+</div>
+<div id="reg-framing" class="panel">
+  <div class="label">Cómo introducirlo con Diego</div>
+  <div class="framing-box"><div class="framing-label">📣 Guión orientativo</div><div class="framing-text">"Acordate del Cuadrante 3 — el Profesional. ¿Cómo rinde alguien aunque no esté inspirado? Tiene un sistema. No espera sentirse bien para jugar bien. Jugar bien es lo que lo hace sentir bien. Al revés de lo que creemos."</div></div>
+  <div class="tip-box"><div class="tip-label">⚠️ Principio clave</div><div class="tip-text">Esta es la herramienta más profunda — va al núcleo de la identidad de Diego. No se instala en una conversación. Se siembra en múltiples momentos cotidianos, se refuerza después de cada partido y se consolida con el tiempo.<br><br><strong>El ancla física y el STOP son herramientas de regulación. Esta es el marco que les da sentido a todas.</strong></div></div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+  var currentTool = 'ancla';
+  var currentSection = 'why';
+  var colors = { ancla: '#c0392b', stop: '#d35400', reg: '#1a6b5e' };
+  var lights = { ancla: '#f0b0a0', stop: '#f5c8a0', reg: '#a0d0c8' };
+  var subtitles = { ancla: 'El interruptor de estado', stop: 'El interruptor del control', reg: 'Rendir cuando el feeling no está' };
+  var taglines = {
+    ancla: 'Un gesto que activa la mejor versión de Diego en 3 segundos.',
+    stop: 'Convierte la reacción instintiva en respuesta profesional en 30 segundos.',
+    reg: 'El salto de Diego de talentoso a profesional.'
+  };
+
+  function selectTool(tool, color) {
+    document.getElementById('panel-' + currentTool + '-' + currentSection) && hidePanel(currentTool, currentSection);
+    document.getElementById(currentTool + '-' + currentSection).classList.remove('active');
+
+    document.getElementById('tab-' + currentTool).classList.remove('active');
+    document.getElementById('label-' + currentTool).style.color = '';
+
+    currentTool = tool;
+    var c = colors[tool];
+
+    document.getElementById('taglineBar').style.background = c;
+    document.getElementById('taglineSub').textContent = subtitles[tool];
+    document.getElementById('taglineText').textContent = '"' + taglines[tool] + '"';
+    document.getElementById('secTabs').style.setProperty('--tc', c);
+    document.getElementById('secTabs').style.setProperty('--tc-light', lights[tool]);
+    document.querySelector('.content').style.setProperty('--tc', c);
+    document.querySelector('.content').style.setProperty('--tc-light', lights[tool]);
+
+    document.getElementById('tab-' + tool).classList.add('active');
+    document.getElementById('label-' + tool).style.color = c;
+
+    currentSection = 'why';
+    showPanel(tool, 'why');
+
+    var tabs = document.querySelectorAll('.sec-tab');
+    tabs.forEach(function(t, i) {
+      t.classList.remove('active');
+    });
+    tabs[0].classList.add('active');
+  }
+
+  function selectSection(section) {
+    document.getElementById(currentTool + '-' + currentSection).classList.remove('active');
+    currentSection = section;
+    document.getElementById(currentTool + '-' + section).classList.add('active');
+
+    var tabs = document.querySelectorAll('.sec-tab');
+    var map = ['why','elite','discovery','install','framing'];
+    tabs.forEach(function(t, i) {
+      t.classList.toggle('active', map[i] === section);
+    });
+  }
+
+  function showPanel(tool, section) {
+    document.getElementById(tool + '-' + section).classList.add('active');
+  }
+
+  // Init colors
+  document.querySelector('.content').style.setProperty('--tc', '#c0392b');
+  document.querySelector('.content').style.setProperty('--tc-light', '#f0b0a0');
+  document.getElementById('secTabs').style.setProperty('--tc', '#c0392b');
+  document.getElementById('secTabs').style.setProperty('--tc-light', '#f0b0a0');
+  document.getElementById('label-ancla').style.color = '#c0392b';
+</script>
+</body>
+</html>
