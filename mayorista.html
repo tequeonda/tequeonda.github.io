@@ -345,6 +345,11 @@ header {
     border-color: rgba(26,17,9,0.15);
     color: var(--dark);
 }
+/* ⚠️ CRÍTICO: sin esto las opciones quedan fondo oscuro + texto oscuro = invisibles */
+.section-white .calc-input-group select option {
+    background: #fff;
+    color: var(--dark);
+}
 .section-white .calc-results { background: #fff; }
 .section-white .calc-result-item {
     background: var(--cream);
@@ -993,6 +998,7 @@ footer p + p { margin-top: 12px; }
     </script>
 
     <!-- 2. Product — Pack Clásico Tequeño Queso x12 -->
+    <!-- 💲 SCHEMA PRECIOS: mantener sincronizados con la tabla HTML de arriba -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -1009,8 +1015,8 @@ footer p + p { margin-top: 12px; }
       "offers": [
         {
           "@type": "Offer",
-          "name": "10–19 ",
-          "price": "5550",
+          "name": "10–19 packs",
+          "price": "5850",
           "priceCurrency": "ARS",
           "availability": "https://schema.org/InStock",
           "itemCondition": "https://schema.org/NewCondition",
@@ -1019,7 +1025,7 @@ footer p + p { margin-top: 12px; }
         {
           "@type": "Offer",
           "name": "20–49 packs",
-          "price": "5350",
+          "price": "5600",
           "priceCurrency": "ARS",
           "availability": "https://schema.org/InStock",
           "itemCondition": "https://schema.org/NewCondition",
@@ -1028,7 +1034,7 @@ footer p + p { margin-top: 12px; }
         {
           "@type": "Offer",
           "name": "50+ packs",
-          "price": "4950",
+          "price": "5200",
           "priceCurrency": "ARS",
           "availability": "https://schema.org/InStock",
           "itemCondition": "https://schema.org/NewCondition",
@@ -1074,7 +1080,7 @@ footer p + p { margin-top: 12px; }
         {
           "@type": "Offer",
           "name": "50+ packs",
-          "price": "8200",
+          "price": "8400",
           "priceCurrency": "ARS",
           "availability": "https://schema.org/InStock",
           "itemCondition": "https://schema.org/NewCondition",
@@ -1120,7 +1126,7 @@ footer p + p { margin-top: 12px; }
         {
           "@type": "Offer",
           "name": "50+ packs",
-          "price": "6950",
+          "price": "7250",
           "priceCurrency": "ARS",
           "availability": "https://schema.org/InStock",
           "itemCondition": "https://schema.org/NewCondition",
@@ -1247,7 +1253,8 @@ footer p + p { margin-top: 12px; }
             <span class="hero-pill">Fábrica propia</span>
             <span class="hero-pill">Entrega en 48hs</span>
             <span class="hero-pill">Muestra gratis</span>
-            <span class="hero-pill">Desde $463/unidad</span>
+            <!-- 💲 PRECIO HERO: precio por unidad (precio-tabla ÷ unidades del pack) -->
+            <span class="hero-pill">Desde $434/unidad</span>
         </div>
         <div class="hero-cta">
             <a href="#formulario" class="btn btn-gold" onclick="trackConversion('solicitar_muestra')">
@@ -1307,6 +1314,13 @@ footer p + p { margin-top: 12px; }
     </div>
 
     <!-- ========== PRECIOS ========== -->
+    <!-- ╔══════════════════════════════════════════════════════════════╗
+         ║  💲 TABLA DE PRECIOS — EDITAR AQUÍ                          ║
+         ║  Después de cambiar estos valores, actualizar también:       ║
+         ║    1. Schema JSON-LD (buscar "SCHEMA PRECIOS" más abajo)    ║
+         ║    2. Select calculadora (buscar "CALC PRECIOS" más abajo)  ║
+         ║    3. Meta description línea 8 si cambia el precio mínimo   ║
+         ╚══════════════════════════════════════════════════════════════╝ -->
     <div class="section-dark" id="precios">
         <section>
             <div class="section-center">
@@ -1325,23 +1339,26 @@ footer p + p { margin-top: 12px; }
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- 💲 FILA 1: Tequeño Queso x12 -->
                         <tr>
                             <td><strong>Tequeño Queso x12 unds</strong></td>
-                            <td>$5.550</td>
-                            <td>$5.350</td>
-                            <td class="precio-destacado">$4.950 <span class="badge-descuento">-10,8%</span></td>
+                            <td>$5.850</td>
+                            <td>$5.600</td>
+                            <td class="precio-destacado">$5.200 <span class="badge-descuento">-10,8%</span></td>
                         </tr>
+                        <!-- 💲 FILA 2: Tequeño Jamón/Queso x12 -->
                         <tr>
                             <td><strong>Tequeño Jamón/Queso x12 unds</strong></td>
                             <td>$9.850</td>
                             <td>$9.300</td>
-                            <td class="precio-destacado">$8.200 <span class="badge-descuento">-17%</span></td>
+                            <td class="precio-destacado">$8.400 <span class="badge-descuento">-17%</span></td>
                         </tr>
+                        <!-- 💲 FILA 3: Tequeños Fiesteros x25 -->
                         <tr>
                             <td><strong>Tequeños Fiesteros x25 unds</strong></td>
-                            <td>$7.875</td>
-                            <td>$7.400</td>
-                            <td class="precio-destacado">$6.950 <span class="badge-descuento">-22%</span></td>
+                            <td>$7.950</td>
+                            <td>$7.600</td>
+                            <td class="precio-destacado">$7.250 <span class="badge-descuento">-22%</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -1375,10 +1392,12 @@ footer p + p { margin-top: 12px; }
                     </div>
                     <div class="calc-input-group">
                         <label>Volumen de compra</label>
+                        <!-- 💲 CALC PRECIOS: estos value= deben coincidir con la tabla de precios de arriba.
+                             Usar el precio del Pack Queso x12 como referencia de costo base. -->
                         <select id="volumen">
-                            <option value="5990">10–19 packs</option>
-                            <option value="5350">20–49 packs</option>
-                            <option value="4950">50+ packs</option>
+                            <option value="5850">10–19 packs</option>
+                            <option value="5600">20–49 packs</option>
+                            <option value="5200">50+ packs</option>
                         </select>
                     </div>
                 </div>
@@ -1654,8 +1673,10 @@ footer p + p { margin-top: 12px; }
             document.getElementById('costoPorpacks').textContent   = fmt(costo);
             document.getElementById('costoSemanal').textContent     = fmt(costoSemanal);
             document.getElementById('ingresosSemanal').textContent  = fmt(ingresosSemanal);
-            document.getElementById('margenpacks').textContent      = fmt(margenPack);
-            document.getElementById('margenPorcentaje').textContent = margenPct + '%';
+            // FIX: usar innerHTML para preservar el span del porcentaje dentro de #margenpacks
+            // .textContent destruía el <span id="margenPorcentaje"> y rompía el cálculo siguiente
+            document.getElementById('margenpacks').innerHTML =
+                fmt(margenPack) + ' <span style="font-size:0.9rem;color:var(--text-muted);">(' + margenPct + '%)</span>';
             document.getElementById('gananciaMensual').textContent  = fmt(gananciaMensual);
         }
 
