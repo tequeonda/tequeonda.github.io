@@ -11,12 +11,12 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bgp);font-family:'Fira Sans',sans-serif;color:var(--txt);min-height:100vh;}
 .tabs{display:flex;background:#111;border-bottom:1px solid var(--gold-b);position:sticky;top:0;z-index:100;}
-.tab{flex:1;padding:11px 2px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
+.tab{flex:1;padding:11px 2px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:11px;letter-spacing:1.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold);}
 .tab-icon{display:block;font-size:16px;margin-bottom:1px;}
 .page{display:none;padding:14px 12px 80px;max-width:480px;margin:0 auto;}
 .page.active{display:block;}
-h2.st{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--gold-b);}
+h2.st{font-family:Bebas Neue,sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--gold-b);}
 .fg{display:flex;flex-direction:column;gap:4px;}
 .fg label{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
 input,select,textarea{background:#111;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-family:'Fira Sans',sans-serif;font-size:13px;padding:8px 10px;width:100%;outline:none;transition:border-color .15s;-webkit-appearance:none;}
@@ -25,7 +25,7 @@ select option{background:#1c1c1c;}
 textarea{resize:none;}
 .panel{background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;padding:14px;margin-bottom:14px;}
 .scale-row{display:flex;gap:8px;}
-.sbtn{flex:1;background:#111;border:1px solid var(--gold-b);border-radius:6px;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;padding:8px 4px;cursor:pointer;text-align:center;transition:all .15s;}
+.sbtn{flex:1;background:#111;border:1px solid var(--gold-b);border-radius:6px;color:var(--muted);font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:1px;padding:8px 4px;cursor:pointer;text-align:center;transition:all .15s;}
 .sbtn small{display:block;font-size:9px;font-family:'Fira Sans',sans-serif;margin-top:1px;}
 .sbtn.active{background:var(--gold);color:#111;border-color:var(--gold);}
 .prows{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
@@ -34,8 +34,8 @@ textarea{resize:none;}
 .rl{display:flex;flex-direction:column;gap:5px;}
 .rr{display:flex;flex-direction:column;gap:4px;align-items:flex-end;}
 .rr label{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;}
-input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);padding:4px;}
-.rsub{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;margin-top:2px;}
+input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--gold);padding:4px;}
+.rsub{font-family:Bebas Neue,sans-serif;font-size:14px;color:#fff;margin-top:2px;}
 .tog{position:absolute;top:8px;right:8px;width:26px;height:15px;background:#2a2a2a;border-radius:8px;cursor:pointer;border:none;transition:background .2s;}
 .tog::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;background:#555;border-radius:50%;transition:all .2s;}
 .tog.on{background:rgba(255,199,44,.2);}
@@ -48,36 +48,36 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 .tr .tv{color:#ccc;}
 .tr.envio .tv{color:var(--green);font-weight:700;}
 .total-bar{background:var(--gold);border-radius:8px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.total-bar .tbl{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:#111;}
-.total-bar .tbv{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#111;}
-.btn-p{width:100%;background:var(--gold);color:#111;border:none;padding:14px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;border-radius:8px;cursor:pointer;}
-.btn-s{width:100%;background:transparent;color:var(--gold);border:1px solid var(--gold-b);padding:11px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;border-radius:8px;cursor:pointer;margin-top:8px;}
-.btn-g{width:100%;background:transparent;color:#444;border:1px solid #2a2a2a;padding:10px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;border-radius:8px;cursor:pointer;margin-top:6px;}
+.total-bar .tbl{font-family:Bebas Neue,sans-serif;font-size:15px;letter-spacing:2px;color:#111;}
+.total-bar .tbv{font-family:Bebas Neue,sans-serif;font-size:26px;color:#111;}
+.btn-p{width:100%;background:var(--gold);color:#111;border:none;padding:14px;font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:2px;border-radius:8px;cursor:pointer;}
+.btn-s{width:100%;background:transparent;color:var(--gold);border:1px solid var(--gold-b);padding:11px;font-family:Bebas Neue,sans-serif;font-size:16px;letter-spacing:2px;border-radius:8px;cursor:pointer;margin-top:8px;}
+.btn-g{width:100%;background:transparent;color:#444;border:1px solid #2a2a2a;padding:10px;font-family:Bebas Neue,sans-serif;font-size:14px;letter-spacing:1px;border-radius:8px;cursor:pointer;margin-top:6px;}
 .onb{display:flex;align-items:center;justify-content:space-between;background:var(--gold-dim);border:1px solid var(--gold-b);border-radius:8px;padding:10px 14px;margin-bottom:14px;}
-.onb-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;}
+.onb-num{font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;}
 /* CARD */
 #card{width:100%;background:#111;border:2px solid var(--gold);border-radius:12px;overflow:hidden;margin-bottom:10px;}
 .ch{background:var(--gold);padding:13px 14px;display:flex;align-items:center;gap:10px;}
 .cl{width:42px;height:42px;min-width:42px;background:#111;border-radius:7px;padding:5px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .cl img{width:100%;height:100%;object-fit:contain;}
-.cl-fb{font-family:'Bebas Neue',sans-serif;font-size:8px;color:var(--gold);text-align:center;line-height:1.2;}
-.cht h1{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#111;line-height:1;}
+.cl-fb{font-family:Bebas Neue,sans-serif;font-size:8px;color:var(--gold);text-align:center;line-height:1.2;}
+.cht h1{font-family:Bebas Neue,sans-serif;font-size:18px;letter-spacing:2px;color:#111;line-height:1;}
 .cht p{font-size:9px;color:#444;font-weight:500;margin-top:1px;}
 .cor{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,199,44,.06);border-bottom:1px solid var(--gold-b);}
-.con{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:3px;}
+.con{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--gold);letter-spacing:3px;}
 .cod{font-size:10px;color:var(--muted);}
 .ccr{display:flex;justify-content:space-between;align-items:center;padding:10px 0;margin:0 12px;border-bottom:1px solid rgba(255,199,44,.12);}
 .cc .lbl,.cf .lbl{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-.cc .val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:3px;margin-top:3px;}
+.cc .val{font-family:Bebas Neue,sans-serif;font-size:22px;color:#fff;letter-spacing:3px;margin-top:3px;}
 .cf{text-align:right;}
-.cf .val{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-top:3px;}
+.cf .val{font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-top:3px;}
 .cb{margin:8px 12px 0;background:rgba(255,199,44,.07);border:1px solid var(--gold-b);border-radius:5px;padding:6px 9px;display:flex;align-items:center;gap:7px;}
-.cb .tag{background:var(--gold);color:#111;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:1px;padding:2px 6px;border-radius:3px;white-space:nowrap;}
+.cb .tag{background:var(--gold);color:#111;font-family:Bebas Neue,sans-serif;font-size:10px;letter-spacing:1px;padding:2px 6px;border-radius:3px;white-space:nowrap;}
 .cb .desc{color:#aaa;font-size:10px;}
 .ctw{padding:9px 12px 0;}
 .ct{width:100%;border-collapse:collapse;}
 .ct thead tr{border-bottom:1px solid var(--gold-b);}
-.ct thead th{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:1.5px;color:var(--gold);padding:4px 3px;text-align:left;}
+.ct thead th{font-family:Bebas Neue,sans-serif;font-size:10px;letter-spacing:1.5px;color:var(--gold);padding:4px 3px;text-align:left;}
 .ct thead th:not(:first-child){text-align:right;}
 .ct tbody tr{border-bottom:1px solid rgba(255,255,255,.04);}
 .ct tbody tr:last-child{border-bottom:none;}
@@ -85,7 +85,7 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 .ct tbody td:not(:first-child){text-align:right;}
 .ct .pn{font-weight:600;color:#fff;font-size:11px;line-height:1.3;}
 .ct .pn small{display:block;font-weight:400;color:#555;font-size:9px;margin-top:1px;}
-.ct .pq{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);}
+.ct .pq{font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--gold);}
 .ct .pp{color:#888;white-space:nowrap;}
 .ct .ps{font-weight:700;color:#fff;white-space:nowrap;}
 .ctots{margin:4px 12px 0;border-top:1px solid var(--gold-b);padding:8px 0 3px;display:flex;flex-direction:column;gap:5px;}
@@ -94,8 +94,8 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 .ctr .val{font-size:10px;color:#aaa;}
 .ctr.envio .val{color:var(--green);font-weight:700;}
 .ctf{display:flex;justify-content:space-between;align-items:center;background:var(--gold);margin:8px 12px 0;padding:11px 13px;border-radius:7px;}
-.ctf .lbl{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:#111;}
-.ctf .val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#111;}
+.ctf .lbl{font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:2px;color:#111;}
+.ctf .val{font-family:Bebas Neue,sans-serif;font-size:22px;color:#111;}
 .cnota{margin:7px 12px 0;background:rgba(255,199,44,.05);border-left:2px solid var(--gold);padding:5px 8px;font-size:10px;color:#888;border-radius:0 4px 4px 0;}
 .cft{margin:8px 12px 12px;display:flex;justify-content:space-between;align-items:center;gap:6px;}
 .chips{display:flex;gap:4px;flex-wrap:wrap;}
@@ -121,10 +121,10 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 .cobro.vencido{border-color:rgba(239,83,80,.35);}
 .cobro.parcial{border-color:rgba(33,150,243,.35);}
 .cobro-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
-.cobro-nombre{font-size:16px;font-weight:700;color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.cobro-nombre{font-size:16px;font-weight:700;color:#fff;font-family:Bebas Neue,sans-serif;letter-spacing:1px;}
 .cobro-num{font-size:10px;color:var(--muted);margin-top:2px;}
 .cobro-monto{text-align:right;}
-.cobro-deuda{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ef5350;line-height:1;}
+.cobro-deuda{font-family:Bebas Neue,sans-serif;font-size:20px;color:#ef5350;line-height:1;}
 .cobro-deuda.p{color:#42a5f5;}
 .cobro-sub{font-size:10px;color:var(--muted);margin-top:1px;}
 .cobro-meta{font-size:11px;color:var(--muted);margin-bottom:10px;display:flex;gap:10px;flex-wrap:wrap;}
@@ -139,30 +139,30 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 .pago-item{display:flex;justify-content:space-between;font-size:11px;color:#aaa;}
 .alert-box{background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.3);border-radius:8px;padding:12px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
 .alert-box .lbl{font-size:11px;color:#ef5350;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-.alert-box .val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ef5350;}
+.alert-box .val{font-family:Bebas Neue,sans-serif;font-size:22px;color:#ef5350;}
 .calle-box{background:rgba(255,199,44,.08);border:1px solid var(--gold-b);border-radius:8px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
 .calle-box .lbl{font-size:11px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-.calle-box .val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);}
+.calle-box .val{font-family:Bebas Neue,sans-serif;font-size:28px;color:var(--gold);}
 /* STATS */
 .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
 .scard{background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;padding:14px 12px;}
 .scard.full{grid-column:1/-1;}
 .slbl{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-.sval{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);line-height:1;}
+.sval{font-family:Bebas Neue,sans-serif;font-size:28px;color:var(--gold);line-height:1;}
 .ssub{font-size:10px;color:var(--muted);margin-top:2px;}
 .olist{display:flex;flex-direction:column;gap:8px;}
 .oitem{background:var(--bgc);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 14px;transition:border-color .15s;}
 .oitem:hover{border-color:var(--gold-b);}
 .oitem-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
-.onum{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;}
-.omonto{font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;}
+.onum{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;}
+.omonto{font-family:Bebas Neue,sans-serif;font-size:16px;color:#fff;}
 .ocliente{font-size:13px;font-weight:600;color:#fff;}
 .ometa{font-size:10px;color:var(--muted);margin-top:2px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;}
 .odel{background:none;border:none;color:#333;font-size:14px;cursor:pointer;padding:4px;float:right;}
 .odel:hover{color:var(--red);}
 .oacts{display:flex;gap:6px;margin-top:10px;}
 .oabtn{flex:1;background:rgba(255,199,44,.07);border:1px solid var(--gold-b);border-radius:6px;color:var(--gold);font-size:11px;font-weight:600;padding:6px 4px;cursor:pointer;text-align:center;}
-.fbtn{flex:1;background:#111;border:1px solid rgba(255,255,255,.08);border-radius:6px;color:var(--muted);font-size:11px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;padding:7px 4px;cursor:pointer;text-align:center;}
+.fbtn{flex:1;background:#111;border:1px solid rgba(255,255,255,.08);border-radius:6px;color:var(--muted);font-size:11px;font-family:Bebas Neue,sans-serif;letter-spacing:1px;padding:7px 4px;cursor:pointer;text-align:center;}
 .fbtn.active{background:var(--gold-dim);border-color:var(--gold-b);color:var(--gold);}
 .barchart{display:flex;align-items:flex-end;gap:4px;height:60px;margin-top:8px;}
 .bcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
@@ -175,11 +175,11 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 .clicard.ar{border-color:rgba(239,83,80,.4);}
 .clicard.an{border-color:rgba(255,152,0,.4);}
 .clicard.ab{border-color:rgba(33,150,243,.4);}
-.clinombre{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:1px;}
+.clinombre{font-family:Bebas Neue,sans-serif;font-size:18px;color:#fff;letter-spacing:1px;}
 .clidir{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:8px;}
 .clistats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
 .csb{background:#111;border-radius:6px;padding:8px;text-align:center;}
-.csv{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);}
+.csv{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--gold);}
 .csl{font-size:9px;color:var(--muted);margin-top:1px;}
 .clialerta{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;margin-bottom:10px;}
 .ar .clialerta{background:rgba(239,83,80,.12);color:#ef5350;}
@@ -196,7 +196,7 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 .moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:flex-end;justify-content:center;}
 .moverlay.open{display:flex;}
 .mbox{background:#1c1c1c;border:1px solid var(--gold-b);border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
-.mtitle{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:4px;}
+.mtitle{font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:4px;}
 .msub{font-size:12px;color:var(--muted);margin-bottom:16px;}
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
 .mbtns{display:flex;gap:8px;margin-top:14px;}
@@ -206,7 +206,7 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 #mapDrawer{position:fixed;bottom:0;left:0;right:0;background:#1c1c1c;border-top:1px solid var(--gold-b);border-radius:16px 16px 0 0;padding:18px 16px 40px;z-index:300;transform:translateY(100%);transition:transform .3s ease;max-height:75vh;overflow-y:auto;}
 #mapDrawer.open{transform:translateY(0);}
 .dhandle{width:36px;height:4px;background:#333;border-radius:2px;margin:0 auto 14px;}
-.dtitle{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:3px;}
+.dtitle{font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:3px;}
 .dsub{font-size:11px;color:var(--muted);margin-bottom:14px;}
 </style>
 </head>
@@ -361,7 +361,7 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
 <div class="page" id="pg3">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
     <h2 class="st" style="margin-bottom:0;border-bottom:none">CLIENTES</h2>
-    <button id="btnNuevoCli2" style="background:var(--gold);color:#111;border:none;border-radius:6px;padding:7px 12px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;">+ NUEVO</button>
+    <button id="btnNuevoCli2" style="background:var(--gold);color:#111;border:none;border-radius:6px;padding:7px 12px;font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;">+ NUEVO</button>
   </div>
   <h2 class="st">PRESENCIA POR BARRIO</h2>
   <div style="background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;margin-bottom:14px;min-height:100px;">
@@ -381,17 +381,69 @@ input.qi{width:52px;text-align:center;font-family:'Bebas Neue',sans-serif;font-s
   <div id="cliEmpty" class="empty" style="display:none"><div class="big">👥</div><p>No hay clientes.<br>Agregá el primero.</p></div>
 </div>
 
-<!-- STATS -->
+<!-- STATS DASHBOARD -->
 <div class="page" id="pg4">
-  <h2 class="st">RESUMEN</h2>
-  <div class="sgrid">
-    <div class="scard"><div class="slbl">Órdenes Totales</div><div class="sval" id="stTotal">0</div><div class="ssub">desde el inicio</div></div>
-    <div class="scard"><div class="slbl">Monto Total</div><div class="sval" id="stMonto" style="font-size:20px">$0</div><div class="ssub">acumulado</div></div>
-    <div class="scard"><div class="slbl">Este Mes</div><div class="sval" id="stMes">0</div><div class="ssub" id="stMesLbl">órdenes</div></div>
-    <div class="scard"><div class="slbl">Esta Semana</div><div class="sval" id="stSem">0</div><div class="ssub">órdenes</div></div>
-    <div class="scard full"><div class="slbl">📈 Proyección próxima semana</div><div class="sval" id="stProy" style="font-size:20px">$0</div><div class="ssub" id="stProySub"></div></div>
-    <div class="scard full"><div class="slbl">Últimos 7 días</div><div class="barchart" id="barChart"></div></div>
+
+  <!-- MES ACTUAL VS ANTERIOR -->
+  <h2 class="st">ESTE MES</h2>
+  <div style="background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;padding:14px;margin-bottom:14px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+      <div>
+        <div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;" id="stMesNombre">Junio 2025</div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:32px;color:var(--gold);line-height:1;margin-top:4px;" id="stMesMonto">$0</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;" id="stMesOrdenes">0 órdenes</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;">vs mes anterior</div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:26px;margin-top:4px;" id="stVsAnterior">—</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;" id="stAnteriorMonto">$0 anterior</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <div style="background:#111;border-radius:6px;padding:8px;text-align:center;">
+        <div style="font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--gold);" id="stTicketProm">$0</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:1px;">Ticket prom.</div>
+      </div>
+      <div style="background:#111;border-radius:6px;padding:8px;text-align:center;">
+        <div style="font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--gold);" id="stMesSem">0</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:1px;">Esta semana</div>
+      </div>
+      <div style="background:#111;border-radius:6px;padding:8px;text-align:center;">
+        <div style="font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--gold);" id="stProy">$0</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:1px;">Proyección</div>
+      </div>
+    </div>
   </div>
+
+  <!-- HISTORIAL MENSUAL -->
+  <h2 class="st">HISTORIAL MENSUAL</h2>
+  <div style="background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;padding:14px;margin-bottom:14px;">
+    <div id="histMensual"></div>
+    <div style="height:80px;display:flex;align-items:flex-end;gap:6px;margin-top:14px;" id="barMeses"></div>
+  </div>
+
+  <!-- TOP CLIENTES -->
+  <h2 class="st">TOP CLIENTES — ESTE MES</h2>
+  <div style="background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;padding:14px;margin-bottom:14px;">
+    <div id="topClientes"></div>
+  </div>
+
+  <!-- PRODUCTOS MÁS VENDIDOS -->
+  <h2 class="st">PRODUCTOS MÁS VENDIDOS</h2>
+  <div style="background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;padding:14px;margin-bottom:14px;">
+    <div id="topProductos"></div>
+  </div>
+
+  <!-- ALERTAS DE NEGOCIO -->
+  <div id="alertasNegocio" style="margin-bottom:14px;"></div>
+
+  <!-- 7 DÍAS -->
+  <h2 class="st">ÚLTIMOS 7 DÍAS</h2>
+  <div style="background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;padding:14px;margin-bottom:14px;">
+    <div class="barchart" id="barChart"></div>
+  </div>
+
+  <!-- ÓRDENES -->
   <h2 class="st">ÓRDENES</h2>
   <div style="display:flex;gap:8px;margin-bottom:14px">
     <button class="fbtn active" data-f="all" id="of0">TODAS</button>
@@ -578,7 +630,7 @@ function renderRows(){
     var catName=entry[0];var items=entry[1];
     // Category header
     var hdr=document.createElement("div");
-    hdr.style.cssText="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--gold);margin:10px 0 4px;padding-bottom:4px;border-bottom:1px solid var(--gold-b);";
+    hdr.style.cssText="font-family:Bebas Neue,sans-serif;font-size:11px;letter-spacing:2px;color:var(--gold);margin:10px 0 4px;padding-bottom:4px;border-bottom:1px solid var(--gold-b);";
     hdr.textContent=catName.toUpperCase();
     cont.appendChild(hdr);
     items.forEach(function(item){
@@ -1020,73 +1072,211 @@ document.getElementById("mcSave").addEventListener("click",function(){
 document.getElementById("btnNuevoCli").addEventListener("click",()=>abrirModalCli(null));
 document.getElementById("btnNuevoCli2").addEventListener("click",()=>abrirModalCli(null));
 
-// ── STATS ──
-var statFilter="all";
-document.querySelectorAll("[data-f]").forEach(b=>{
-  b.addEventListener("click",()=>{
-    document.querySelectorAll("[data-f]").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active");statFilter=b.dataset.f;renderOList();
+// ── STATS DASHBOARD ──
+var MESES_ES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+function getMesData(orders, year, month){
+  var filtered=orders.filter(function(o){
+    var d=new Date(o.createdAt);
+    return d.getFullYear()===year&&d.getMonth()===month;
   });
-});
+  var monto=filtered.reduce(function(a,o){return a+o.money;},0);
+  return{orders:filtered,count:filtered.length,monto:monto,ticket:filtered.length?monto/filtered.length:0};
+}
+
+function pctChange(curr,prev){
+  if(!prev)return null;
+  return Math.round((curr-prev)/prev*100);
+}
+
 function renderStats(){
-  var orders=getOrders();var now=new Date();
-  document.getElementById("stTotal").textContent=orders.length;
-  document.getElementById("stMonto").textContent=fmt(orders.reduce((a,o)=>a+o.money,0));
-  var tm=orders.filter(o=>{var d=new Date(o.createdAt);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
-  document.getElementById("stMes").textContent=tm.length;
-  document.getElementById("stMesLbl").textContent=fmt(tm.reduce((a,o)=>a+o.money,0));
+  var orders=getOrders();
+  var now=new Date();
+  var curYear=now.getFullYear();
+  var curMonth=now.getMonth();
+  var prevMonth=curMonth===0?11:curMonth-1;
+  var prevYear=curMonth===0?curYear-1:curYear;
+
+  // ── MES ACTUAL ──
+  var cur=getMesData(orders,curYear,curMonth);
+  var prev=getMesData(orders,prevYear,prevMonth);
+  document.getElementById("stMesNombre").textContent=MESES_ES[curMonth]+" "+curYear;
+  document.getElementById("stMesMonto").textContent=fmt(cur.monto);
+  document.getElementById("stMesOrdenes").textContent=cur.count+" orden"+(cur.count!==1?"es":"");
+  document.getElementById("stTicketProm").textContent=fmt(cur.ticket);
+  document.getElementById("stAnteriorMonto").textContent=fmt(prev.monto)+" en "+MESES_ES[prevMonth];
+
+  var pct=pctChange(cur.monto,prev.monto);
+  var vsEl=document.getElementById("stVsAnterior");
+  if(pct===null){vsEl.textContent="—";vsEl.style.color="var(--muted)";}
+  else if(pct>=0){vsEl.textContent="↑ "+pct+"%";vsEl.style.color="var(--green)";}
+  else{vsEl.textContent="↓ "+Math.abs(pct)+"%";vsEl.style.color="var(--red)";}
+
+  // Semana actual
   var ws=new Date(now);ws.setDate(now.getDate()-now.getDay());
-  document.getElementById("stSem").textContent=orders.filter(o=>new Date(o.createdAt)>=ws).length;
+  var semOrd=orders.filter(function(o){return new Date(o.createdAt)>=ws;});
+  document.getElementById("stMesSem").textContent=semOrd.length;
+
   // Proyección
   var clientes=getClientes();var proy=0;var proyN=[];
-  clientes.forEach(c=>{
-    var s=getCliStats(c.id);
-    var freq=s.frecReal||parseInt(c.frecuencia)||30;
+  clientes.forEach(function(c){
+    var s=getCliStats(c.id);var freq=s.frecReal||parseInt(c.frecuencia)||30;
     if(s.avgMoney&&s.diasUltimo!==null){var dias=Math.max(0,freq-s.diasUltimo);if(dias<=7){proy+=s.avgMoney;proyN.push(c.nombre);}}
   });
   document.getElementById("stProy").textContent=fmt(proy);
-  var plen=proyN.length;
-  document.getElementById("stProySub").textContent=plen?(plen+" cliente"+(plen!==1?"s":"")+" esperado"+(plen!==1?"s":"")+" · "+proyN.slice(0,3).join(", ")+(plen>3?"...":"")):"Sin pedidos proyectados esta semana";
-  // Barras
+
+  // ── HISTORIAL MENSUAL (últimos 6 meses) ──
+  var hist=[];
+  for(var i=5;i>=0;i--){
+    var d=new Date(curYear,curMonth-i,1);
+    var y=d.getFullYear();var m=d.getMonth();
+    var data=getMesData(orders,y,m);
+    hist.push({label:MESES_ES[m].slice(0,3)+" "+String(y).slice(2),year:y,month:m,data:data});
+  }
+  var histEl=document.getElementById("histMensual");
+  histEl.innerHTML="";
+  var maxMonto=Math.max.apply(null,hist.map(function(h){return h.data.monto;}));
+  hist.forEach(function(h,i){
+    var isCur=(h.year===curYear&&h.month===curMonth);
+    var pctVsPrev=i>0?pctChange(h.data.monto,hist[i-1].data.monto):null;
+    var pctStr="";
+    if(pctVsPrev!==null){
+      pctStr=pctVsPrev>=0?'<span style="color:var(--green);font-size:10px;">↑'+pctVsPrev+'%</span>':'<span style="color:var(--red);font-size:10px;">↓'+Math.abs(pctVsPrev)+'%</span>';
+    }
+    var row=document.createElement("div");
+    row.style.cssText="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);";
+    if(i===hist.length-1)row.style.borderBottom="none";
+    var barW=maxMonto>0?Math.max(4,Math.round(h.data.monto/maxMonto*100)):0;
+    row.innerHTML='<div style="width:60px;font-size:11px;color:'+(isCur?"var(--gold)":"#ccc")+';font-weight:'+(isCur?"700":"400")+';">'+h.label+'</div>'
+      +'<div style="flex:1;background:#2a2a2a;border-radius:3px;height:6px;overflow:hidden;">'
+        +'<div style="width:'+barW+'%;height:100%;background:'+(isCur?"var(--gold)":"#555")+';border-radius:3px;"></div>'
+      +'</div>'
+      +'<div style="width:90px;text-align:right;font-family:Bebas Neue,sans-serif;font-size:14px;color:'+(isCur?"var(--gold)":"#ccc")+';">'+fmt(h.data.monto)+'</div>'
+      +'<div style="width:55px;text-align:right;font-size:10px;color:var(--muted);">'+h.data.count+' ord.</div>'
+      +(pctStr?'<div style="width:40px;text-align:right;">'+pctStr+'</div>':'<div style="width:40px;"></div>');
+    histEl.appendChild(row);
+  });
+
+  // ── TOP CLIENTES ──
+  var cliMonto={};
+  cur.orders.forEach(function(o){
+    if(o.clienteId){
+      if(!cliMonto[o.clienteId])cliMonto[o.clienteId]={monto:0,count:0,nombre:o.cliente||"Sin nombre"};
+      cliMonto[o.clienteId].monto+=o.money;
+      cliMonto[o.clienteId].count+=1;
+    }
+  });
+  var topCli=Object.values(cliMonto).sort(function(a,b){return b.monto-a.monto;}).slice(0,5);
+  var topCliEl=document.getElementById("topClientes");
+  if(!topCli.length){
+    topCliEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin órdenes este mes</div>';
+  }else{
+    var maxCliMonto=topCli[0].monto;
+    topCliEl.innerHTML="";
+    topCli.forEach(function(c,i){
+      var barW=Math.max(4,Math.round(c.monto/maxCliMonto*100));
+      var medals=["🥇","🥈","🥉","4️⃣","5️⃣"];
+      var row=document.createElement("div");
+      row.style.cssText="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);";
+      if(i===topCli.length-1)row.style.borderBottom="none";
+      row.innerHTML='<div style="font-size:16px;">'+medals[i]+'</div>'
+        +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-size:12px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.nombre+'</div>'
+          +'<div style="background:#2a2a2a;border-radius:3px;height:4px;margin-top:4px;overflow:hidden;">'
+            +'<div style="width:'+barW+'%;height:100%;background:var(--gold);border-radius:3px;"></div>'
+          +'</div>'
+        +'</div>'
+        +'<div style="text-align:right;flex-shrink:0;">'
+          +'<div style="font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--gold);">'+fmt(c.monto)+'</div>'
+          +'<div style="font-size:9px;color:var(--muted);">'+c.count+' orden'+(c.count!==1?"es":"")+'</div>'
+        +'</div>';
+      topCliEl.appendChild(row);
+    });
+  }
+
+  // ── PRODUCTOS MÁS VENDIDOS ──
+  var prodStats={};
+  orders.filter(function(o){
+    var d=new Date(o.createdAt);return d.getFullYear()===curYear&&d.getMonth()===curMonth;
+  }).forEach(function(o){
+    (o.items||[]).forEach(function(item){
+      var key=item.cod||item.name;
+      if(!prodStats[key])prodStats[key]={cod:item.cod||"",name:item.name,units:0,monto:0,packs:0};
+      prodStats[key].packs+=item.qty;
+      prodStats[key].units+=item.qty*(item.units||1);
+      prodStats[key].monto+=item.subtotal;
+    });
+  });
+  var topProd=Object.values(prodStats).sort(function(a,b){return b.monto-a.monto;});
+  var topProdEl=document.getElementById("topProductos");
+  if(!topProd.length){
+    topProdEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin datos este mes</div>';
+  }else{
+    var maxProdMonto=topProd[0].monto;
+    topProdEl.innerHTML="";
+    topProd.forEach(function(p,i){
+      var barW=Math.max(4,Math.round(p.monto/maxProdMonto*100));
+      var row=document.createElement("div");
+      row.style.cssText="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);";
+      if(i===topProd.length-1)row.style.borderBottom="none";
+      row.innerHTML=(p.cod?'<span style="background:var(--gold);color:#111;font-family:Bebas Neue,sans-serif;font-size:10px;padding:2px 6px;border-radius:3px;flex-shrink:0;">'+p.cod+'</span>':'')
+        +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-size:11px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+p.name+'</div>'
+          +'<div style="background:#2a2a2a;border-radius:3px;height:4px;margin-top:4px;overflow:hidden;">'
+            +'<div style="width:'+barW+'%;height:100%;background:var(--gold);border-radius:3px;"></div>'
+          +'</div>'
+          +'<div style="font-size:9px;color:var(--muted);margin-top:2px;">'+p.packs+' packs · '+p.units+' unidades</div>'
+        +'</div>'
+        +'<div style="font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--gold);flex-shrink:0;">'+fmt(p.monto)+'</div>';
+      topProdEl.appendChild(row);
+    });
+  }
+
+  // ── ALERTAS DE NEGOCIO ──
+  var alertasEl=document.getElementById("alertasNegocio");
+  alertasEl.innerHTML="";
+  var alertas=[];
+  // Caída de monto vs mes anterior
+  if(pct!==null&&pct<=-20)alertas.push({tipo:"red",msg:"📉 Las ventas bajaron "+Math.abs(pct)+"% vs "+MESES_ES[prevMonth]});
+  else if(pct!==null&&pct>=-10&&pct<0)alertas.push({tipo:"orange",msg:"⚠ Las ventas bajaron "+Math.abs(pct)+"% vs "+MESES_ES[prevMonth]});
+  // Clientes que compraban y no compraron este mes
+  var cliActivos=clientes.filter(function(c){
+    var s=getCliStats(c.id);
+    return s.total>0&&s.diasUltimo!==null&&s.diasUltimo>45;
+  });
+  if(cliActivos.length)alertas.push({tipo:"orange",msg:"👥 "+cliActivos.length+(cliActivos.length!==1?" clientes":" cliente")+" sin comprar hace más de 45 días"});
+  // Sin órdenes esta semana
+  if(semOrd.length===0)alertas.push({tipo:"orange",msg:"📭 Sin órdenes esta semana"});
+  if(alertas.length){
+    var hdr=document.createElement("h2");hdr.className="st";hdr.textContent="⚠ ALERTAS DE NEGOCIO";
+    alertasEl.appendChild(hdr);
+    alertas.forEach(function(a){
+      var d=document.createElement("div");
+      d.style.cssText="background:"+(a.tipo==="red"?"rgba(239,83,80,.1)":"rgba(255,152,0,.1)")+";border:1px solid "+(a.tipo==="red"?"rgba(239,83,80,.3)":"rgba(255,152,0,.3)")+";border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:12px;color:"+(a.tipo==="red"?"#ef5350":"#ff9800")+";font-weight:600;";
+      d.textContent=a.msg;alertasEl.appendChild(d);
+    });
+  }
+
+  // ── 7 DÍAS ──
   var chart=document.getElementById("barChart");chart.innerHTML="";
   var days=[];
-  for(var i=6;i>=0;i--){var d=new Date(now);d.setDate(now.getDate()-i);var key=d.toISOString().split("T")[0];var cnt=orders.filter(o=>o.createdAt&&o.createdAt.startsWith(key)).length;days.push({label:d.toLocaleDateString("es-AR",{weekday:"short"}).slice(0,2),count:cnt});}
-  var maxC=Math.max(...days.map(d=>d.count),1);
-  days.forEach(d=>{var col=document.createElement("div");col.className="bcol";var fill=document.createElement("div");fill.className="bfill";fill.style.height=Math.max(2,Math.round(d.count/maxC*54))+"px";var lbl=document.createElement("div");lbl.className="blbl";lbl.textContent=d.label;col.appendChild(fill);col.appendChild(lbl);chart.appendChild(col);});
+  for(var i=6;i>=0;i--){
+    var dd=new Date(now);dd.setDate(now.getDate()-i);
+    var key=dd.toISOString().split("T")[0];
+    var cnt=orders.filter(function(o){return o.createdAt&&o.createdAt.startsWith(key);}).length;
+    days.push({label:dd.toLocaleDateString("es-AR",{weekday:"short"}).slice(0,2),count:cnt});
+  }
+  var maxC=Math.max.apply(null,days.map(function(d){return d.count;}));if(maxC===0)maxC=1;
+  days.forEach(function(d){
+    var col=document.createElement("div");col.className="bcol";
+    var fill=document.createElement("div");fill.className="bfill";fill.style.height=Math.max(2,Math.round(d.count/maxC*54))+"px";
+    var lbl=document.createElement("div");lbl.className="blbl";lbl.textContent=d.label;
+    col.appendChild(fill);col.appendChild(lbl);chart.appendChild(col);
+  });
+
   renderOList();
 }
-function payBadge(o){
-  if(!o.pagoEstado||o.pagoEstado==="contado")return'<span class="pbadge pagado">✓ PAGADO</span>';
-  var now=new Date();now.setHours(0,0,0,0);
-  if(o.pagoVence&&new Date(o.pagoVence)<now)return'<span class="pbadge vencido">⚠ VENCIDO</span>';
-  if((o.pagos||[]).length>0&&o.deuda>0)return'<span class="pbadge parcial">● PARCIAL</span>';
-  return'<span class="pbadge pendiente">● PENDIENTE</span>';
-}
-function renderOList(){
-  var all=getOrders();var now=new Date();var filtered=all;
-  if(statFilter==="week"){var ws=new Date(now);ws.setDate(now.getDate()-now.getDay());filtered=all.filter(o=>new Date(o.createdAt)>=ws);}
-  else if(statFilter==="month")filtered=all.filter(o=>{var d=new Date(o.createdAt);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
-  var list=document.getElementById("oList");
-  if(!filtered.length){list.innerHTML='<div class="empty"><div class="big">📋</div><p>No hay órdenes</p></div>';return;}
-  list.innerHTML="";
-  filtered.forEach(o=>{
-    var div=document.createElement("div");div.className="oitem";
-    var d=new Date(o.createdAt);
-    var ds=d.toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"});
-    var ts=d.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
-    div.innerHTML='<button class="odel" data-n="'+o.num+'">✕</button>'
-      +'<div class="oitem-top"><span class="onum">'+o.num+'</span><span class="omonto">'+fmt(o.money)+'</span></div>'
-      +'<div class="ocliente">'+(o.cliente||"Sin nombre")+'</div>'
-      +'<div class="ometa"><span>'+ds+' '+ts+' · '+o.packs+' packs</span>'+payBadge(o)+'</div>'
-      +'<div class="oacts"></div>';
-    var acts=div.querySelector(".oacts");
-    var a1=document.createElement("button");a1.className="oabtn";a1.textContent="👁 Ver";a1.addEventListener("click",()=>reloadOrder(o.num));acts.appendChild(a1);
-    var a2=document.createElement("button");a2.className="oabtn";a2.textContent="⬇ PNG";a2.addEventListener("click",()=>reloadAndDL(o.num));acts.appendChild(a2);
-    var a3=document.createElement("button");a3.className="oabtn";a3.textContent="🖨 Ticket";a3.addEventListener("click",()=>reloadAndPrint(o.num));acts.appendChild(a3);
-    div.querySelector(".odel").addEventListener("click",function(){if(confirm("¿Eliminar "+this.dataset.n+"?"))deleteOrder(this.dataset.n);});
-    list.appendChild(div);
-  });
-}
+
 function deleteOrder(num){saveOrders(getOrders().filter(o=>o.num!==num));renderStats();}
 document.getElementById("btnClearHist").addEventListener("click",function(){
   if(confirm("¿Borrar TODO el historial?")){{localStorage.removeItem("toOrders");localStorage.removeItem("toCounter");renderStats();updOrderNum();}
@@ -1126,7 +1316,7 @@ function renderPrecios(){
     var sec=document.createElement("div");
     sec.style.cssText="margin-bottom:18px;";
     var title=document.createElement("div");
-    title.style.cssText="font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:8px;";
+    title.style.cssText="font-family:Bebas Neue,sans-serif;font-size:14px;color:#fff;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:8px;";
     title.innerHTML='<span style="background:var(--gold);color:#111;font-size:11px;padding:2px 7px;border-radius:4px;">'+p.cod+'</span>'+p.name+' <span style="font-size:10px;color:var(--muted);">· '+p.desc+'</span>';
     sec.appendChild(title);
     var grid=document.createElement("div");
