@@ -1277,6 +1277,42 @@ function renderStats(){
   renderOList();
 }
 
+var statFilter="all";
+function renderOList(){
+  var all=getOrders();
+  var now=new Date();
+  var filtered=all;
+  if(statFilter==="week"){var ws=new Date(now);ws.setDate(now.getDate()-now.getDay());filtered=all.filter(function(o){return new Date(o.createdAt)>=ws;});}
+  else if(statFilter==="month"){filtered=all.filter(function(o){var d=new Date(o.createdAt);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});}
+  var list=document.getElementById("oList");
+  if(!list)return;
+  if(!filtered.length){list.innerHTML='<div class="empty"><div class="big">📋</div><p>No hay órdenes</p></div>';return;}
+  list.innerHTML="";
+  filtered.forEach(function(o){
+    var div=document.createElement("div");div.className="oitem";
+    var d=new Date(o.createdAt);
+    var ds=d.toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"});
+    var ts=d.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
+    div.innerHTML='<button class="odel" data-n="'+o.num+'">✕</button>'
+      +'<div class="oitem-top"><span class="onum">'+o.num+'</span><span class="omonto">'+fmt(o.money)+'</span></div>'
+      +'<div class="ocliente">'+(o.cliente||"Sin nombre")+'</div>'
+      +'<div class="ometa"><span>'+ds+' '+ts+' · '+o.packs+' packs</span>'+payBadge(o)+'</div>'
+      +'<div class="oacts"></div>';
+    var acts=div.querySelector(".oacts");
+    var a1=document.createElement("button");a1.className="oabtn";a1.textContent="👁 Ver";
+    a1.addEventListener("click",function(){reloadOrder(o.num);});acts.appendChild(a1);
+    var a2=document.createElement("button");a2.className="oabtn";a2.textContent="⬇ PNG";
+    a2.addEventListener("click",function(){reloadAndDL(o.num);});acts.appendChild(a2);
+    var a3=document.createElement("button");a3.className="oabtn";a3.textContent="🖨 Ticket";
+    a3.addEventListener("click",function(){reloadAndPrint(o.num);});acts.appendChild(a3);
+    div.querySelector(".odel").addEventListener("click",function(){
+      var num=this.dataset.n;
+      if(confirm("¿Eliminar orden "+num+"?"))deleteOrder(num);
+    });
+    list.appendChild(div);
+  });
+}
+
 function deleteOrder(num){saveOrders(getOrders().filter(o=>o.num!==num));renderStats();}
 document.getElementById("btnClearHist").addEventListener("click",function(){
   if(confirm("¿Borrar TODO el historial?")){{localStorage.removeItem("toOrders");localStorage.removeItem("toCounter");renderStats();updOrderNum();}
@@ -1405,6 +1441,16 @@ fillCliSel();
 updOrderNum();
 renderRows();
 recalc();
+// Stats filter buttons
+["of0","of1","of2"].forEach(function(id){
+  var btn=document.getElementById(id);
+  if(btn)btn.addEventListener("click",function(){
+    document.querySelectorAll("[data-f]").forEach(function(x){x.classList.remove("active");});
+    btn.classList.add("active");
+    statFilter=btn.dataset.f;
+    renderOList();
+  });
+});
 </script>
 </body>
 </html>
