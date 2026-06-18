@@ -1179,7 +1179,7 @@ function renderStats(){
   var topCli=Object.values(cliMonto).sort(function(a,b){return b.monto-a.monto;}).slice(0,5);
   var topCliEl=document.getElementById("topClientes");
   if(!topCli.length){
-    topCliEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin órdenes este mes</div>';
+    topCliEl.innerHTML='<div style="text-align:center;color:var(--bgc);font-size:13px;padding:12px;">Sin órdenes este mes</div>';
   }else{
     var maxCliMonto=topCli[0].monto;
     topCliEl.innerHTML="";
@@ -1191,7 +1191,7 @@ function renderStats(){
       if(i===topCli.length-1)row.style.borderBottom="none";
       row.innerHTML='<div style="font-size:16px;">'+medals[i]+'</div>'
         +'<div style="flex:1;min-width:0;">'
-          +'<div style="font-size:12px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.nombre+'</div>'
+          +'<div style="font-size:12px;font-weight:600;color:var(--bgc);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.nombre+'</div>'
           +'<div style="background:#e6e4db;border-radius:3px;height:4px;margin-top:4px;overflow:hidden;">'
             +'<div style="width:'+barW+'%;height:100%;background:var(--gold);border-radius:3px;"></div>'
           +'</div>'
@@ -1220,7 +1220,7 @@ function renderStats(){
   var topProd=Object.values(prodStats).sort(function(a,b){return b.monto-a.monto;});
   var topProdEl=document.getElementById("topProductos");
   if(!topProd.length){
-    topProdEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin datos este mes</div>';
+    topProdEl.innerHTML='<div style="text-align:center;color:var(--bgc);font-size:13px;padding:12px;">Sin datos este mes</div>';
   }else{
     var maxProdMonto=topProd[0].monto;
     topProdEl.innerHTML="";
