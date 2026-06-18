@@ -4,103 +4,261 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cierre Palermo · Teque Onda</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #FFC72C; --dark: #111009; --surface: #1a1810; --card: #221f12;
-    --border: #332e18; --red: #e8412a; --orange: #f07d1a; --green: #3dba6e;
-    --text: #f0e8cc; --muted: #8a8060;
-    --font-head: 'Bebas Neue', sans-serif; --font-body: 'Fira Sans', sans-serif;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--dark); color: var(--text); font-family: var(--font-body); min-height: 100vh; padding: 0 0 80px; }
-  header { background: var(--surface); border-bottom: 2px solid var(--gold); padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  header h1 { font-family: var(--font-head); font-size: 1.7rem; letter-spacing: 2px; color: var(--gold); line-height: 1; }
-  header .sub { font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
-  .header-right { display: flex; align-items: center; gap: 10px; }
-  .date-badge { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 0.75rem; color: var(--muted); font-weight: 500; }
-  .btn-settings { background: var(--card); border: 1px solid var(--gold); border-radius: 8px; color: var(--gold); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 7px 12px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; white-space: nowrap; font-family: var(--font-body); }
-  .btn-settings:hover { background: var(--gold); color: var(--dark); }
-  .toolbar { display: flex; gap: 8px; padding: 14px 16px; flex-wrap: wrap; align-items: center; }
-  .filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); font-family: var(--font-body); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
-  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
-  .filter-btn.active     { background: var(--gold);   border-color: var(--gold);   color: var(--dark); }
-  .filter-btn.red.active { background: var(--red);    border-color: var(--red);    color: #fff; }
-  .filter-btn.orange.active { background: var(--orange); border-color: var(--orange); color: #fff; }
-  .filter-btn.green.active  { background: var(--green);  border-color: var(--green);  color: #fff; }
-  .filter-btn.grey.active   { background: var(--muted);  border-color: var(--muted);  color: var(--dark); }
-  .category { margin: 12px 16px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card); }
-  .cat-header { background: var(--surface); padding: 10px 16px; font-family: var(--font-head); font-size: 1.05rem; letter-spacing: 2px; color: var(--gold); display: flex; align-items: center; gap: 10px; }
-  .cat-count { margin-left: auto; font-family: var(--font-body); font-size: 0.65rem; background: var(--border); border-radius: 10px; padding: 2px 8px; color: var(--muted); font-weight: 500; }
-  .product-row { display: flex; align-items: center; padding: 10px 16px; border-top: 1px solid var(--border); gap: 10px; transition: background 0.1s; }
-  .product-row:hover { background: rgba(255,199,44,0.03); }
-  .product-row.hidden { display: none !important; }
-  .product-row.confirmed { opacity: 0.5; background: rgba(255,255,255,0.015); }
-  .product-row.confirmed .prod-name { text-decoration: line-through; color: var(--muted); }
-  .prod-name { font-size: 0.82rem; font-weight: 500; flex: 1; color: var(--text); }
-  .prod-abbr { font-size: 0.65rem; color: var(--muted); font-weight: 400; margin-left: 4px; }
-  .qty-wrap { display: flex; align-items: center; background: var(--dark); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .qty-btn { background: transparent; border: none; color: var(--muted); font-size: 1rem; width: 28px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; transition: color 0.1s; }
-  .qty-btn:hover { color: var(--gold); }
-  .qty-btn:disabled { pointer-events: none; opacity: 0.3; }
-  .qty-input { background: transparent; border: none; color: var(--text); font-family: var(--font-body); font-size: 0.88rem; font-weight: 600; width: 54px; text-align: center; outline: none; height: 32px; }
-  .qty-input::-webkit-inner-spin-button { display: none; }
-  .qty-input:disabled { color: var(--muted); }
-  .unit-label { font-size: 0.65rem; color: var(--muted); min-width: 28px; }
-  .status-badge { font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; min-width: 60px; text-align: center; }
-  .status-badge.critical { background: rgba(232,65,42,0.18);  color: var(--red);    border: 1px solid rgba(232,65,42,0.3); }
-  .status-badge.warning  { background: rgba(240,125,26,0.15); color: var(--orange); border: 1px solid rgba(240,125,26,0.25); }
-  .status-badge.ok       { background: rgba(61,186,110,0.12); color: var(--green);  border: 1px solid rgba(61,186,110,0.2); }
-  .status-badge.done     { background: rgba(138,128,96,0.12); color: var(--muted);  border: 1px solid rgba(138,128,96,0.2); font-size: 0.58rem; }
-  .btn-confirm { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 0.72rem; padding: 5px 11px; border-radius: 6px; cursor: pointer; font-family: var(--font-body); font-weight: 600; transition: all 0.15s; white-space: nowrap; }
-  .btn-confirm:hover { border-color: var(--green); color: var(--green); }
-  .btn-edit { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 0.68rem; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-family: var(--font-body); transition: all 0.15s; white-space: nowrap; }
-  .btn-edit:hover { border-color: var(--gold); color: var(--gold); }
-  .product-row.freetext { flex-wrap: wrap; gap: 8px; }
-  .freetext-input { background: var(--dark); border: 1px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: 0.82rem; padding: 6px 10px; border-radius: 8px; width: 130px; outline: none; }
-  .freetext-input:focus { border-color: var(--gold); }
-  .freetext-input:disabled { color: var(--muted); pointer-events: none; }
-  .divider-confirmed { border: none; border-top: 1px dashed var(--border); margin: 0 16px; opacity: 0.5; }
-  .thresh-note { font-size: 0.67rem; color: var(--muted); text-align: center; padding: 10px 16px 0; }
-  .summary-panel { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 2px solid var(--gold); padding: 12px 16px; display: flex; gap: 10px; z-index: 200; align-items: center; }
-  .summary-stats { display: flex; gap: 14px; align-items: center; flex: 1; flex-wrap: wrap; }
-  .stat-pill { font-size: 0.72rem; }
-  .btn-generate { background: var(--gold); color: var(--dark); border: none; font-family: var(--font-head); font-size: 1rem; letter-spacing: 1.5px; padding: 10px 20px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
-  .btn-generate:hover { background: #e6b220; }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 300; align-items: flex-end; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--gold); border-bottom: none; border-radius: 16px 16px 0 0; width: 100%; max-width: 600px; padding: 20px 20px 30px; animation: slideUp 0.25s ease; }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal-title { font-family: var(--font-head); font-size: 1.3rem; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; }
-  .modal-text { background: var(--dark); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 0.78rem; line-height: 1.7; white-space: pre-wrap; font-family: 'Courier New', monospace; color: var(--text); max-height: 50vh; overflow-y: auto; margin-bottom: 14px; }
-  .modal-actions { display: flex; gap: 10px; }
-  .btn-copy { flex: 1; background: var(--gold); color: var(--dark); border: none; font-family: var(--font-head); font-size: 1rem; letter-spacing: 1px; padding: 11px; border-radius: 8px; cursor: pointer; }
-  .btn-close { background: var(--card); color: var(--text); border: 1px solid var(--border); font-family: var(--font-body); font-size: 0.82rem; padding: 11px 18px; border-radius: 8px; cursor: pointer; }
-  .settings-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 400; flex-direction: column; }
-  .settings-overlay.open { display: flex; }
-  .settings-header { background: var(--surface); border-bottom: 2px solid var(--gold); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  .settings-header h2 { font-family: var(--font-head); font-size: 1.4rem; letter-spacing: 2px; color: var(--gold); }
-  .settings-subtitle { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-  .btn-close-settings { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--font-body); font-size: 0.8rem; padding: 7px 14px; border-radius: 8px; cursor: pointer; }
-  .btn-close-settings:hover { border-color: var(--gold); color: var(--gold); }
-  .settings-body { flex: 1; overflow-y: auto; padding: 12px 16px 30px; }
-  .settings-cat-title { font-family: var(--font-head); font-size: 0.95rem; letter-spacing: 2px; color: var(--gold); padding: 12px 0 6px; display: flex; align-items: center; gap: 8px; }
-  .settings-row { display: flex; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); gap: 10px; }
-  .settings-prod-name { font-size: 0.8rem; font-weight: 500; flex: 1; color: var(--text); }
-  .settings-prod-abbr { font-size: 0.62rem; color: var(--muted); display: block; margin-top: 1px; }
-  .thresh-group { display: flex; align-items: center; gap: 6px; }
-  .thresh-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; min-width: 18px; }
-  .thresh-input { background: var(--dark); border: 1px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; width: 52px; text-align: center; padding: 5px 4px; border-radius: 6px; outline: none; }
-  .thresh-input:focus { border-color: var(--gold); }
-  .thresh-input::-webkit-inner-spin-button { display: none; }
-  .settings-save-note { font-size: 0.68rem; color: var(--muted); text-align: center; padding: 16px 0 0; }
+:root {
+  --gold: #FFC72C; --gold-dark: #c79500; --ink: #111111;
+  --green: #00a82d; --green-bright: #00d838;
+  --page: #f4f3ee; --card: #ffffff; --border: #e6e4db;
+  --red: #e23b3b; --orange: #e07c14;
+  --text: #222222; --muted: #888888; --cream: #eceae3;
+  --fh: 'Bebas Neue', sans-serif;
+  --fb: 'Fira Sans', sans-serif;
+  --fc: 'Oswald', sans-serif;
+  --cat-color: #888888; --cat-bg: #f8f7f5;
+}
+
+/* CATEGORY COLOR TOKENS */
+.category[data-cat="POSTRES"]        { --cat-color:#9B6BE0; --cat-bg:#faf7fe; }
+.category[data-cat="CACHITOS"]       { --cat-color:#E0A92C; --cat-bg:#fdfaf2; }
+.category[data-cat="MINI_EMPANADAS"] { --cat-color:#3fae6e; --cat-bg:#f7fdf9; }
+.category[data-cat="PASTELITOS"]     { --cat-color:#FF8A4C; --cat-bg:#fffaf6; }
+.category[data-cat="TEQUEÑOS"]       { --cat-color:#FFC72C; --cat-bg:#fffdf5; }
+.category[data-cat="BEBIDAS"]        { --cat-color:#3499c7; --cat-bg:#f4fbfe; }
+.category[data-cat="SALSAS"]         { --cat-color:#D85A85; --cat-bg:#fef6f9; }
+.category[data-cat="CAJAS"]          { --cat-color:#7a7a7a; --cat-bg:#f8f7f5; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--page); color: var(--text); font-family: var(--fb); min-height: 100vh; padding: 0 0 80px; }
+
+/* ── HEADER ── */
+header {
+  background: var(--ink); border-bottom: 4px solid var(--green);
+  padding: 14px 16px 12px; display: flex; align-items: center;
+  justify-content: space-between; position: sticky; top: 0; z-index: 100;
+}
+header h1 { font-family: var(--fh); font-size: 1.7rem; letter-spacing: 3px; color: #fff; line-height: 1; }
+header h1 .onda { color: var(--gold); }
+header .sub { font-size: 0.68rem; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 3px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.date-badge { font-family: var(--fh); font-size: 0.95rem; color: var(--green-bright); letter-spacing: 2px; }
+.btn-settings {
+  background: transparent; border: 1px solid rgba(255,199,44,0.35);
+  border-radius: 7px; color: var(--gold); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.5px; padding: 6px 12px; height: 34px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; white-space: nowrap; font-family: var(--fb);
+}
+.btn-settings:hover { background: var(--gold); color: var(--ink); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex; gap: 7px; padding: 11px 14px; flex-wrap: wrap;
+  align-items: center; background: var(--ink);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.filter-btn {
+  background: transparent; border: 1px solid rgba(255,255,255,0.15);
+  color: #999; font-family: var(--fb); font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.5px; padding: 5px 12px; border-radius: 20px;
+  cursor: pointer; transition: all 0.15s; text-transform: uppercase;
+}
+.filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+.filter-btn.active        { background: var(--gold);   border-color: var(--gold);   color: var(--ink); }
+.filter-btn.red.active    { background: var(--red);    border-color: var(--red);    color: #fff; }
+.filter-btn.orange.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+.filter-btn.green.active  { background: var(--green);  border-color: var(--green);  color: #fff; }
+.filter-btn.grey.active   { background: #666; border-color: #666; color: #fff; }
+
+/* ── CATEGORIES ── */
+.category {
+  margin: 12px 14px 0;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--cat-color);
+  border-radius: 0 11px 11px 0;
+  overflow: hidden;
+  background: var(--cat-bg);
+}
+.cat-header {
+  background: var(--ink); padding: 9px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.cat-header > span:first-child { font-size: 1rem; color: var(--cat-color); }
+.cat-header > span:nth-child(2) {
+  font-family: var(--fh); font-size: 1rem; letter-spacing: 2.5px;
+  color: var(--cat-color); flex: 1;
+}
+.cat-count {
+  margin-left: auto; font-family: var(--fb); font-size: 0.62rem;
+  background: rgba(255,255,255,0.1); border-radius: 10px;
+  padding: 2px 8px; color: #aaa; font-weight: 500;
+}
+
+/* ── PRODUCT ROWS ── */
+.product-row {
+  display: flex; align-items: center;
+  padding: 9px 14px; border-top: 1px solid var(--border);
+  gap: 10px; background: var(--card); transition: background 0.1s;
+}
+.product-row:hover { background: #fafaf8; }
+.product-row.hidden { display: none !important; }
+.product-row.confirmed { opacity: 0.55; background: #f5f4f1; }
+.product-row.confirmed .prod-name { text-decoration: line-through; color: var(--muted); }
+.prod-name { font-size: 0.82rem; font-weight: 500; flex: 1; color: var(--text); }
+.prod-abbr {
+  font-family: var(--fc); font-weight: 600; font-size: 0.68rem;
+  letter-spacing: 1px; color: var(--ink); background: var(--cream);
+  padding: 1px 6px; border-radius: 5px; margin-left: 4px;
+}
+
+/* ── QTY ── */
+.qty-wrap {
+  display: flex; align-items: center;
+  background: var(--page); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.qty-btn {
+  background: transparent; border: none; color: var(--muted);
+  font-size: 1rem; width: 28px; height: 32px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; transition: color 0.1s;
+}
+.qty-btn:hover { color: var(--green); }
+.qty-btn:disabled { pointer-events: none; opacity: 0.3; }
+.qty-input {
+  background: transparent; border: none; color: var(--text);
+  font-family: var(--fb); font-size: 0.88rem; font-weight: 700;
+  width: 54px; text-align: center; outline: none; height: 32px;
+}
+.qty-input::-webkit-inner-spin-button { display: none; }
+.qty-input:disabled { color: var(--muted); }
+.unit-label { font-size: 0.62rem; color: var(--muted); min-width: 28px; }
+
+/* ── BADGES ── */
+.status-badge {
+  font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 10px;
+  letter-spacing: 0.5px; text-transform: uppercase; min-width: 60px; text-align: center;
+}
+.status-badge.critical { background: rgba(226,59,59,0.1);  color: var(--red);    border: 1px solid rgba(226,59,59,0.3); }
+.status-badge.warning  { background: rgba(224,124,20,0.1); color: var(--orange); border: 1px solid rgba(224,124,20,0.25); }
+.status-badge.ok       { background: rgba(0,168,45,0.08);  color: var(--green);  border: 1px solid rgba(0,168,45,0.25); }
+.status-badge.done     { background: var(--cream); color: var(--muted); border: 1px solid var(--border); font-size: 0.58rem; }
+
+/* ── ACTION BUTTONS ── */
+.btn-confirm {
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  font-size: 0.72rem; padding: 5px 11px; border-radius: 6px;
+  cursor: pointer; font-family: var(--fb); font-weight: 600;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-confirm:hover { border-color: var(--green); color: var(--green); background: rgba(0,168,45,0.05); }
+.btn-edit {
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  font-size: 0.68rem; padding: 5px 10px; border-radius: 6px;
+  cursor: pointer; font-family: var(--fb); transition: all 0.15s; white-space: nowrap;
+}
+.btn-edit:hover { border-color: var(--gold-dark); color: var(--gold-dark); }
+
+/* ── FREETEXT ── */
+.product-row.freetext { flex-wrap: wrap; gap: 8px; }
+.freetext-input {
+  background: var(--page); border: 1px solid var(--border); color: var(--text);
+  font-family: var(--fb); font-size: 0.82rem; padding: 6px 10px;
+  border-radius: 8px; width: 130px; outline: none;
+}
+.freetext-input:focus { border-color: var(--green); }
+.freetext-input:disabled { color: var(--muted); pointer-events: none; }
+.divider-confirmed { border: none; border-top: 1px dashed var(--border); margin: 0 14px; }
+.thresh-note { font-size: 0.67rem; color: var(--muted); text-align: center; padding: 10px 16px 0; }
+
+/* ── BOTTOM BAR ── */
+.summary-panel {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--ink); border-top: 3px solid var(--green);
+  padding: 12px 16px; display: flex; gap: 10px; z-index: 200; align-items: center;
+}
+.summary-stats { display: flex; gap: 14px; align-items: center; flex: 1; flex-wrap: wrap; }
+.stat-pill { font-size: 0.72rem; color: #bbb; }
+.stat-pill b { color: #fff; }
+.btn-generate {
+  background: var(--green); color: #fff; border: none;
+  font-family: var(--fh); font-size: 1.05rem; letter-spacing: 2px;
+  padding: 10px 20px; border-radius: 8px; cursor: pointer; white-space: nowrap;
+}
+.btn-generate:hover { background: #009926; }
+
+/* ── MODAL WHATSAPP ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; align-items: flex-end; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card); border: 1px solid var(--border); border-bottom: none;
+  border-radius: 16px 16px 0 0; width: 100%; max-width: 600px;
+  padding: 20px 20px 30px; animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-title { font-family: var(--fh); font-size: 1.3rem; letter-spacing: 2px; color: var(--ink); margin-bottom: 14px; }
+.modal-text {
+  background: var(--page); border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px; font-size: 0.78rem; line-height: 1.7; white-space: pre-wrap;
+  font-family: 'Courier New', monospace; color: var(--text);
+  max-height: 50vh; overflow-y: auto; margin-bottom: 14px;
+}
+.modal-actions { display: flex; gap: 10px; }
+.btn-copy { flex: 1; background: var(--green); color: #fff; border: none; font-family: var(--fh); font-size: 1rem; letter-spacing: 1px; padding: 11px; border-radius: 8px; cursor: pointer; }
+.btn-close { background: var(--page); color: var(--text); border: 1px solid var(--border); font-family: var(--fb); font-size: 0.82rem; padding: 11px 18px; border-radius: 8px; cursor: pointer; }
+
+/* ── SETTINGS ── */
+.settings-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; flex-direction: column; align-items: center; justify-content: flex-end; }
+.settings-overlay.open { display: flex; }
+.settings-panel { background: var(--card); width: 100%; max-width: 600px; border-radius: 16px 16px 0 0; max-height: 90vh; display: flex; flex-direction: column; }
+.settings-header {
+  background: var(--ink); border-radius: 16px 16px 0 0;
+  border-bottom: 3px solid var(--green);
+  padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.settings-header h2 { font-family: var(--fh); font-size: 1.3rem; letter-spacing: 2px; color: #fff; }
+.settings-subtitle { font-size: 0.68rem; color: #aaa; margin-top: 2px; }
+.btn-close-settings {
+  background: var(--green); border: none; color: #fff;
+  font-family: var(--fb); font-size: 0.8rem; font-weight: 600;
+  padding: 7px 14px; border-radius: 8px; cursor: pointer;
+}
+.settings-body { flex: 1; overflow-y: auto; padding: 12px 16px 30px; background: var(--page); }
+.settings-cat-title {
+  font-family: var(--fh); font-size: 0.95rem; letter-spacing: 2px;
+  color: var(--ink); padding: 12px 0 6px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 2px solid var(--border); margin-bottom: 6px;
+}
+.settings-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; margin-bottom: 4px;
+  background: var(--card); border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.settings-prod-name { font-size: 0.8rem; font-weight: 500; flex: 1; color: var(--text); }
+.settings-prod-abbr {
+  font-family: var(--fc); font-weight: 600; font-size: 0.65rem;
+  color: var(--ink); background: var(--cream);
+  padding: 1px 6px; border-radius: 4px; display: inline-block; margin-top: 2px;
+}
+.thresh-group { display: flex; align-items: center; gap: 6px; }
+.thresh-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; min-width: 18px; }
+.thresh-input {
+  background: var(--page); border: 1px solid var(--border); color: var(--text);
+  font-family: var(--fb); font-size: 0.82rem; font-weight: 600;
+  width: 52px; text-align: center; padding: 5px 4px; border-radius: 6px; outline: none;
+}
+.thresh-input:focus { border-color: var(--green); }
+.thresh-input::-webkit-inner-spin-button { display: none; }
+.settings-save-note { font-size: 0.68rem; color: var(--muted); text-align: center; padding: 16px 0 0; }
 </style>
 </head>
 <body>
 
 <header>
   <div>
-    <h1>TEQUE ONDA</h1>
+    <h1>🧀 TEQUE <span class="onda">ONDA</span></h1>
     <div class="sub">Cierre · Palermo Bonpland</div>
   </div>
   <div class="header-right">
@@ -125,7 +283,7 @@
     <span class="stat-pill">🔴 <b id="cCrit">0</b></span>
     <span class="stat-pill">🟡 <b id="cWarn">0</b></span>
     <span class="stat-pill">🟢 <b id="cOk">0</b></span>
-    <span class="stat-pill" style="color:var(--muted)">✅ <b id="cDone">0</b>/<b id="cTotal">0</b></span>
+    <span class="stat-pill">✅ <b id="cDone">0</b>/<b id="cTotal">0</b></span>
   </div>
   <button class="btn-generate" onclick="openModal()">📋 GENERAR</button>
 </div>
@@ -142,14 +300,16 @@
 </div>
 
 <div class="settings-overlay" id="settingsOverlay">
-  <div class="settings-header">
-    <div>
-      <h2>⚙️ UMBRALES DE STOCK</h2>
-      <div class="settings-subtitle">Los cambios se aplican al instante</div>
+  <div class="settings-panel">
+    <div class="settings-header">
+      <div>
+        <h2>⚙️ UMBRALES DE STOCK</h2>
+        <div class="settings-subtitle">Los cambios se aplican al instante y se guardan</div>
+      </div>
+      <button class="btn-close-settings" onclick="closeSettings()">✓ Listo</button>
     </div>
-    <button class="btn-close-settings" onclick="closeSettings()">✓ Listo</button>
+    <div class="settings-body" id="settingsBody"></div>
   </div>
-  <div class="settings-body" id="settingsBody"></div>
 </div>
 
 <script>
@@ -159,7 +319,7 @@ const catalog = [
   { id:'cachitos', cat:'CACHITOS',       label:'Cachitos',                abbr:'CACHITOS',       unit:'und',  val:0,   critAt:5,  warnAt:20 },
   { id:'eme',      cat:'MINI EMPANADAS', label:'Empanada Mechada',        abbr:'EME',            unit:'und',  val:0,   critAt:5,  warnAt:25 },
   { id:'emo',      cat:'MINI EMPANADAS', label:'Empanada Molida',         abbr:'EMO',            unit:'und',  val:38,  critAt:5,  warnAt:25 },
-  { id:'epo',      cat:'MINI EMPANADAS', label:'Empanada Pollo',          abbr:'EPO',            unit:'und',  val:0,   critAt:5,  warnAt:25 },
+  { id:'epo',      cat:'MINI EMPANADAS', label:'Empanada Pollo',         abbr:'EPO',            unit:'und',  val:0,   critAt:5,  warnAt:25 },
   { id:'ejq',      cat:'MINI EMPANADAS', label:'Empanada Jamón y Queso',  abbr:'EJQ',            unit:'und',  val:37,  critAt:5,  warnAt:25 },
   { id:'eq',       cat:'MINI EMPANADAS', label:'Empanada Queso',          abbr:'EQ',             unit:'und',  val:69,  critAt:10, warnAt:40 },
   { id:'edm',      cat:'MINI EMPANADAS', label:'Empanada Dominó',         abbr:'EDM',            unit:'und',  val:51,  critAt:10, warnAt:40 },
@@ -192,39 +352,6 @@ catalog.forEach(p => { thresholds[p.id] = { critAt: p.critAt, warnAt: p.warnAt, 
 let state = {};
 catalog.forEach(p => { state[p.id] = { val: p.val ?? 0, freeVal: p.freeVal || '', confirmed: false }; });
 
-// ── PRE-LOADED FROM WHATSAPP ───────────────────────────────────────────────
-state['choco'].val    = 0;
-state['leches'].val   = 10;
-state['cachitos'].val = 5;
-state['eme'].val      = 93;
-state['emo'].val      = 30;
-state['epo'].val      = 50;
-state['ejq'].val      = 26;
-state['eq'].val       = 49;
-state['edm'].val      = 43;
-state['epa'].val      = 9;
-state['pme'].val      = 51;
-state['pmo'].val      = 1;
-state['ppo'].val      = 46;
-state['ppz'].val      = 47;
-state['pq'].val       = 70;
-state['ppa'].val      = 76;
-state['pjq'].val      = 28;
-state['to'].val       = 103;  // 97 + 6
-state['tf'].val       = 21;
-state['tjq'].freeVal  = '16 pack y 5 und';
-state['tyo'].val      = 42;
-state['malta58'].val  = 40;
-state['maltapeq'].val = 5;
-state['maltagde'].val = 0;
-state['te'].val       = 48;
-state['mayo'].freeVal = '4B';
-state['mojito'].freeVal = '0 Taza';
-state['picante'].val  = 0;
-state['cajap'].val    = 150;
-state['cajag'].val    = 50;
-// ──────────────────────────────────────────────────────────────────────────
-
 // ── PERSIST THRESHOLDS ────────────────────────────────────────────────────
 function saveThresholds() {
   try { localStorage.setItem('tequeonda_thresholds', JSON.stringify(thresholds)); } catch(e) {}
@@ -234,9 +361,7 @@ function loadThresholds() {
     const saved = localStorage.getItem('tequeonda_thresholds');
     if (saved) {
       const parsed = JSON.parse(saved);
-      Object.keys(parsed).forEach(id => {
-        if (thresholds[id]) thresholds[id] = parsed[id];
-      });
+      Object.keys(parsed).forEach(id => { if (thresholds[id]) thresholds[id] = parsed[id]; });
     }
   } catch(e) {}
 }
@@ -244,6 +369,7 @@ loadThresholds();
 
 let currentFilter = 'all';
 
+// ── PARSERS ───────────────────────────────────────────────────────────────
 function parseMayonesa(fv) {
   if (!fv) return 0;
   fv = fv.toLowerCase().replace(/bolsas?/gi,'').replace(/\s+/g,' ').trim();
@@ -255,7 +381,6 @@ function parseMayonesa(fv) {
   if (!isNaN(num)) total += num;
   return total;
 }
-
 function parseMojito(fv) {
   if (!fv) return 0;
   fv = fv.toLowerCase().replace(/tazas?/g,'').trim();
@@ -265,6 +390,7 @@ function parseMojito(fv) {
   return isNaN(num) ? 0 : num;
 }
 
+// ── STATUS ────────────────────────────────────────────────────────────────
 function getStatus(p) {
   const t = thresholds[p.id];
   if (t.critAt === null) {
@@ -281,11 +407,11 @@ function getStatus(p) {
   if (v <= t.warnAt) return 'warning';
   return 'ok';
 }
-
 function badgeText(st) {
   return st==='critical' ? '🔴 CRÍTICO' : st==='warning' ? '🟡 BAJO' : '🟢 OK';
 }
 
+// ── ACTIONS ───────────────────────────────────────────────────────────────
 function confirmItem(id) { state[id].confirmed = true; render(); }
 function editItem(id) {
   state[id].confirmed = false; render();
@@ -308,6 +434,7 @@ function updateFree(id, val) {
   updateStats();
 }
 
+// ── FILTER ────────────────────────────────────────────────────────────────
 function setFilter(f, btn) {
   currentFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
@@ -322,6 +449,7 @@ function applyFilter() {
   });
 }
 
+// ── STATS ─────────────────────────────────────────────────────────────────
 function updateStats() {
   let crit=0,warn=0,ok=0,done=0;
   catalog.forEach(p => {
@@ -336,6 +464,7 @@ function updateStats() {
   document.getElementById('cTotal').textContent=catalog.length;
 }
 
+// ── RENDER ────────────────────────────────────────────────────────────────
 function catIcon(cat) {
   return {POSTRES:'🍫',CACHITOS:'🥐','MINI EMPANADAS':'🥟',PASTELITOS:'🫓',TEQUEÑOS:'🧀',BEBIDAS:'🍺',SALSAS:'🫙',CAJAS:'📦'}[cat]||'📌';
 }
@@ -374,7 +503,13 @@ function render() {
     const products=catalog.filter(p=>p.cat===cat);
     const pending=products.filter(p=>!state[p.id].confirmed);
     const confirmed=products.filter(p=>state[p.id].confirmed);
-    html+=`<div class="category"><div class="cat-header"><span>${catIcon(cat)}</span><span>${cat}</span><span class="cat-count">${products.length} items</span></div>`;
+    const dataCat=cat.replace(/\s/g,'_');
+    html+=`<div class="category" data-cat="${dataCat}">
+      <div class="cat-header">
+        <span>${catIcon(cat)}</span>
+        <span>${cat}</span>
+        <span class="cat-count">${products.length} items</span>
+      </div>`;
     pending.forEach(p=>{html+=buildRow(p);});
     if(confirmed.length){html+=`<hr class="divider-confirmed">`;confirmed.forEach(p=>{html+=buildRow(p);});}
     html+=`</div>`;
@@ -383,6 +518,7 @@ function render() {
   applyFilter(); updateStats();
 }
 
+// ── SETTINGS ──────────────────────────────────────────────────────────────
 function openSettings() { renderSettings(); document.getElementById('settingsOverlay').classList.add('open'); }
 function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); render(); }
 
@@ -398,7 +534,7 @@ function renderSettings() {
         html+=`<div class="settings-row">
           <div class="settings-prod-name">${p.label}<span class="settings-prod-abbr">${p.abbr}</span></div>
           <select id="st-free-${p.id}" onchange="updateFreeThresh('${p.id}',this.value)"
-            style="background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:0.8rem;padding:5px 8px;border-radius:6px;outline:none;">
+            style="background:#f4f3ee;border:1px solid #e6e4db;color:#222;font-family:'Fira Sans',sans-serif;font-size:0.8rem;padding:5px 8px;border-radius:6px;outline:none;">
             ${p.id==='mayo' ? `
               <option value="1" ${(t.freeCritAt??2)<=1?'selected':''}>≤ 1 bolsa</option>
               <option value="2" ${(t.freeCritAt??2)===2?'selected':''}>≤ 2 bolsas</option>
@@ -437,6 +573,7 @@ function updateThresh(id, field, val) {
 }
 function updateFreeThresh(id, val) { thresholds[id].freeCritAt = parseFloat(val); saveThresholds(); updateStats(); }
 
+// ── GENERATE ──────────────────────────────────────────────────────────────
 function generateMsg() {
   const cats=[...new Set(catalog.map(p=>p.cat))];
   const dateStr=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
@@ -493,7 +630,8 @@ function flashCopied() {
   btn.textContent='✅ COPIADO'; setTimeout(()=>btn.textContent='📋 COPIAR',2500);
 }
 
-document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'});
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
 render();
 </script>
 </body>
