@@ -993,7 +993,7 @@ function renderClientes(){
       var col=x.a.tipo==="ar"?"rgba(239,83,80,.1)":x.a.tipo==="an"?"rgba(255,152,0,.1)":"rgba(33,150,243,.1)";
       var tcol=x.a.tipo==="ar"?"#ef5350":x.a.tipo==="an"?"#ff9800":"#42a5f5";
       d.style.cssText="background:"+col+";border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:12px;";
-      d.innerHTML='<strong style="color:#fff;">'+x.c.nombre+'</strong> <span style="color:'+tcol+';">'+x.a.msg+'</span>';
+      d.innerHTML='<strong style="color:#171717;">'+x.c.nombre+'</strong> <span style="color:'+tcol+';">'+x.a.msg+'</span>';
       alist.appendChild(d);
     });
   }else asec.style.display="none";
