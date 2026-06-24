@@ -17,31 +17,31 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bgp);font-family:'Fira Sans',sans-serif;color:var(--txt);min-height:100vh;}
 .tabs{display:flex;background:var(--ink);border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:100;}
-.tab{flex:1;padding:11px 2px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:11px;letter-spacing:1.5px;color:#666;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
+.tab{flex:1;padding:12px 2px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;color:#666;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold);}
-.tab-icon{display:block;font-size:16px;margin-bottom:1px;}
+.tab-icon{display:block;font-size:18px;margin-bottom:1px;}
 .page{display:none;padding:14px 12px 80px;max-width:480px;margin:0 auto;}
 .page.active{display:block;}
-h2.st{font-family:Bebas Neue,sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold-d);margin-bottom:10px;padding-bottom:5px;border-bottom:2px solid var(--gold);}
+h2.st{font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:3px;color:var(--gold-d);margin-bottom:10px;padding-bottom:5px;border-bottom:2px solid var(--gold);}
 .fg{display:flex;flex-direction:column;gap:4px;}
-.fg label{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
-input,select,textarea{background:#fff;border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:'Fira Sans',sans-serif;font-size:13px;padding:8px 10px;width:100%;outline:none;transition:border-color .15s;-webkit-appearance:none;}
+.fg label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+input,select,textarea{background:#fff;border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:'Fira Sans',sans-serif;font-size:14px;padding:10px 10px;width:100%;outline:none;transition:border-color .15s;-webkit-appearance:none;}
 input:focus,select:focus,textarea:focus{border-color:var(--gold);}
 select option{background:#fff;color:var(--txt);}
 textarea{resize:none;}
 .panel{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
 .scale-row{display:flex;gap:8px;}
-.sbtn{flex:1;background:#f4f3ee;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:1px;padding:8px 4px;cursor:pointer;text-align:center;transition:all .15s;}
-.sbtn small{display:block;font-size:9px;font-family:'Fira Sans',sans-serif;margin-top:1px;}
+.sbtn{flex:1;background:#f4f3ee;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:Bebas Neue,sans-serif;font-size:14px;letter-spacing:1px;padding:10px 4px;cursor:pointer;text-align:center;transition:all .15s;}
+.sbtn small{display:block;font-size:10px;font-family:'Fira Sans',sans-serif;margin-top:1px;}
 .sbtn.active{background:var(--gold);color:#111;border-color:var(--gold);}
 .prows{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
 .prow{background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 10px 10px 12px;display:grid;grid-template-columns:1fr 58px;gap:8px;align-items:start;position:relative;}
 .prow.off{opacity:.4;}
 .rl{display:flex;flex-direction:column;gap:5px;}
 .rr{display:flex;flex-direction:column;gap:4px;align-items:flex-end;}
-.rr label{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;}
-input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--gold);padding:4px;}
-.rsub{font-family:Bebas Neue,sans-serif;font-size:14px;color:var(--ink);margin-top:2px;}
+.rr label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;}
+input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:24px;color:var(--gold);padding:4px;}
+.rsub{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--ink);margin-top:2px;}
 .tog{position:absolute;top:8px;right:8px;width:26px;height:15px;background:#ccc;border-radius:8px;cursor:pointer;border:none;transition:background .2s;}
 .tog::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;background:#fff;border-radius:50%;transition:all .2s;}
 .tog.on{background:var(--gold);}
@@ -49,7 +49,7 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 .add-btn{width:100%;background:transparent;border:1px dashed var(--border);border-radius:8px;color:var(--muted);font-size:12px;padding:8px;cursor:pointer;transition:all .15s;margin-bottom:12px;}
 .add-btn:hover{border-color:var(--gold);color:var(--gold-d);}
 .tot-box{display:flex;flex-direction:column;gap:6px;}
-.tr{display:flex;justify-content:space-between;font-size:12px;}
+.tr{display:flex;justify-content:space-between;font-size:13px;}
 .tr .tl{color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
 .tr .tv{color:var(--txt);}
 .tr.envio .tv{color:var(--green);font-weight:700;}
@@ -83,21 +83,21 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 .ctw{padding:9px 12px 0;}
 .ct{width:100%;border-collapse:collapse;}
 .ct thead tr{border-bottom:2px solid var(--border);}
-.ct thead th{font-family:Bebas Neue,sans-serif;font-size:10px;letter-spacing:1.5px;color:var(--gold-d);padding:4px 3px;text-align:left;}
+.ct thead th{font-family:Bebas Neue,sans-serif;font-size:11px;letter-spacing:1.5px;color:var(--gold-d);padding:4px 3px;text-align:left;}
 .ct thead th:not(:first-child){text-align:right;}
 .ct tbody tr{border-bottom:1px solid var(--border);}
 .ct tbody tr:last-child{border-bottom:none;}
-.ct tbody td{padding:8px 3px;font-size:11px;color:var(--txt);vertical-align:middle;}
+.ct tbody td{padding:8px 3px;font-size:12px;color:var(--txt);vertical-align:middle;}
 .ct tbody td:not(:first-child){text-align:right;}
-.ct .pn{font-weight:600;color:var(--ink);font-size:11px;line-height:1.3;}
-.ct .pn small{display:block;font-weight:400;color:var(--muted);font-size:9px;margin-top:1px;}
-.ct .pq{font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--ink);}
+.ct .pn{font-weight:600;color:var(--ink);font-size:12px;line-height:1.3;}
+.ct .pn small{display:block;font-weight:400;color:var(--muted);font-size:10px;margin-top:1px;}
+.ct .pq{font-family:Bebas Neue,sans-serif;font-size:20px;color:var(--ink);}
 .ct .pp{color:var(--muted);white-space:nowrap;}
 .ct .ps{font-weight:700;color:var(--ink);white-space:nowrap;}
 .ctots{margin:4px 12px 0;border-top:1px solid var(--border);padding:8px 0 3px;display:flex;flex-direction:column;gap:5px;}
 .ctr{display:flex;justify-content:space-between;}
-.ctr .lbl{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-.ctr .val{font-size:10px;color:var(--muted);}
+.ctr .lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.ctr .val{font-size:12px;color:var(--muted);}
 .ctr.envio .val{color:var(--green);font-weight:700;}
 .ctf{display:flex;justify-content:space-between;align-items:center;background:var(--ink);margin:8px 12px 0;padding:11px 13px;border-radius:7px;}
 .ctf .lbl{font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:2px;color:#fff;}
@@ -127,17 +127,17 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 .cobro.vencido{border-color:rgba(239,83,80,.35);}
 .cobro.parcial{border-color:rgba(33,150,243,.35);}
 .cobro-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
-.cobro-nombre{font-size:16px;font-weight:700;color:var(--ink);font-family:Bebas Neue,sans-serif;letter-spacing:1px;}
-.cobro-num{font-size:10px;color:var(--muted);margin-top:2px;}
+.cobro-nombre{font-size:17px;font-weight:700;color:var(--ink);font-family:Bebas Neue,sans-serif;letter-spacing:1px;}
+.cobro-num{font-size:11px;color:var(--muted);margin-top:2px;}
 .cobro-monto{text-align:right;}
-.cobro-deuda{font-family:Bebas Neue,sans-serif;font-size:20px;color:var(--red);line-height:1;}
+.cobro-deuda{font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--red);line-height:1;}
 .cobro-deuda.p{color:#42a5f5;}
 .cobro-sub{font-size:10px;color:var(--muted);margin-top:1px;}
 .cobro-meta{font-size:11px;color:var(--muted);margin-bottom:10px;display:flex;gap:10px;flex-wrap:wrap;}
 .cvence{color:#ef5350;font-weight:600;}
 .cvence.ok{color:#ff9800;}
 .cobro-acts{display:flex;gap:6px;}
-.cbtn{flex:1;border-radius:6px;font-size:11px;font-weight:600;padding:7px 4px;cursor:pointer;text-align:center;border:none;}
+.cbtn{flex:1;border-radius:6px;font-size:12px;font-weight:600;padding:8px 4px;cursor:pointer;text-align:center;border:none;}
 .cbtn.pay{background:rgba(76,175,80,.15);color:#4caf50;border:1px solid rgba(76,175,80,.3);}
 .cbtn.par{background:rgba(33,150,243,.12);color:#42a5f5;border:1px solid rgba(33,150,243,.25);}
 .cbtn.ver{background:var(--gold-dim);color:var(--gold-d);border:1px solid var(--gold-b);}
@@ -160,10 +160,10 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 .oitem{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px;transition:border-color .15s;box-shadow:0 1px 3px rgba(0,0,0,.04);}
 .oitem:hover{border-color:var(--gold-b);}
 .oitem-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
-.onum{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--ink);letter-spacing:2px;}
-.omonto{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--gold-d);}
-.ocliente{font-size:13px;font-weight:600;color:var(--bgc);}
-.ometa{font-size:10px;color:var(--muted);margin-top:2px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;}
+.onum{font-family:Bebas Neue,sans-serif;font-size:17px;color:var(--ink);letter-spacing:2px;}
+.omonto{font-family:Bebas Neue,sans-serif;font-size:17px;color:var(--gold-d);}
+.ocliente{font-size:14px;font-weight:600;color:var(--ink);}
+.ometa{font-size:11px;color:var(--muted);margin-top:2px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;}
 .odel{background:none;border:none;color:#333;font-size:14px;cursor:pointer;padding:4px;float:right;}
 .odel:hover{color:var(--red);}
 .oacts{display:flex;gap:6px;margin-top:10px;}
@@ -181,18 +181,18 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 .clicard.ar{border-color:rgba(239,83,80,.4);}
 .clicard.an{border-color:rgba(255,152,0,.4);}
 .clicard.ab{border-color:rgba(33,150,243,.4);}
-.clinombre{font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--bgc);letter-spacing:1px;}
-.clidir{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:8px;}
+.clinombre{font-family:Bebas Neue,sans-serif;font-size:20px;color:var(--ink);letter-spacing:1px;}
+.clidir{font-size:12px;color:var(--muted);margin-top:2px;margin-bottom:8px;}
 .clistats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
 .csb{background:#f4f3ee;border-radius:6px;padding:8px;text-align:center;}
-.csv{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--ink);}
-.csl{font-size:9px;color:var(--muted);margin-top:1px;}
+.csv{font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--ink);}
+.csl{font-size:10px;color:var(--muted);margin-top:1px;}
 .clialerta{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;margin-bottom:10px;}
 .ar .clialerta{background:rgba(239,83,80,.12);color:#ef5350;}
 .an .clialerta{background:rgba(255,152,0,.12);color:#ff9800;}
 .ab .clialerta{background:rgba(33,150,243,.12);color:#42a5f5;}
 .cliacts{display:flex;gap:6px;}
-.cabtn{flex:1;border-radius:6px;font-size:11px;font-weight:600;padding:7px 4px;cursor:pointer;text-align:center;border:none;}
+.cabtn{flex:1;border-radius:6px;font-size:12px;font-weight:600;padding:8px 4px;cursor:pointer;text-align:center;border:none;}
 .cabtn.np{background:var(--gold);color:#111;border:1px solid var(--gold);}
 .cabtn.ed{background:#f4f3ee;color:var(--muted);border:1px solid var(--border);}
 .cabtn.el{background:rgba(226,59,59,.08);color:var(--red);border:1px solid rgba(226,59,59,.3);}
@@ -202,7 +202,7 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 .moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:flex-end;justify-content:center;}
 .moverlay.open{display:flex;}
 .mbox{background:#fff;border:1px solid var(--border);border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 -4px 20px rgba(0,0,0,.15);}
-.mtitle{font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:2px;color:var(--bgc);margin-bottom:4px;}
+.mtitle{font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:2px;color:var(--ink);margin-bottom:4px;}
 .msub{font-size:12px;color:var(--muted);margin-bottom:16px;}
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
 .mbtns{display:flex;gap:8px;margin-top:14px;}
@@ -213,7 +213,7 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 #mapDrawer.open{transform:translateY(0);}
 .dhandle{width:36px;height:4px;background:#ccc;border-radius:2px;margin:0 auto 14px;}
 .dtitle{font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:2px;color:var(--ink);margin-bottom:3px;}
-.dsub{font-size:11px;color:var(--bgc);margin-bottom:14px;}
+.dsub{font-size:11px;color:var(--muted);margin-bottom:14px;}
 </style>
 </head>
 <body>
@@ -371,10 +371,10 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 <div class="page" id="pg3">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
     <h2 class="st" style="margin-bottom:0;border-bottom:none">CLIENTES</h2>
-    <button id="btnNuevoCli2" style="background:var(--gold);color:#1111;border:none;border-radius:6px;padding:7px 12px;font-family:Bebas Neue,sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer;">+ NUEVO</button>
+    <button id="btnNuevoCli2" style="background:var(--gold);color:#111;border:none;border-radius:6px;padding:7px 12px;font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;">+ NUEVO</button>
   </div>
   <h2 class="st">PRESENCIA POR BARRIO</h2>
-  <div style="background:var(--bgc);border:1px solid var(--gold-b);border-radius:10px;margin-bottom:14px;min-height:100px;">
+  <div style="background:var(--txt);border:1px solid var(--gold-b);border-radius:10px;margin-bottom:14px;min-height:100px;">
     <div id="mapInner"></div>
   </div>
   <div id="alertasSection" style="display:none;margin-bottom:14px">
@@ -442,6 +442,13 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
   <h2 class="st">PRODUCTOS MÁS VENDIDOS</h2>
   <div style="background:var(--txt);border:2px solid var(--gold-b);border-radius:10px;padding:14px;margin-bottom:14px;">
     <div id="topProductos"></div>
+  </div>
+
+  <!-- CLIENTES - VENTAS POR CLIENTE -->
+  <h2 class="st">VENTAS POR CLIENTE</h2>
+  <div style="background:var(--txt);border:2px solid var(--gold-b);border-radius:10px;padding:14px;margin-bottom:14px;">
+    <div style="font-size:10px;color:var(--muted);margin-bottom:10px;">Acumulado del año | Últimos 30 días en la columna "Mes"</div>
+    <div id="cliStatsTable"></div>
   </div>
 
   <!-- ALERTAS DE NEGOCIO -->
@@ -908,7 +915,7 @@ function renderMap(clientes){
   var cont=document.getElementById("mapInner");
   var withB=clientes.filter(c=>c.barrio);
   if(!withB.length){
-    cont.innerHTML='<div style="display:flex;align-items:center;justify-content:center;min-height:100px;color:#555;font-size:13px;text-align:center;padding:20px">Completá el barrio en cada cliente<br>para ver la presencia</div>';
+    cont.innerHTML='<div style="display:flex;align-items:center;justify-content:center;min-height:100px;color:#bbb;font-size:13px;text-align:center;padding:20px">Completá el barrio en cada cliente<br>para ver la presencia</div>';
     return;
   }
   var barrios={};
@@ -917,7 +924,7 @@ function renderMap(clientes){
   var wrap=document.createElement("div");
   wrap.style.cssText="padding:8px;display:flex;flex-direction:column;gap:5px;";
   var hdr=document.createElement("div");
-  hdr.style.cssText="font-size:9px;color:var(--muted);letter-spacing:2px;font-weight:600;margin-bottom:4px;";
+  hdr.style.cssText="font-size:9px;color:var(--gold);letter-spacing:2px;font-weight:600;margin-bottom:4px;text-transform:uppercase;";
   hdr.textContent="BARRIOS CON PRESENCIA";
   wrap.appendChild(hdr);
   entries.forEach(function(entry){
@@ -926,15 +933,15 @@ function renderMap(clientes){
     var color=als.length===cs.length?"#ef5350":als.length>0?"#ff9800":"#4caf50";
     var size=Math.max(10,Math.min(24,8+Math.round(cs.reduce(function(a,c){var s=getCliStats(c.id);return a+s.avgMoney*s.total;},0)/40000)));
     var row=document.createElement("div");
-    row.style.cssText="display:flex;align-items:center;gap:8px;padding:6px 8px;background:#111;border-radius:6px;border-left:3px solid "+color+";cursor:pointer;";
+    row.style.cssText="display:flex;align-items:center;gap:8px;padding:6px 8px;background:#1a1a1a;border-radius:6px;border-left:3px solid "+color+";cursor:pointer;";
     var dot=document.createElement("div");
     dot.style.cssText="width:"+size+"px;height:"+size+"px;background:"+color+";border-radius:50%;flex-shrink:0;opacity:.85;";
     var info=document.createElement("div");
     info.style.cssText="flex:1;min-width:0;";
-    info.innerHTML='<div style="font-size:12px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+barrio+'</div><div style="font-size:9px;color:var(--muted);margin-top:1px;">'+cs.map(c=>c.nombre).join(", ")+'</div>';
+    info.innerHTML='<div style="font-size:12px;font-weight:600;color:#ddd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+barrio+'</div><div style="font-size:9px;color:#999;margin-top:1px;">'+cs.map(c=>c.nombre).join(", ")+'</div>';
     var cnt=document.createElement("div");
     cnt.style.cssText="text-align:right;flex-shrink:0;";
-    cnt.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:16px;color:'+color+';">'+cs.length+'</div><div style="font-size:8px;color:var(--muted);">cliente'+(cs.length!==1?"s":"")+'</div>';
+    cnt.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:16px;color:'+color+';">'+cs.length+'</div><div style="font-size:8px;color:#999;">cliente'+(cs.length!==1?"s":"")+'</div>';
     row.appendChild(dot);row.appendChild(info);row.appendChild(cnt);
     row.addEventListener("click",function(){openMapDrawer(barrio,cs);});
     wrap.appendChild(row);
@@ -1009,11 +1016,13 @@ function renderClientes(){
     var s=getCliStats(c.id);var a=getCliAlerta(c,s);
     var div=document.createElement("div");
     div.className="clicard"+(a?" "+a.tipo:"");
+    div.style.cssText="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.05);";
+    if(a)div.style.cssText+=a.tipo==="ar"?"border-color:rgba(239,83,80,.4);":"border-color:"+( a.tipo==="an"?"rgba(255,152,0,.4);":"rgba(33,150,243,.4);" );
     var aH=a?'<div class="clialerta">⚠ '+a.msg+'</div>':"";
     var frH=s.frecReal?'<div style="font-size:10px;color:var(--muted);margin-bottom:8px;">📅 Cada ~'+s.frecReal+' días · Próximo en ~'+Math.max(0,s.frecReal-(s.diasUltimo||0))+' días</div>':"";
     div.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">'
       +'<div><div class="clinombre">'+c.nombre+'</div><div class="clidir">📍 '+([c.direccion,c.barrio,c.provincia].filter(Boolean).join(", ")||"Sin dirección")+'</div></div>'
-      +'<span style="font-size:10px;color:var(--muted);background:#111;padding:2px 7px;border-radius:4px;">'+( c.tipo||"")+'</span>'
+      +'<span style="font-size:10px;color:var(--muted);background:#f4f3ee;padding:2px 7px;border-radius:4px;">'+( c.tipo||"")+'</span>'
       +'</div>'
       +aH
       +'<div class="clistats">'
@@ -1179,7 +1188,7 @@ function renderStats(){
   var topCli=Object.values(cliMonto).sort(function(a,b){return b.monto-a.monto;}).slice(0,5);
   var topCliEl=document.getElementById("topClientes");
   if(!topCli.length){
-    topCliEl.innerHTML='<div style="text-align:center;color:var(--bgc);font-size:13px;padding:12px;">Sin órdenes este mes</div>';
+    topCliEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin órdenes este mes</div>';
   }else{
     var maxCliMonto=topCli[0].monto;
     topCliEl.innerHTML="";
@@ -1191,7 +1200,7 @@ function renderStats(){
       if(i===topCli.length-1)row.style.borderBottom="none";
       row.innerHTML='<div style="font-size:16px;">'+medals[i]+'</div>'
         +'<div style="flex:1;min-width:0;">'
-          +'<div style="font-size:12px;font-weight:600;color:var(--bgc);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.nombre+'</div>'
+          +'<div style="font-size:12px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.nombre+'</div>'
           +'<div style="background:#e6e4db;border-radius:3px;height:4px;margin-top:4px;overflow:hidden;">'
             +'<div style="width:'+barW+'%;height:100%;background:var(--gold);border-radius:3px;"></div>'
           +'</div>'
@@ -1220,7 +1229,7 @@ function renderStats(){
   var topProd=Object.values(prodStats).sort(function(a,b){return b.monto-a.monto;});
   var topProdEl=document.getElementById("topProductos");
   if(!topProd.length){
-    topProdEl.innerHTML='<div style="text-align:center;color:var(--bgc);font-size:13px;padding:12px;">Sin datos este mes</div>';
+    topProdEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin datos este mes</div>';
   }else{
     var maxProdMonto=topProd[0].monto;
     topProdEl.innerHTML="";
@@ -1231,7 +1240,7 @@ function renderStats(){
       if(i===topProd.length-1)row.style.borderBottom="none";
       row.innerHTML=(p.cod?'<span style="background:#eceae3;color:#111;font-family:Oswald,sans-serif;font-weight:600;font-size:10px;letter-spacing:1px;padding:1px 6px;border-radius:4px;flex-shrink:0;">'+p.cod+'</span>':'')
         +'<div style="flex:1;min-width:0;">'
-          +'<div style="font-size:11px;font-weight:600;color:var(--bgc);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+p.name+'</div>'
+          +'<div style="font-size:11px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+p.name+'</div>'
           +'<div style="background:#e6e4db;border-radius:3px;height:4px;margin-top:4px;overflow:hidden;">'
             +'<div style="width:'+barW+'%;height:100%;background:var(--gold);border-radius:3px;"></div>'
           +'</div>'
@@ -1240,6 +1249,46 @@ function renderStats(){
         +'<div style="font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--gold-d);flex-shrink:0;">'+fmt(p.monto)+'</div>';
       topProdEl.appendChild(row);
     });
+  }
+
+  // ── CLIENTES CON STATS (TODO EL AÑO + ESTE MES) ──
+  var allCliStats={};
+  clientes.forEach(function(c){
+    var cliOrders=orders.filter(function(o){return o.clienteId===c.id;});
+    var cliMesOrders=cliOrders.filter(function(o){var d=new Date(o.createdAt);return d.getFullYear()===curYear&&d.getMonth()===curMonth;});
+    var anoMonto=cliOrders.reduce(function(a,o){return a+o.money;},0);
+    var mesMonto=cliMesOrders.reduce(function(a,o){return a+o.money;},0);
+    if(cliOrders.length>0){
+      allCliStats[c.id]={nombre:c.nombre,anoMonto:anoMonto,mesMonto:mesMonto,anoCount:cliOrders.length,mesCount:cliMesOrders.length};
+    }
+  });
+  var cliStatsList=Object.values(allCliStats).sort(function(a,b){return b.anoMonto-a.anoMonto;});
+  var totalAnoMonto=cliStatsList.reduce(function(a,c){return a+c.anoMonto;},0);
+  var cliStatsEl=document.getElementById("cliStatsTable");
+  if(cliStatsList.length){
+    var html='<div style="overflow-x:auto;">'
+      +'<table style="width:100%;font-size:11px;border-collapse:collapse;">'
+      +'<thead><tr style="background:#111;border-bottom:2px solid var(--gold);">'
+      +'<th style="text-align:left;padding:8px;color:var(--gold);font-weight:600;">Cliente</th>'
+      +'<th style="text-align:right;padding:8px;color:var(--gold);font-weight:600;">Año</th>'
+      +'<th style="text-align:right;padding:8px;color:var(--gold);font-weight:600;">%</th>'
+      +'<th style="text-align:right;padding:8px;color:var(--gold);font-weight:600;">Mes</th>'
+      +'<th style="text-align:right;padding:8px;color:var(--gold);font-weight:600;">Órdenes</th>'
+      +'</tr></thead><tbody>';
+    cliStatsList.forEach(function(c){
+      var pct=totalAnoMonto>0?Math.round(c.anoMonto/totalAnoMonto*100):0;
+      html+='<tr style="border-bottom:1px solid rgba(255,255,255,.05);">'
+        +'<td style="text-align:left;padding:8px;color:#ddd;">'+c.nombre+'</td>'
+        +'<td style="text-align:right;padding:8px;color:var(--gold);font-weight:600;">'+fmt(c.anoMonto)+'</td>'
+        +'<td style="text-align:right;padding:8px;color:var(--gold);">'+pct+'%</td>'
+        +'<td style="text-align:right;padding:8px;color:var(--muted);">'+fmt(c.mesMonto)+'</td>'
+        +'<td style="text-align:right;padding:8px;color:var(--muted);">'+c.anoCount+' ('+c.mesCount+')</td>'
+        +'</tr>';
+    });
+    html+='</tbody></table></div>';
+    cliStatsEl.innerHTML=html;
+  }else{
+    cliStatsEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin datos</div>';
   }
 
   // ── ALERTAS DE NEGOCIO ──
