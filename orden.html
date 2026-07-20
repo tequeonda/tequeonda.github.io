@@ -17,21 +17,21 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bgp);font-family:'Fira Sans',sans-serif;color:var(--txt);min-height:100vh;}
 .tabs{display:flex;background:var(--ink);border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:100;}
-.tab{flex:1;padding:11px 2px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:11px;letter-spacing:1.5px;color:#666;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
+.tab{flex:1;padding:12px 2px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;color:#666;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold);}
-.tab-icon{display:block;font-size:16px;margin-bottom:1px;}
+.tab-icon{display:block;font-size:18px;margin-bottom:1px;}
 .page{display:none;padding:14px 12px 80px;max-width:480px;margin:0 auto;}
 .page.active{display:block;}
-h2.st{font-family:Bebas Neue,sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold-d);margin-bottom:10px;padding-bottom:5px;border-bottom:2px solid var(--gold);}
+h2.st{font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:3px;color:var(--gold-d);margin-bottom:10px;padding-bottom:5px;border-bottom:2px solid var(--gold);}
 .fg{display:flex;flex-direction:column;gap:4px;}
-.fg label{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.fg label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
 input,select,textarea{background:#fff;border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:'Fira Sans',sans-serif;font-size:13px;padding:8px 10px;width:100%;outline:none;transition:border-color .15s;-webkit-appearance:none;}
 input:focus,select:focus,textarea:focus{border-color:var(--gold);}
 select option{background:#fff;color:var(--txt);}
 textarea{resize:none;}
 .panel{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
 .scale-row{display:flex;gap:8px;}
-.sbtn{flex:1;background:#f4f3ee;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:1px;padding:8px 4px;cursor:pointer;text-align:center;transition:all .15s;}
+.sbtn{flex:1;background:#f4f3ee;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:Bebas Neue,sans-serif;font-size:14px;letter-spacing:1px;padding:10px 4px;cursor:pointer;text-align:center;transition:all .15s;}
 .sbtn small{display:block;font-size:9px;font-family:'Fira Sans',sans-serif;margin-top:1px;}
 .sbtn.active{background:var(--gold);color:#111;border-color:var(--gold);}
 .prows{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
@@ -160,9 +160,9 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 .oitem{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px;transition:border-color .15s;box-shadow:0 1px 3px rgba(0,0,0,.04);}
 .oitem:hover{border-color:var(--gold-b);}
 .oitem-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
-.onum{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--ink);letter-spacing:2px;}
+.onum{font-family:Bebas Neue,sans-serif;font-size:17px;color:var(--ink);letter-spacing:2px;}
 .omonto{font-family:Bebas Neue,sans-serif;font-size:16px;color:var(--gold-d);}
-.ocliente{font-size:13px;font-weight:600;color:var(--ink);}
+.ocliente{font-size:14px;font-weight:600;color:var(--ink);}
 .ometa{font-size:10px;color:var(--muted);margin-top:2px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;}
 .odel{background:none;border:none;color:#333;font-size:14px;cursor:pointer;padding:4px;float:right;}
 .odel:hover{color:var(--red);}
@@ -181,7 +181,7 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 .clicard.ar{border-color:rgba(239,83,80,.4);}
 .clicard.an{border-color:rgba(255,152,0,.4);}
 .clicard.ab{border-color:rgba(33,150,243,.4);}
-.clinombre{font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--ink);letter-spacing:1px;}
+.clinombre{font-family:Bebas Neue,sans-serif;font-size:20px;color:var(--ink);letter-spacing:1px;}
 .clidir{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:8px;}
 .clistats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
 .csb{background:#f4f3ee;border-radius:6px;padding:8px;text-align:center;}
@@ -618,7 +618,7 @@ function showPage(idx){
   });
   if(idx===2)renderCobros();
   if(idx===3)renderClientes();
-  if(idx===4)renderStats();
+  if(idx===4){renderStats();setTimeout(drawDonut,100);}
   if(idx===5)renderPrecios();
   if(idx===6)renderForecast();
 }
@@ -1360,29 +1360,9 @@ function renderStats(){
     if(topProdEl)topProdEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin datos este mes</div>';
   }else{
     var totalProdMonto=topProd.reduce(function(a,p){return a+p.monto;},0);
-    // Donut chart
-    var canvas=document.getElementById("donutChart");
-    if(canvas&&canvas.getContext){
-      var ctx=canvas.getContext("2d");
-      canvas.width=140;canvas.height=140;
-      ctx.clearRect(0,0,140,140);
-      var cx=70,cy=70,r=58,ri=36,startAngle=-Math.PI/2;
-      topProd.forEach(function(p,i){
-        var slice=(p.monto/totalProdMonto)*Math.PI*2;
-        ctx.beginPath();ctx.moveTo(cx,cy);
-        ctx.arc(cx,cy,r,startAngle,startAngle+slice);
-        ctx.closePath();
-        ctx.fillStyle=donutColors[i%donutColors.length];ctx.fill();
-        startAngle+=slice;
-      });
-      ctx.beginPath();ctx.arc(cx,cy,ri,0,Math.PI*2);
-      ctx.fillStyle="#fff";ctx.fill();
-      ctx.fillStyle="#111";ctx.font="bold 10px sans-serif";
-      ctx.textAlign="center";ctx.textBaseline="middle";
-      ctx.fillText(fmt(totalProdMonto),cx,cy-6);
-      ctx.fillStyle="#888";ctx.font="8px sans-serif";
-      ctx.fillText("este mes",cx,cy+7);
-    }
+    // Store donut data globally and draw after tab is visible
+    window._donutData={prods:topProd,total:totalProdMonto,colors:donutColors};
+    setTimeout(drawDonut,50);
     // Legend
     if(topProdEl){
       topProdEl.innerHTML="";
@@ -1662,12 +1642,16 @@ function renderForecast(){
     var cOrds=orders.filter(function(o){return o.clienteId===c.id;}).sort(function(a,b){return new Date(a.createdAt)-new Date(b.createdAt);});
     if(!cOrds.length)return;
     var s=getCliStats(c.id);
-    var freq=s.frecReal||parseInt(c.frecuencia)||30;
+    // Use configured frequency if not enough history to calculate real frequency
+    var freq=s.frecReal&&s.total>=3?s.frecReal:parseInt(c.frecuencia)||30;
     var diasDesde=s.diasUltimo||0;
     var diasParaProximo=Math.max(0,freq-diasDesde);
-    // Include if within fcWindow or overdue (might order any day)
-    var priority=diasDesde>freq?"VENCIDO":diasParaProximo<=fcWindow?"ESTA SEMANA":"PRÓXIMAMENTE";
-    if(diasParaProximo>fcWindow&&diasDesde<=freq)return; // skip if not due soon
+    // VENCIDO only if clearly overdue with meaningful frequency data
+    var isVencido=diasDesde>freq&&freq>=7; // minimum 7 days to avoid false positives
+    var priority=isVencido?"VENCIDO":diasParaProximo<=fcWindow?"ESTA SEMANA":"PRÓXIMAMENTE";
+    // Filter: show ESTA SEMANA within window, VENCIDO always visible, PRÓXIMAMENTE hidden
+    // fcWindow controls how far ahead we show future orders
+    if(!isVencido&&diasParaProximo>fcWindow)return;
     // Average products from last 3 orders
     var last3=cOrds.slice(-3);
     var prodAvg={};
@@ -1689,6 +1673,7 @@ function renderForecast(){
       freq:freq,
       avgMoney:s.avgMoney,
       priority:priority,
+      isVencido:isVencido,
       prods:prodList,
       lastOrder:cOrds[cOrds.length-1]
     });
@@ -1752,12 +1737,12 @@ function renderForecast(){
   if(fcEmpty)fcEmpty.style.display="none";
   fcList.innerHTML="";
   forecasts.forEach(function(f){
-    var isVenc=f.priority==="VENCIDO";
-    var isSoon=f.priority==="ESTA SEMANA";
+    var isVenc=f.isVencido||f.priority==="VENCIDO";
+    var isSoon=!isVenc&&(f.priority==="ESTA SEMANA"||f.diasParaProximo<=fcWindow);
     var borderColor=isVenc?"var(--red)":isSoon?"var(--gold)":"var(--border)";
     var card=document.createElement("div");
     card.style.cssText="background:#fff;border:1px solid "+borderColor+";border-left:4px solid "+borderColor+";border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.05);";
-    var badge=isVenc?'<span style="background:rgba(226,59,59,.1);color:var(--red);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(226,59,59,.3);">⚠ VENCIDO '+f.diasDesde+'d</span>'
+    var badge=isVenc?'<span style="background:rgba(226,59,59,.1);color:var(--red);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(226,59,59,.3);">⚠ VENCIDO hace '+f.diasDesde+'d (frec. ~'+f.freq+'d)</span>'
       :isSoon?'<span style="background:var(--gold-dim);color:var(--gold-d);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid var(--gold-b);">📅 EN '+f.diasParaProximo+'d</span>'
       :'<span style="background:#f4f3ee;color:var(--muted);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">~'+f.diasParaProximo+'d</span>';
     var prodsHtml=f.prods.map(function(p){
@@ -1780,16 +1765,42 @@ function renderForecast(){
   });
 }
 
-// Forecast window buttons
+// Forecast window buttons - filter which CLIENTS appear based on their next order date
 ["fw0","fw1","fw2"].forEach(function(id){
   var btn=document.getElementById(id);
   if(btn)btn.addEventListener("click",function(){
     document.querySelectorAll("[data-fw]").forEach(function(x){x.classList.remove("active");});
     btn.classList.add("active");
     fcWindow=parseInt(btn.dataset.fw);
-    renderForecast();
+    renderForecast(); // re-runs full filter: shows clients whose next order falls within fcWindow days
   });
 });
+
+function drawDonut(){
+  var canvas=document.getElementById("donutChart");
+  if(!canvas||!window._donutData)return;
+  var d=window._donutData;
+  if(!d.prods||!d.prods.length)return;
+  var ctx=canvas.getContext("2d");
+  canvas.width=140;canvas.height=140;
+  ctx.clearRect(0,0,140,140);
+  var cx=70,cy=70,r=58,ri=36,startAngle=-Math.PI/2;
+  d.prods.forEach(function(p,i){
+    var slice=(p.monto/d.total)*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,startAngle,startAngle+slice);
+    ctx.closePath();
+    ctx.fillStyle=d.colors[i%d.colors.length];ctx.fill();
+    startAngle+=slice;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,ri,0,Math.PI*2);
+  ctx.fillStyle="#fff";ctx.fill();
+  ctx.fillStyle="#111";ctx.font="bold 10px sans-serif";
+  ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.fillText(fmt(d.total),cx,cy-6);
+  ctx.fillStyle="#888";ctx.font="8px sans-serif";
+  ctx.fillText("este mes",cx,cy+7);
+}
 
 // ── INIT ──
 document.getElementById("fechaIn").valueAsDate=new Date();
