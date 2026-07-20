@@ -1376,7 +1376,6 @@ function renderStats(){
       topProdEl.appendChild(row);
     });
   }
-
   // ── CLIENTES CON STATS (TODO EL AÑO + ESTE MES) ──
   var allCliStats={};
   clientes.forEach(function(c){
@@ -1422,8 +1421,8 @@ function renderStats(){
     cliStatsEl.innerHTML=html;
   }else{
     cliStatsEl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">Sin datos</div>';
-  }                     
-    // ── PRODUCTOS MÁS VENDIDOS + DONUT ──
+  }
+  // ── PRODUCTOS MÁS VENDIDOS + DONUT ──
   var prodStats={};
   var donutColors=["#FFC72C","#111111","#00a82d","#e07c14","#3499c7","#e23b3b","#9c27b0","#c79500","#888","#00d838"];
   orders.filter(function(o){
