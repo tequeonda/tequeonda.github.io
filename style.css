@@ -112,6 +112,7 @@ header {
     justify-content: space-between;
     padding: 10px 40px;
     border-bottom: 1px solid rgba(255, 199, 44, 0.12);
+    transition: padding 0.3s ease;
 }
 
 .header-top img {
@@ -128,6 +129,7 @@ header {
     gap: 4px;
     padding: 4px 24px;
     background-color: var(--dark2);
+    transition: padding 0.3s ease;
 }
 
 .header-nav a {
@@ -137,8 +139,25 @@ header {
     color: rgba(255, 255, 255, 0.7);
     padding: 12px 20px;
     border-bottom: 3px solid transparent;
-    transition: color 0.2s ease, border-color 0.2s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, padding 0.3s ease;
     white-space: nowrap;
+}
+
+/* Header plegado al hacer scroll */
+header.scrolled {
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.75);
+}
+
+header.scrolled .header-top {
+    padding: 4px 40px;
+}
+
+header.scrolled .header-top img {
+    height: 52px;
+}
+
+header.scrolled .header-nav a {
+    padding: 8px 20px;
 }
 
 .header-nav a:hover {
@@ -682,14 +701,26 @@ header {
 .sucursales-info-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     font-size: 1rem;
     color: var(--text);
 }
 
+.sucursales-info-item .icon-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    background-color: rgba(255, 199, 44, 0.14);
+    border: 1px solid rgba(224, 168, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+}
+
 .sucursales-info-item i {
     color: var(--gold-dark);
-    font-size: 1.2rem;
+    font-size: 1.05rem;
 }
 
 .map-wrapper {
@@ -723,18 +754,26 @@ footer {
     margin-top: 16px;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 14px;
 }
 
 .redes-sociales a {
-    color: rgba(255, 255, 255, 0.55);
-    font-size: 1.5rem;
-    transition: color 0.2s ease, transform 0.2s ease;
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    background-color: var(--gold);
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .redes-sociales a:hover {
-    color: var(--gold);
-    transform: scale(1.15);
+    background-color: var(--gold-dark);
+    color: var(--dark);
+    transform: scale(1.08);
 }
 
 
@@ -754,11 +793,27 @@ footer {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.05rem;
     letter-spacing: 0.1em;
-    padding: 14px 36px;
-    border-radius: 50px;
+    padding: 14px 18px 14px 28px;
+    border-radius: 20px;
     box-shadow: 0 6px 24px rgba(192, 57, 43, 0.5);
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pedir-fixed-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    background-color: #fff;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex: none;
 }
 
 .pedir-fixed:hover {
@@ -773,7 +828,7 @@ footer {
     right: 24px;
     z-index: 200;
     background-color: #25D366;
-    border-radius: 50%;
+    border-radius: 20px;
     width: 56px;
     height: 56px;
     display: flex;
@@ -787,9 +842,9 @@ footer {
     transform: scale(1.1);
 }
 
-.whatsapp img {
-    width: 30px;
-    height: 30px;
+.whatsapp i {
+    color: #fff;
+    font-size: 1.7rem;
 }
 
 
@@ -845,6 +900,14 @@ footer {
 
     .header-top img {
         height: 62px;
+    }
+
+    header.scrolled .header-top {
+        padding: 4px 20px;
+    }
+
+    header.scrolled .header-top img {
+        height: 42px;
     }
 
     /* Mostrar hamburger */
@@ -1152,4 +1215,196 @@ footer {
         font-size: 0.78rem;
         padding: 9px 18px;
     }
+}
+
+
+/* =====================
+   14. BANNER PROMO
+   ===================== */
+.promo-banner {
+    padding: 0;
+    background-color: var(--dark);
+}
+
+.promo-banner-bg {
+    position: relative;
+    width: 100%;
+    min-height: 440px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.promo-banner-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 65% 70%;
+}
+
+.promo-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(13,10,5,0.95) 0%, rgba(13,10,5,0) 14%),
+        linear-gradient(90deg,
+            rgba(13,10,5,0.94) 0%,
+            rgba(13,10,5,0.82) 30%,
+            rgba(13,10,5,0.35) 55%,
+            rgba(13,10,5,0) 75%);
+}
+
+.promo-banner-content {
+    position: relative;
+    z-index: 2;
+    padding: 60px 8%;
+    max-width: 460px;
+}
+
+.promo-banner-content .promo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold);
+    color: var(--dark);
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 50px;
+}
+
+.promo-banner-title {
+    font-family: 'Bebas Neue', sans-serif;
+    color: #fff;
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
+    line-height: 1.05;
+    margin-top: 14px;
+    letter-spacing: 0.02em;
+}
+
+.promo-banner-off {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: clamp(1.6rem, 3.5vw, 2rem);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+}
+
+.promo-banner-content .btn {
+    margin-top: 18px;
+}
+
+@media (max-width: 600px) {
+    .promo-banner-bg {
+        min-height: 460px;
+        align-items: flex-end;
+    }
+
+    .promo-banner-overlay {
+        background:
+            linear-gradient(180deg, rgba(13,10,5,0.95) 0%, rgba(13,10,5,0) 14%),
+            linear-gradient(0deg,
+                rgba(13,10,5,0.95) 0%,
+                rgba(13,10,5,0.85) 35%,
+                rgba(13,10,5,0.25) 65%,
+                rgba(13,10,5,0) 85%);
+    }
+
+    .promo-banner-content {
+        max-width: 100%;
+        padding: 32px 5% 36px;
+    }
+}
+
+
+/* =====================
+   13. CATEGORÍAS RÁPIDAS (debajo de header)
+   ===================== */
+.cat-strip {
+    background-color: var(--dark);
+    padding: 48px 8%;
+    border-bottom: 1px solid rgba(255, 199, 44, 0.08);
+}
+
+.cat-strip-title {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    letter-spacing: 0.04em;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.cat-strip-row {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px 4px 6px;
+}
+
+.cat-strip-row::-webkit-scrollbar {
+    display: none;
+}
+
+.cat-strip-item {
+    flex: 0 0 auto;
+    width: 84px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.cat-strip-circle {
+    width: 84px;
+    height: 84px;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 199, 44, 0.2);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cat-strip-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cat-strip-item:hover .cat-strip-circle {
+    transform: scale(1.08) rotate(-2deg);
+    box-shadow: 0 0 0 2px var(--gold), 0 8px 18px rgba(255, 199, 44, 0.25);
+}
+
+.cat-strip-item span {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+    .cat-strip { padding: 36px 5%; }
+    .cat-strip-title { margin-bottom: 20px; }
+}
+
+@media (max-width: 480px) {
+    .cat-strip-item, .cat-strip-circle { width: 70px; height: 70px; }
+    .cat-strip-circle { border-radius: 20px; }
+    .cat-strip-row { gap: 14px; }
+    .cat-strip-item span { font-size: 0.66rem; }
+}
+
+@media (max-width: 360px) {
+    .cat-strip-item, .cat-strip-circle { width: 64px; height: 64px; }
+    .cat-strip-circle { border-radius: 18px; }
 }

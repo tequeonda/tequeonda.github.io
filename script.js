@@ -171,6 +171,23 @@ if (navToggle && headerNav) {
 
 
 /* =====================
+   3.5 HEADER PLEGABLE AL SCROLL
+   ===================== */
+const headerEl = document.getElementById('header');
+
+function handleHeaderScroll() {
+    if (window.scrollY > 40) {
+        headerEl.classList.add('scrolled');
+    } else {
+        headerEl.classList.remove('scrolled');
+    }
+}
+
+window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+handleHeaderScroll();
+
+
+/* =====================
    4. ANIMACIÓN AL SCROLL
    ===================== */
 const animatedSections = document.querySelectorAll('.nosotros, .sucursales');

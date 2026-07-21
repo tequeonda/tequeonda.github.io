@@ -78,6 +78,59 @@
         </div>
     </section>
 
+    <!-- ========== BANNER PROMO ========== -->
+    <section class="promo-banner">
+        <div class="promo-banner-bg">
+            <img src="img/promo-mundial.jpg" alt="24 Tequeños + 2 salsas - Promo Mundial 15% OFF" class="promo-banner-img" loading="lazy">
+            <div class="promo-banner-overlay"></div>
+            <div class="promo-banner-content">
+                <span class="promo-badge">🔥 Promo Mundial</span>
+                <h2 class="promo-banner-title">24 Tequeños<br>+ 2 Salsas</h2>
+                <div class="promo-banner-off">15% OFF</div>
+                <a href="https://menu.fu.do/tequeonda" class="btn btn-gold" target="_blank" rel="noopener">Pedí Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CATEGORÍAS RÁPIDAS ========== -->
+    <section class="cat-strip">
+        <h2 class="cat-strip-title">¿Qué se te antoja hoy?</h2>
+        <div class="cat-strip-row">
+            <a href="#menu" class="cat-strip-item" onclick="abrirPanel('tequeños')">
+                <div class="cat-strip-circle"><img src="img/tequeños.jpg" alt="Tequeños" loading="lazy"></div>
+                <span>Tequeños</span>
+            </a>
+            <a href="#menu" class="cat-strip-item" onclick="abrirPanel('empanadas')">
+                <div class="cat-strip-circle"><img src="img/empanaditas.jpg" alt="Empanadas" loading="lazy"></div>
+                <span>Empanadas</span>
+            </a>
+            <a href="#menu" class="cat-strip-item" onclick="abrirPanel('pastelitos')">
+                <div class="cat-strip-circle"><img src="img/pasteles.jpg" alt="Pastelitos" loading="lazy"></div>
+                <span>Pastelitos</span>
+            </a>
+            <a href="#menu" class="cat-strip-item" onclick="abrirPanel('congelados')">
+                <div class="cat-strip-circle"><img src="img/congelados.jpg" alt="Congelados" loading="lazy"></div>
+                <span>Congelados</span>
+            </a>
+            <a href="#menu" class="cat-strip-item" onclick="abrirPanel('promos')">
+                <div class="cat-strip-circle"><img src="img/promodelmes.jpg" alt="Promos del Mes" loading="lazy"></div>
+                <span>Promos</span>
+            </a>
+            <a href="#menu" class="cat-strip-item" onclick="abrirPanel('postres')">
+                <div class="cat-strip-circle"><img src="img/postres.jpg" alt="Postres" loading="lazy"></div>
+                <span>Postres</span>
+            </a>
+            <a href="#menu" class="cat-strip-item" onclick="abrirPanel('especiales')">
+                <div class="cat-strip-circle"><img src="img/especiales.jpg" alt="Especiales" loading="lazy"></div>
+                <span>Especiales</span>
+            </a>
+            <a href="#menu" class="cat-strip-item" onclick="abrirPanel('vegetariana')">
+                <div class="cat-strip-circle"><img src="img/vegetariana.jpg" alt="Vegetarianas" loading="lazy"></div>
+                <span>Vegetarianas</span>
+            </a>
+        </div>
+    </section>
+
     <!-- ========== COMBOS ========== -->
     <section class="combos" id="combos">
         <h2 class="section-title">Los Más Pedidos</h2>
@@ -235,11 +288,11 @@
 
         <div class="sucursales-info">
             <div class="sucursales-info-item">
-                <i class="fas fa-map-marker-alt"></i>
+                <span class="icon-badge"><i class="fas fa-map-marker-alt"></i></span>
                 <span>Bonpland 1708, Palermo, CABA, Argentina</span>
             </div>
             <div class="sucursales-info-item">
-                <i class="fas fa-clock"></i>
+                <span class="icon-badge"><i class="fas fa-clock"></i></span>
                 <span>Lunes a Sábado: 11:00 – 23:00</span>
             </div>
         </div>
@@ -284,11 +337,14 @@
     </footer>
 
     <!-- ========== BOTÓN FLOTANTE: PEDIR AHORA ========== -->
-    <a href="https://menu.fu.do/tequeonda" class="pedir-fixed" target="_blank" rel="noopener">PEDIR AHORA</a>
+    <a href="https://menu.fu.do/tequeonda" class="pedir-fixed" target="_blank" rel="noopener">
+        PEDIR AHORA
+        <span class="pedir-fixed-icon"><i class="fas fa-motorcycle"></i></span>
+    </a>
 
     <!-- ========== BOTÓN FLOTANTE: WHATSAPP ========== -->
     <a href="https://wa.me/5491176389237?text=hola" class="whatsapp" aria-label="Contactar por WhatsApp" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
     </a>
 
     <!-- Scripts -->
