@@ -1,0 +1,35 @@
+{
+  "_ayuda": "Editá solo los numeros de 'precios'. Guardá y subí el archivo. La landing se actualiza sola.",
+  "actualizado": "2026-07-24",
+  "moneda": "ARS",
+  "productos": [
+    {
+      "cod": "TO",
+      "nombre": "Tequeño Queso x12 unds",
+      "unidades": 12,
+      "referenciaCalculadora": true,
+      "precios": { "10-19": 5950, "20-49": 5750, "50+": 5600 }
+    },
+    {
+      "cod": "TJQ",
+      "nombre": "Tequeño Jamón/Queso x12 unds",
+      "unidades": 12,
+      "precios": { "10-19": 9850, "20-49": 9500, "50+": 8600 }
+    },
+    {
+      "cod": "TF",
+      "nombre": "Tequeños Fiesteros x25 unds",
+      "unidades": 25,
+      "precios": { "10-19": 7900, "20-49": 7750, "50+": 7550 }
+    }
+  ],
+  "_productosEnEspera": [
+    {
+      "cod": "TPA",
+      "nombre": "Teque Pancho x12 unds",
+      "unidades": 12,
+      "precioUnico": 5750,
+      "_nota": "Mové este bloque a 'productos' cuando quieras publicarlo"
+    }
+  ]
+}

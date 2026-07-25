@@ -1500,7 +1500,7 @@ footer p + p { margin-top: 12px; }
                             <th>50+ Packs<br><small style="font-family:'Fira Sans';font-size:0.78rem;font-weight:400;color:rgba(255,199,44,0.6);">+600 unidades</small></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="preciosBody">
                         <!-- 💲 FILA 1: Tequeño Queso x12 -->
                         <tr>
                             <td><strong>Tequeño Queso x12 unds</strong></td>
@@ -1556,7 +1556,7 @@ footer p + p { margin-top: 12px; }
                         <label>Volumen de compra</label>
                         <!-- 💲 CALC PRECIOS: estos value= deben coincidir con la tabla de precios de arriba.
                              Usar el precio del Pack Queso x12 como referencia de costo base. -->
-                        <select id="volumen">
+                        <select id="volumen" data-dinamico="1">
                             <option value="5950">10–19 packs</option>
                             <option value="5750">20–49 packs</option>
                             <option value="5600">50+ packs</option>
@@ -1855,6 +1855,47 @@ footer p + p { margin-top: 12px; }
                 if (!isOpen) item.classList.add('open');
             });
         });
+    </script>
+
+    <!-- ═══ PRECIOS DINÁMICOS: lee precios.json y actualiza tabla + calculadora ═══ -->
+    <script>
+    (function(){
+      function fmt(n){ return '$' + Number(n).toLocaleString('es-AR'); }
+      function pctOff(a,b){ return a>0 ? '-' + (((a-b)/a*100).toFixed(1).replace('.',',')) + '%' : ''; }
+      fetch('precios.json?v=' + Date.now())
+        .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+        .then(function(data){
+          var prods = (data && data.productos) || [];
+          if(!prods.length) return;
+
+          // --- tabla ---
+          var tb = document.getElementById('preciosBody');
+          if(tb){
+            var html = '';
+            prods.forEach(function(p){
+              var e = p.precios || {};
+              var p1=e['10-19'], p2=e['20-49'], p3=e['50+'];
+              html += '<tr><td><strong>'+p.nombre+'</strong></td>'+
+                      '<td>'+fmt(p1)+'</td>'+
+                      '<td>'+fmt(p2)+'</td>'+
+                      '<td class="precio-destacado">'+fmt(p3)+' <span class="badge-descuento">'+pctOff(p1,p3)+'</span></td></tr>';
+            });
+            tb.innerHTML = html;
+          }
+
+          // --- calculadora (usa el producto marcado como referencia, o el primero) ---
+          var ref = prods.filter(function(p){return p.referenciaCalculadora;})[0] || prods[0];
+          var sel = document.getElementById('volumen');
+          if(sel && ref && ref.precios){
+            sel.innerHTML =
+              '<option value="'+ref.precios['10-19']+'">10–19 packs</option>'+
+              '<option value="'+ref.precios['20-49']+'">20–49 packs</option>'+
+              '<option value="'+ref.precios['50+']+'">50+ packs</option>';
+            if(typeof calcular === 'function') calcular();
+          }
+        })
+        .catch(function(){ /* si falla, quedan los precios estáticos del HTML */ });
+    })();
     </script>
 </body>
 </html>
