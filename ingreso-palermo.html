@@ -736,8 +736,8 @@ function esCatPack(cat){
   return catalog.some(p=>p.cat===cat&&(p.porUnid||1)>1);
 }
 function catResumen(cat,cd){
-  if(esCatPack(cat)){
-    return '<b>'+cd.qty.toLocaleString('es-AR')+'</b> packs <span style=\"color:var(--muted);font-size:.85em\">('+cd.uReal.toLocaleString('es-AR')+' u)</span>';
+  if(cd.packs>0){
+    return '<b>'+cd.packs.toLocaleString('es-AR')+'</b> packs <span style=\"color:var(--muted);font-size:.85em\">('+cd.uReal.toLocaleString('es-AR')+' u)</span>';
   }
   return '<b>'+cd.uReal.toLocaleString('es-AR')+'</b> u';
 }
@@ -754,22 +754,25 @@ function renderReporte(){
 
   const cats=[...new Set(catalog.map(p=>p.cat))];
   const aggCat={}, aggProd={};
-  cats.forEach(c=>{ aggCat[c]={qty:0,uReal:0,monto:0}; });
-  catalog.forEach(p=>{ aggProd[p.id]={qty:0,uReal:0,monto:0}; });
-  let totalQty=0, totalUReal=0, totalMonto=0;
+  cats.forEach(c=>{ aggCat[c]={qty:0,packs:0,uReal:0,monto:0}; });
+  catalog.forEach(p=>{ aggProd[p.id]={qty:0,packs:0,uReal:0,monto:0}; });
+  let totalQty=0, totalPacks=0, totalUReal=0, totalMonto=0;
 
   history.forEach(o=>{
     (o.items||[]).forEach(it=>{
       const p=catalog.find(x=>x.id===it.id); if(!p)return;
-      var ur;
-      if(it.ur!==undefined){ ur=it.ur; }
-      else {
+      var ur, packs;
+      if(it.ur!==undefined){
+        ur=it.ur;
+        packs=(it.pu&&it.pu>1)?it.qty:0;
+      } else {
         var yaEraPack = (p.cat==='TEQUEÑOS' && it.id!=='tyo');
-        ur = yaEraPack ? it.qty*(p.porUnid||1) : it.qty;
+        if(yaEraPack){ ur=it.qty*(p.porUnid||1); packs=it.qty; }
+        else { ur=it.qty; packs=0; }
       }
-      aggCat[p.cat].qty+=it.qty; aggCat[p.cat].uReal+=ur; aggCat[p.cat].monto+=it.sub||0;
-      aggProd[p.id].qty+=it.qty; aggProd[p.id].uReal+=ur; aggProd[p.id].monto+=it.sub||0;
-      totalQty+=it.qty; totalUReal+=ur; totalMonto+=it.sub||0;
+      aggCat[p.cat].qty+=it.qty; aggCat[p.cat].packs+=packs; aggCat[p.cat].uReal+=ur; aggCat[p.cat].monto+=it.sub||0;
+      aggProd[p.id].qty+=it.qty; aggProd[p.id].packs+=packs; aggProd[p.id].uReal+=ur; aggProd[p.id].monto+=it.sub||0;
+      totalQty+=it.qty; totalPacks+=packs; totalUReal+=ur; totalMonto+=it.sub||0;
     });
   });
 
@@ -816,8 +819,8 @@ function renderReporte(){
       html+=`<div class="rep-prod-row">
         <div class="rep-prod-name">${p.label} <span class="rep-prod-abbr">${p.abbr}</span></div>
         <div class="rep-bar-wrap"><div class="rep-bar" style="width:${bw}%"></div></div>
-        <div class="rep-prod-qty">${(p.porUnid||1)>1
-          ? '<b style="color:var(--gold)">'+pd.qty.toLocaleString('es-AR')+'</b> pk<br><span style="color:var(--muted);font-size:.85em">'+pd.uReal.toLocaleString('es-AR')+' u</span>'
+        <div class="rep-prod-qty">${pd.packs>0
+          ? '<b style="color:var(--gold)">'+pd.packs.toLocaleString('es-AR')+'</b> pk<br><span style="color:var(--muted);font-size:.85em">'+pd.uReal.toLocaleString('es-AR')+' u</span>'
           : '<b style="color:var(--gold)">'+pd.uReal.toLocaleString('es-AR')+'</b> u'}</div>
         <div class="rep-prod-monto">${fmt(pd.monto)}</div>
       </div>`;
@@ -830,8 +833,8 @@ function renderReporte(){
     <div class="rep-global-title">TOTAL GLOBAL</div>`;
   cats.forEach(cat=>{
     const cd=aggCat[cat]; if(cd.uReal===0)return;
-    const val = esCatPack(cat)
-      ? `<b>${cd.qty.toLocaleString('es-AR')}</b> packs <span class="rgm">(${cd.uReal.toLocaleString('es-AR')} u)</span>`
+    const val = cd.packs>0
+      ? `<b>${cd.packs.toLocaleString('es-AR')}</b> packs <span class="rgm">(${cd.uReal.toLocaleString('es-AR')} u)</span>`
       : `<b>${cd.uReal.toLocaleString('es-AR')}</b> u`;
     html+=`<div class="rep-global-row"><span>${catIcons[cat]||'📌'} ${cat}</span><span>${val}</span></div>`;
   });
