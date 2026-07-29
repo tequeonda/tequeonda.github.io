@@ -161,7 +161,7 @@ body{background:var(--dark);color:var(--text);font-family:var(--fb);min-height:1
 .rep-prod-abbr{font-size:0.6rem;color:var(--muted);margin-left:3px;}
 .rep-bar-wrap{flex:1;height:4px;background:var(--border);border-radius:2px;margin:0 6px;}
 .rep-bar{height:4px;background:var(--gold);border-radius:2px;}
-.rep-prod-qty{width:58px;text-align:right;font-size:0.75rem;color:var(--muted);}
+.rep-prod-qty{width:72px;text-align:right;font-size:0.75rem;color:var(--muted);line-height:1.25;}
 .rep-kpi-sub{font-size:0.62rem;color:var(--muted);margin-top:2px;}
 .rep-global{background:var(--surface);border:1px solid var(--gold);border-radius:11px;padding:14px 16px;margin-top:16px;}
 .rep-global-title{font-family:var(--fh);font-size:0.9rem;letter-spacing:2px;color:var(--gold);margin-bottom:10px;text-align:center;}
@@ -184,7 +184,7 @@ body{background:var(--dark);color:var(--text);font-family:var(--fb);min-height:1
 <body>
 
 <div class="tabs">
-  <button class="tab active" onclick="showPage('nueva')">📦 NUEVA</button>
+  <button class="tab active" onclick="nuevaOrden()">📦 NUEVA</button>
   <button class="tab" onclick="showPage('preview')" id="tabPreview" style="display:none">🧾 ORDEN</button>
   <button class="tab" onclick="showPage('historial')">📋 HISTORIAL</button>
   <button class="tab" onclick="showPage('reportes')">📊 REPORTES</button>
@@ -493,6 +493,7 @@ function generarOrden(){
     `<div style="margin-bottom:12px">${buildTicketHTML(orden,1)}</div>
      <div>${buildTicketHTML(orden,2)}</div>`;
   window._currentOrden=orden;
+  saveOrden();
   document.getElementById('tabPreview').style.display='';
   showPage('preview');
 }
@@ -762,7 +763,7 @@ function renderReporte(){
       <div class="rep-cat-body">
         <div class="rep-col-header">
           <span style="flex:1">Producto</span>
-          <span style="width:58px;text-align:right">Cant</span>
+          <span style="width:72px;text-align:right">Packs · Unid.</span>
           <span style="width:78px;text-align:right">Monto</span>
         </div>`;
     prods.sort((a,b)=>aggProd[b.id].monto-aggProd[a.id].monto).forEach(p=>{
@@ -771,7 +772,9 @@ function renderReporte(){
       html+=`<div class="rep-prod-row">
         <div class="rep-prod-name">${p.label} <span class="rep-prod-abbr">${p.abbr}</span></div>
         <div class="rep-bar-wrap"><div class="rep-bar" style="width:${bw}%"></div></div>
-        <div class="rep-prod-qty">${(p.porUnid||1)>1?pd.uReal.toLocaleString('es-AR')+' u<br><span style="color:var(--muted);font-size:.8em">'+pd.qty+'×'+p.porUnid+'</span>':pd.qty+' u'}</div>
+        <div class="rep-prod-qty">${(p.porUnid||1)>1
+          ? '<b style="color:var(--gold)">'+pd.qty.toLocaleString('es-AR')+'</b> pk<br><span style="color:var(--muted);font-size:.85em">'+pd.uReal.toLocaleString('es-AR')+' u</span>'
+          : '<b style="color:var(--gold)">'+pd.uReal.toLocaleString('es-AR')+'</b> u'}</div>
         <div class="rep-prod-monto">${fmt(pd.monto)}</div>
       </div>`;
     });
@@ -804,6 +807,15 @@ function renderReporte(){
 }
 
 // ── NAV ───────────────────────────────────────────────────────────────────
+function nuevaOrden(){
+  catalog.forEach(p=>{ qtys[p.id]=0; const el=document.getElementById('qty-'+p.id); if(el)el.value=0; updateSub(p.id); updateLive(p.id); });
+  document.getElementById('numOrden').value=getNextNum();
+  const fe=document.getElementById('fechaOrden'); if(fe)fe.value=new Date().toISOString().split('T')[0];
+  ['entregaInput','recibeInput','obsInput'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  window._currentOrden=null;
+  recalcTotals();
+  showPage('nueva');
+}
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
