@@ -22,6 +22,10 @@ body{background:var(--dark);color:var(--text);font-family:var(--fb);min-height:1
 .page-header{padding:20px 16px 12px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border);}
 .page-title{font-family:var(--fh);font-size:1.6rem;letter-spacing:2px;color:var(--gold);line-height:1;}
 .page-sub{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.hist-actions{display:flex;gap:7px;}
+.btn-backup,.btn-restore{background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.72rem;font-weight:600;padding:7px 11px;border-radius:7px;cursor:pointer;white-space:nowrap;}
+.btn-backup{border-color:var(--gold);color:var(--gold);}
+.btn-restore:hover,.btn-backup:hover{border-color:var(--gold);}
 .meta-row{display:flex;gap:10px;padding:14px 16px 0;flex-wrap:wrap;}
 .meta-field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;}
 .meta-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;}
@@ -236,7 +240,14 @@ body{background:var(--dark);color:var(--text);font-family:var(--fb);min-height:1
 
 <!-- HISTORIAL -->
 <div id="historial" class="page">
-  <div class="page-header"><div><div class="page-title">HISTORIAL</div><div class="page-sub">Órdenes de ingreso emitidas</div></div></div>
+  <div class="page-header">
+    <div><div class="page-title">HISTORIAL</div><div class="page-sub">Órdenes de ingreso emitidas</div></div>
+    <div class="hist-actions">
+      <button class="btn-backup" onclick="exportarHistorial()">⬇ Backup</button>
+      <button class="btn-restore" onclick="document.getElementById('fileRestore').click()">⬆ Restaurar</button>
+      <input type="file" id="fileRestore" accept="application/json" style="display:none" onchange="importarHistorial(this)">
+    </div>
+  </div>
   <div id="histList"></div>
 </div>
 
@@ -551,6 +562,36 @@ function verOrden(i){
 }
 function confirmarOrden(i){ const h=loadHistory(); h[i].status='confirmada'; saveHistory(h); renderHistory(); }
 function eliminarOrden(i){ if(!confirm('¿Eliminar esta orden?'))return; const h=loadHistory(); h.splice(i,1); saveHistory(h); renderHistory(); }
+
+function exportarHistorial(){
+  const h=loadHistory();
+  if(!h.length){ alert('No hay órdenes para respaldar.'); return; }
+  const data={ tipo:'ingreso-palermo-backup', fecha:new Date().toISOString(), ordenes:h };
+  const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const u=URL.createObjectURL(b), a=document.createElement('a');
+  a.href=u; a.download='IngresoPalermo_historial_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+function importarHistorial(input){
+  const file=input.files&&input.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    let data;
+    try{ data=JSON.parse(e.target.result); }catch(err){ alert('Archivo inválido: no se pudo leer el JSON.'); input.value=''; return; }
+    const nuevas=Array.isArray(data)?data:(data.ordenes||[]);
+    if(!Array.isArray(nuevas)||!nuevas.length){ alert('El archivo no contiene órdenes válidas.'); input.value=''; return; }
+    const actual=loadHistory();
+    const nums=new Set(actual.map(o=>o.num));
+    let sumadas=0;
+    nuevas.forEach(o=>{ if(o&&o.num&&!nums.has(o.num)){ actual.push(o); nums.add(o.num); sumadas++; } });
+    actual.sort((a,b)=>(b.ts||0)-(a.ts||0));
+    saveHistory(actual); renderHistory();
+    alert('Restauración lista.\n'+sumadas+' órdenes agregadas.\n'+(nuevas.length-sumadas)+' ya existían (se omitieron).');
+    input.value='';
+  };
+  reader.readAsText(file);
+}
 
 // ── PIE CHART ─────────────────────────────────────────────────────────────
 let _pieData=[], _pieMetric='monto', _pieActive=-1;
