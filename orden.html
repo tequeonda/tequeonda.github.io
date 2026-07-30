@@ -576,7 +576,11 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 <script>
 // ── STORAGE ──
 var getOrders=()=>{try{return JSON.parse(localStorage.getItem('toOrders')||'[]')}catch(e){return[]}};
-var saveOrders=o=>localStorage.setItem('toOrders',JSON.stringify(o));
+var _cambiosSinBackup=false;
+var saveOrders=o=>{localStorage.setItem('toOrders',JSON.stringify(o));_cambiosSinBackup=true;};
+window.addEventListener('beforeunload',function(e){
+  if(_cambiosSinBackup){e.preventDefault();e.returnValue='Tenés ventas sin respaldar. ¿Querés salir sin hacer backup?';return e.returnValue;}
+});
 var getClientes=()=>{try{return JSON.parse(localStorage.getItem('toClientes')||'[]')}catch(e){return[]}};
 var saveClientes=c=>localStorage.setItem('toClientes',JSON.stringify(c));
 
@@ -589,6 +593,7 @@ function exportarOrdenes(){
   a.href=u;a.download='OrdenMayorista_ventas_'+new Date().toISOString().slice(0,10)+'.json';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   setTimeout(function(){URL.revokeObjectURL(u);},1000);
+  _cambiosSinBackup=false;
 }
 function importarOrdenes(input){
   var file=input.files&&input.files[0]; if(!file)return;

@@ -317,7 +317,11 @@ function fmt(n){ return '$'+Number(n).toLocaleString('es-AR',{minimumFractionDig
 function loadPrice(id){ try{return parseFloat(localStorage.getItem('to_price_'+id)||'0')||0;}catch(e){return 0;} }
 function savePrice(id,v){ try{localStorage.setItem('to_price_'+id,v);}catch(e){} }
 function loadHistory(){ try{return JSON.parse(localStorage.getItem('to_ingreso_history')||'[]');}catch(e){return[];} }
-function saveHistory(h){ try{localStorage.setItem('to_ingreso_history',JSON.stringify(h));}catch(e){} }
+var _cambiosSinBackup=false;
+function saveHistory(h){ try{localStorage.setItem('to_ingreso_history',JSON.stringify(h));_cambiosSinBackup=true;}catch(e){} }
+window.addEventListener('beforeunload',function(e){
+  if(_cambiosSinBackup){e.preventDefault();e.returnValue='Tenés órdenes sin respaldar. ¿Querés salir sin hacer backup?';return e.returnValue;}
+});
 function getNextNum(){
   const h=loadHistory();
   const nums=h.map(o=>parseInt((o.num||'0').replace(/[^0-9]/g,''))||0);
@@ -575,6 +579,7 @@ function exportarHistorial(){
   a.href=u; a.download='IngresoPalermo_historial_'+new Date().toISOString().slice(0,10)+'.json';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(u),1000);
+  _cambiosSinBackup=false;
 }
 function importarHistorial(input){
   const file=input.files&&input.files[0]; if(!file)return;
