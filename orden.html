@@ -395,6 +395,13 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
 <!-- STATS DASHBOARD -->
 <div class="page" id="pg4">
 
+  <!-- BACKUP / RESTAURAR -->
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button onclick="exportarOrdenes()" style="flex:1;background:var(--gold);border:none;color:#111;font-weight:700;font-size:12px;padding:11px;border-radius:8px;cursor:pointer;">⬇ Backup ventas</button>
+    <button onclick="document.getElementById('fileRestOrden').click()" style="flex:1;background:#fff;border:1px solid var(--border);color:#111;font-weight:700;font-size:12px;padding:11px;border-radius:8px;cursor:pointer;">⬆ Restaurar</button>
+    <input type="file" id="fileRestOrden" accept="application/json" style="display:none" onchange="importarOrdenes(this)">
+  </div>
+
   <!-- MES ACTUAL VS ANTERIOR -->
   <h2 class="st">ESTE MES</h2>
   <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05);">
@@ -572,6 +579,42 @@ var getOrders=()=>{try{return JSON.parse(localStorage.getItem('toOrders')||'[]')
 var saveOrders=o=>localStorage.setItem('toOrders',JSON.stringify(o));
 var getClientes=()=>{try{return JSON.parse(localStorage.getItem('toClientes')||'[]')}catch(e){return[]}};
 var saveClientes=c=>localStorage.setItem('toClientes',JSON.stringify(c));
+
+function exportarOrdenes(){
+  var o=getOrders();
+  if(!o.length){alert('No hay ventas para respaldar.');return;}
+  var data={tipo:'orden-mayorista-backup',fecha:new Date().toISOString(),orders:o,clientes:getClientes()};
+  var b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download='OrdenMayorista_ventas_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(u);},1000);
+}
+function importarOrdenes(input){
+  var file=input.files&&input.files[0]; if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var data;
+    try{data=JSON.parse(e.target.result);}catch(err){alert('Archivo inválido.');input.value='';return;}
+    var nuevas=Array.isArray(data)?data:(data.orders||data.ordenes||[]);
+    if(!Array.isArray(nuevas)||!nuevas.length){alert('El archivo no contiene ventas válidas.');input.value='';return;}
+    var actual=getOrders();
+    var nums={};actual.forEach(function(o){nums[o.num]=1;});
+    var sumadas=0;
+    nuevas.forEach(function(o){if(o&&o.num&&!nums[o.num]){actual.push(o);nums[o.num]=1;sumadas++;}});
+    actual.sort(function(a,b){return (b.numInt||0)-(a.numInt||0);});
+    saveOrders(actual);
+    if(data.clientes&&Array.isArray(data.clientes)){
+      var cl=getClientes();var cids={};cl.forEach(function(c){cids[c.id]=1;});
+      data.clientes.forEach(function(c){if(c&&c.id&&!cids[c.id]){cl.push(c);cids[c.id]=1;}});
+      saveClientes(cl);
+    }
+    alert('Restauración lista.\n'+sumadas+' ventas agregadas.\n'+(nuevas.length-sumadas)+' ya existían (se omitieron).');
+    input.value='';
+    if(typeof renderStats==='function')renderStats();
+  };
+  reader.readAsText(file);
+}
 var getCounter=()=>parseInt(localStorage.getItem('toCounter')||'0');
 var bumpCounter=()=>{var n=getCounter()+1;localStorage.setItem('toCounter',n);return n};
 var padNum=n=>'MO-'+String(n).padStart(4,'0');
