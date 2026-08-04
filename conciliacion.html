@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conciliación · Qué Fiesta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@500;600;700&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f3ee;
+    --gold:#FFC72C;
+    --ink:#111111;
+    --green:#00a82d;
+    --red:#c0392b;
+    --card:#ffffff;
+    --line:#e3e1d8;
+    --muted:#6b6a63;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Fira Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header.top{
+    background:var(--ink);
+    color:#fff;
+    padding:22px 18px 20px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:6px;
+    background:var(--gold);
+  }
+  h1{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:34px;
+    letter-spacing:1px;
+    margin:0;
+    line-height:1;
+  }
+  .sub{
+    font-size:13px;
+    color:#cfcfc8;
+    margin-top:6px;
+  }
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:16px;
+  }
+  .deuda-card{
+    background:var(--ink);
+    color:#fff;
+    border-radius:14px;
+    padding:18px 20px;
+    margin-top:-30px;
+    position:relative;
+    z-index:2;
+    box-shadow:0 6px 20px rgba(0,0,0,0.15);
+  }
+  .deuda-label{
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+    font-size:12px;
+    letter-spacing:1.5px;
+    color:var(--gold);
+    font-weight:600;
+  }
+  .deuda-monto{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:44px;
+    line-height:1.1;
+    margin-top:4px;
+  }
+  .deuda-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .mini-stats{
+    display:flex;
+    gap:18px;
+    font-size:12px;
+    color:#cfcfc8;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+  .mini-stats b{color:#fff;font-family:'Oswald',sans-serif;}
+
+  section{margin-top:26px;}
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  .section-title{
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+    font-size:13px;
+    letter-spacing:1.2px;
+    color:var(--muted);
+  }
+  button{
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    letter-spacing:0.5px;
+    border:none;
+    border-radius:9px;
+    padding:9px 14px;
+    cursor:pointer;
+    font-size:13px;
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+  button:active{transform:scale(0.97);}
+  .btn-primary{background:var(--gold); color:var(--ink);}
+  .btn-outline{background:transparent; color:var(--ink); border:1.5px solid var(--ink);}
+  .btn-green{background:var(--green); color:#fff;}
+  .btn-small{padding:6px 10px; font-size:12px;}
+  .btn-danger-outline{background:transparent;color:var(--red);border:1.5px solid var(--red);}
+  .btn-ghost{background:transparent;color:var(--muted);border:1px dashed var(--line);}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:10px;
+  }
+  .boleta-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .boleta-desc{font-weight:600; font-size:14.5px;}
+  .boleta-fecha{font-size:11.5px; color:var(--muted); margin-top:2px;}
+  .boleta-montos{text-align:right; font-family:'Oswald',sans-serif;}
+  .boleta-total{font-size:12px; color:var(--muted);}
+  .boleta-saldo{font-size:17px; font-weight:600;}
+  .saldo-ok{color:var(--green);}
+  .saldo-pend{color:var(--ink);}
+  .saldo-cero{color:var(--muted); text-decoration:line-through;}
+
+  .barra{
+    height:6px;
+    background:var(--line);
+    border-radius:4px;
+    margin-top:10px;
+    overflow:hidden;
+  }
+  .barra-fill{height:100%; background:var(--green);}
+
+  .items-list{
+    margin-top:12px;
+    border-top:1px dashed var(--line);
+    padding-top:10px;
+  }
+  .item-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12.5px;
+    padding:5px 0;
+    gap:8px;
+  }
+  .item-desc{color:var(--ink); font-weight:500;}
+  .item-desc.item-saldada{color:var(--muted); text-decoration:line-through;}
+  .item-cant{font-size:11px; color:var(--muted); margin-top:1px;}
+  .item-montos{text-align:right; white-space:nowrap; font-family:'Oswald',sans-serif;}
+  .item-saldo{font-weight:600;}
+
+  .card-actions{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+
+  .entrega-desc{font-weight:600; font-size:14.5px;}
+  .entrega-fecha{font-size:11.5px; color:var(--muted); margin-top:2px;}
+  .entrega-monto{font-family:'Oswald',sans-serif; font-size:16px; font-weight:600;}
+  .badge-deducciones{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:6px;
+    border-top:1px dashed var(--line);
+    padding-top:6px;
+  }
+  .badge-deducciones div{margin-top:3px;}
+
+  .neto-cobrar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1.5px solid var(--ink);
+  }
+  .neto-cobrar .label{
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+    font-size:11px;
+    letter-spacing:0.8px;
+    color:var(--muted);
+  }
+  .neto-cobrar .monto{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:22px;
+    color:var(--green);
+  }
+
+  .empty{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    padding:24px 10px;
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+  }
+
+  /* Modal */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(17,17,17,0.55);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:50;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:#fff;
+    width:100%;
+    max-width:480px;
+    max-height:88vh;
+    overflow-y:auto;
+    border-radius:18px 18px 0 0;
+    padding:20px 18px 26px;
+    animation:slideup .18s ease;
+  }
+  @keyframes slideup{from{transform:translateY(30px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+  .modal h3{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:24px;
+    margin:0 0 12px;
+    letter-spacing:0.5px;
+  }
+  label{
+    display:block;
+    font-family:'Oswald',sans-serif;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.8px;
+    color:var(--muted);
+    margin:12px 0 5px;
+  }
+  input, select, textarea{
+    width:100%;
+    padding:10px 11px;
+    border-radius:8px;
+    border:1.5px solid var(--line);
+    font-family:'Fira Sans',sans-serif;
+    font-size:14.5px;
+    background:#fafaf7;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+  .modal-actions{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+  }
+  .modal-actions button{flex:1;}
+  .helptext{font-size:12px; color:var(--muted); margin-top:4px;}
+
+  .item-input-block{
+    margin-top:12px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .item-input-toprow{
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  .item-input-toprow input{flex:1;}
+  .item-input-toprow button{padding:9px 10px; flex:none;}
+  .item-input-subrow{
+    display:flex;
+    gap:8px;
+    margin-top:8px;
+    align-items:center;
+  }
+  .item-input-subrow .field{flex:1;}
+  .item-input-subrow .field-label{
+    font-size:10.5px;
+    color:var(--muted);
+    margin-bottom:3px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .item-subtotal{
+    font-size:12px;
+    color:var(--muted);
+    text-align:right;
+    margin-top:6px;
+    font-family:'Oswald',sans-serif;
+  }
+  .item-subtotal b{color:var(--ink);}
+  .item-total-line{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    margin-top:14px;
+    padding-top:10px;
+    border-top:2px solid var(--ink);
+    font-size:15px;
+  }
+
+  .ded-item-row{
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .ded-item-top{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .ded-item-row input[type=checkbox]{
+    width:20px; height:20px; flex:none; accent-color:var(--green); margin-top:2px;
+  }
+  .ded-item-info{flex:1;}
+  .ded-item-desc{font-weight:600; font-size:13.5px;}
+  .ded-item-saldo{font-size:11.5px; color:var(--muted); margin-top:1px;}
+  .ded-item-controls{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin-top:8px;
+    margin-left:30px;
+  }
+  .ded-item-controls .field{flex:1;}
+  .ded-item-controls .field-label{
+    font-size:10px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin-bottom:3px;
+  }
+  .ded-item-subtotal{
+    font-size:12px;
+    text-align:right;
+    margin-top:6px;
+    margin-left:30px;
+    font-family:'Oswald',sans-serif;
+    color:var(--green);
+    font-weight:600;
+  }
+  .ded-total-line{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    margin-top:14px;
+    padding-top:10px;
+    border-top:2px solid var(--ink);
+    font-size:16px;
+  }
+  .ded-total-line span:last-child{color:var(--green);}
+
+  .fab-bar{
+    display:flex;
+    gap:10px;
+    margin-top:6px;
+  }
+  .fab-bar button{flex:1;}
+
+  .toast{
+    position:fixed;
+    bottom:18px; left:50%;
+    transform:translateX(-50%);
+    background:var(--ink);
+    color:#fff;
+    padding:10px 18px;
+    border-radius:24px;
+    font-size:13px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, bottom .2s ease;
+    z-index:100;
+  }
+  .toast.show{opacity:1; bottom:26px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>CONCILIACIÓN</h1>
+  <div class="sub">Qué Fiesta · Panchos Cheddar</div>
+</header>
+
+<div class="wrap">
+  <div class="deuda-card">
+    <div class="deuda-row">
+      <div>
+        <div class="deuda-label">Deuda de insumos pendiente</div>
+        <div class="deuda-monto" id="deudaTotal">$0</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="deuda-label">Recibido total</div>
+        <div style="font-family:'Oswald',sans-serif; font-size:16px;" id="recibidoTotal">$0</div>
+      </div>
+    </div>
+    <div class="mini-stats">
+      <div><b id="statBoletas">0</b> boletas activas</div>
+      <div><b id="statEntregas">0</b> entregas registradas</div>
+      <div><b id="statDeducido">$0</b> deducido</div>
+      <div><b id="statNetoCobrar">$0</b> neto a cobrar total</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div class="section-title">Boletas de insumos (Qué Fiesta → vos)</div>
+      <button class="btn-primary btn-small" onclick="openBoletaModal()">+ Boleta</button>
+    </div>
+    <div id="boletasList"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-title">Entregas de producto terminado</div>
+      <button class="btn-primary btn-small" onclick="openEntregaModal()">+ Entrega</button>
+    </div>
+    <div id="entregasList"></div>
+  </section>
+
+  <section>
+    <div class="fab-bar">
+      <button class="btn-outline" onclick="exportarWhatsapp()">Resumen para WhatsApp</button>
+      <button class="btn-danger-outline" onclick="resetAll()">Borrar todo</button>
+    </div>
+  </section>
+</div>
+
+<!-- Modal Boleta -->
+<div class="overlay" id="overlayBoleta">
+  <div class="modal">
+    <h3>Nueva boleta de insumos</h3>
+    <label>Fecha</label>
+    <input type="date" id="bFecha">
+    <label>Ítems de la boleta</label>
+    <div id="itemRows"></div>
+    <button class="btn-ghost btn-small" style="margin-top:10px; width:100%;" onclick="addItemRow()">+ Agregar ítem</button>
+    <div class="item-total-line">
+      <span>Total boleta</span>
+      <span id="bTotalPreview">$0</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeModal('overlayBoleta')">Cancelar</button>
+      <button class="btn-primary" onclick="guardarBoleta()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Entrega -->
+<div class="overlay" id="overlayEntrega">
+  <div class="modal">
+    <h3>Nueva entrega</h3>
+
+    <label>Cargar orden / remito (foto)</label>
+    <input type="file" id="eImagenInput" accept="image/*" onchange="procesarImagenEntrega(event)">
+    <div class="helptext" id="eImagenStatus">Subí la captura del pedido y completo los campos solo.</div>
+    <div id="eImagenPreviewItems"></div>
+    <input type="hidden" id="eItemsData" value="">
+
+    <label style="margin-top:18px; border-top:1px dashed var(--line); padding-top:14px;">Fecha</label>
+    <input type="date" id="eFecha">
+    <label>Descripción</label>
+    <input type="text" id="eDesc" placeholder="Ej: 300 panchos cheddar">
+    <label>Monto facturado a Qué Fiesta ($)</label>
+    <input type="number" id="eMonto" placeholder="0" min="0" step="1">
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeModal('overlayEntrega')">Cancelar</button>
+      <button class="btn-primary" onclick="guardarEntrega()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Deducción por cantidades -->
+<div class="overlay" id="overlayDeduccion">
+  <div class="modal">
+    <h3>Deducir de boleta</h3>
+    <div id="deduccionInfo" class="helptext"></div>
+    <div id="dedItemsList"></div>
+    <div class="ded-total-line">
+      <span>Total a deducir</span>
+      <span id="dedTotalPreview">$0</span>
+    </div>
+    <label>Aplicar contra entrega (opcional)</label>
+    <select id="dEntrega"><option value="">— Sin vincular a una entrega —</option></select>
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeModal('overlayDeduccion')">Cancelar</button>
+      <button class="btn-green" onclick="confirmarDeduccion()">Descontar seleccionados</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'queFiestaConciliacion';
+
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      parsed.boletas = (parsed.boletas || []).map(b=>{
+        if(!b.items) b.items = [];
+        b.items = b.items.map(i=>{
+          // migración: ítems viejos solo tenían monto/saldo, sin cantidad/precioUnit
+          if(i.cantidad === undefined){
+            const precioUnit = i.monto || 0;
+            const cantidad = 1;
+            const cantidadSaldo = (i.saldo && i.monto) ? (i.saldo / i.monto) : 1;
+            return { id: i.id, desc: i.desc, cantidad, unidad: i.unidad || 'u', precioUnit, monto: i.monto, cantidadSaldo, saldo: i.saldo };
+          }
+          return i;
+        });
+        return b;
+      });
+      return parsed;
+    }
+  }catch(e){}
+  return {
+    boletas: [
+      {
+        id: genId(),
+        fecha: new Date().toISOString().slice(0,10),
+        desc: 'Remito insumos',
+        items: [
+          { id: genId(), desc: 'Cajas Salchichas Súper x144', cantidad: 2, unidad: 'cajas', precioUnit: 32976, monto: 65952, cantidadSaldo: 2, saldo: 65952 },
+          { id: genId(), desc: 'Cheddar', cantidad: 1, unidad: 'u', precioUnit: 25900, monto: 25900, cantidadSaldo: 1, saldo: 25900 }
+        ],
+        monto: 91852,
+        saldo: 91852
+      }
+    ],
+    entregas: []
+  };
+}
+
+function genId(){
+  return 'id' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+
+let data = loadData();
+recalcBoletas();
+
+function round2(n){ return Math.round(n * 100) / 100; }
+
+function recalcBoletas(){
+  data.boletas.forEach(b=>{
+    b.items.forEach(i=>{
+      i.monto = round2(i.cantidad * i.precioUnit);
+      i.saldo = round2(i.cantidadSaldo * i.precioUnit);
+    });
+    b.monto = b.items.reduce((s,i)=> s + i.monto, 0);
+    b.saldo = b.items.reduce((s,i)=> s + i.saldo, 0);
+  });
+}
+
+function saveData(){
+  recalcBoletas();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  render();
+}
+
+function fmt(n){
+  return '$' + Math.round(n).toLocaleString('es-AR');
+}
+
+function fmtCant(n){
+  // sin decimales innecesarios
+  return (Math.round(n * 100) / 100).toString().replace('.', ',');
+}
+
+function fmtFecha(f){
+  if(!f) return '';
+  const [y,m,d] = f.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+/* ---------- Boleta con ítems (cantidad x precio unitario) ---------- */
+
+function openBoletaModal(){
+  document.getElementById('bFecha').value = new Date().toISOString().slice(0,10);
+  document.getElementById('itemRows').innerHTML = '';
+  addItemRow();
+  addItemRow();
+  updateBoletaTotalPreview();
+  openModal('overlayBoleta');
+}
+
+function addItemRow(desc, cantidad, unidad, precioUnit){
+  const rowId = genId();
+  const wrap = document.createElement('div');
+  wrap.className = 'item-input-block';
+  wrap.dataset.rowId = rowId;
+  wrap.innerHTML = `
+    <div class="item-input-toprow">
+      <input type="text" placeholder="Descripción (ej: Cheddar)" class="item-desc-input" value="${desc ? escapeHtml(desc) : ''}">
+      <button type="button" class="btn-danger-outline btn-small" onclick="removeItemRow('${rowId}')">✕</button>
+    </div>
+    <div class="item-input-subrow">
+      <div class="field">
+        <div class="field-label">Cantidad</div>
+        <input type="number" placeholder="1" min="0" step="0.01" class="item-cant-input" value="${cantidad !== undefined && cantidad !== null ? cantidad : 1}">
+      </div>
+      <div class="field">
+        <div class="field-label">Unidad</div>
+        <input type="text" placeholder="cajas, kg, u..." class="item-unidad-input" value="${unidad || 'u'}">
+      </div>
+      <div class="field">
+        <div class="field-label">Precio unit. ($)</div>
+        <input type="number" placeholder="0" min="0" step="1" class="item-precio-input" value="${precioUnit || ''}">
+      </div>
+    </div>
+    <div class="item-subtotal">Subtotal: <b class="item-subtotal-val">$0</b></div>
+  `;
+  document.getElementById('itemRows').appendChild(wrap);
+  const cantInp = wrap.querySelector('.item-cant-input');
+  const precioInp = wrap.querySelector('.item-precio-input');
+  const subtotalEl = wrap.querySelector('.item-subtotal-val');
+  function updateRowSubtotal(){
+    const c = parseFloat(cantInp.value) || 0;
+    const p = parseFloat(precioInp.value) || 0;
+    subtotalEl.textContent = fmt(c * p);
+    updateBoletaTotalPreview();
+  }
+  cantInp.addEventListener('input', updateRowSubtotal);
+  precioInp.addEventListener('input', updateRowSubtotal);
+  updateRowSubtotal();
+}
+
+function removeItemRow(rowId){
+  const el = document.querySelector(`.item-input-block[data-row-id="${rowId}"]`);
+  if(el) el.remove();
+  updateBoletaTotalPreview();
+}
+
+function updateBoletaTotalPreview(){
+  let total = 0;
+  document.querySelectorAll('#itemRows .item-input-block').forEach(row=>{
+    const c = parseFloat(row.querySelector('.item-cant-input').value) || 0;
+    const p = parseFloat(row.querySelector('.item-precio-input').value) || 0;
+    total += c * p;
+  });
+  document.getElementById('bTotalPreview').textContent = fmt(total);
+}
+
+function guardarBoleta(){
+  const fecha = document.getElementById('bFecha').value;
+  const rows = document.querySelectorAll('#itemRows .item-input-block');
+  const items = [];
+  rows.forEach(row=>{
+    const desc = row.querySelector('.item-desc-input').value.trim();
+    const cantidad = parseFloat(row.querySelector('.item-cant-input').value);
+    const unidad = row.querySelector('.item-unidad-input').value.trim() || 'u';
+    const precioUnit = parseFloat(row.querySelector('.item-precio-input').value);
+    if(desc && cantidad > 0 && precioUnit > 0){
+      const monto = round2(cantidad * precioUnit);
+      items.push({ id: genId(), desc, cantidad, unidad, precioUnit, monto, cantidadSaldo: cantidad, saldo: monto });
+    }
+  });
+  if(items.length === 0){
+    toast('Cargá al menos un ítem con cantidad y precio');
+    return;
+  }
+  const totalMonto = items.reduce((s,i)=>s+i.monto,0);
+  data.boletas.push({
+    id: genId(),
+    fecha,
+    desc: items.map(i=>i.desc).join(' + '),
+    items,
+    monto: totalMonto,
+    saldo: totalMonto
+  });
+  closeModal('overlayBoleta');
+  saveData();
+  toast('Boleta agregada');
+}
+
+/* ---------- Entregas ---------- */
+
+function openEntregaModal(){
+  document.getElementById('eFecha').value = new Date().toISOString().slice(0,10);
+  document.getElementById('eDesc').value = '';
+  document.getElementById('eMonto').value = '';
+  document.getElementById('eImagenInput').value = '';
+  document.getElementById('eImagenStatus').textContent = 'Subí la captura del pedido y completo los campos solo.';
+  document.getElementById('eImagenPreviewItems').innerHTML = '';
+  document.getElementById('eItemsData').value = '';
+  openModal('overlayEntrega');
+}
+
+function fileToBase64(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function procesarImagenEntrega(evt){
+  const file = evt.target.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById('eImagenStatus');
+  const prevEl = document.getElementById('eImagenPreviewItems');
+  statusEl.textContent = 'Leyendo la imagen...';
+  prevEl.innerHTML = '';
+  try{
+    const base64 = await fileToBase64(file);
+    const mediaType = file.type || 'image/png';
+    const promptText = `Esta imagen es una orden o remito de pedido de comida (panchos/tequeños). Devolvé SOLO un JSON válido, sin texto adicional, sin explicación y sin backticks, con esta forma exacta:
+{"numeroPedido": "código/número del pedido tal cual figura (ej: MO-0211) o null", "fecha": "YYYY-MM-DD o null si no se ve", "cliente": "nombre del cliente o null", "items": [{"desc": "nombre del producto", "cantidad": numero, "precioUnit": numero, "subtotal": numero}], "total": numero}
+Todos los valores numéricos van sin símbolo de moneda ni separadores de miles (ej: 95200, no $95.200). Usá los datos tal cual figuran en la imagen.`;
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: [
+            { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
+            { type: "text", text: promptText }
+          ]
+        }]
+      })
+    });
+    const data = await response.json();
+    const textBlock = (data.content || []).find(b => b.type === "text");
+    if(!textBlock) throw new Error('Sin respuesta de texto del modelo');
+    const clean = textBlock.text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    const items = parsed.items || [];
+    if(parsed.fecha){
+      document.getElementById('eFecha').value = parsed.fecha;
+    }
+    document.getElementById('eDesc').value = parsed.numeroPedido
+      ? parsed.numeroPedido
+      : (items.length ? items.map(i => `${i.cantidad} ${i.desc}`).join(' + ') : (parsed.cliente ? `Pedido ${parsed.cliente}` : 'Pedido'));
+    const totalCalc = items.reduce((s,i)=> s + (i.subtotal || (i.cantidad*i.precioUnit) || 0), 0);
+    document.getElementById('eMonto').value = parsed.total || totalCalc || '';
+
+    document.getElementById('eItemsData').value = JSON.stringify(items);
+
+    prevEl.innerHTML = items.map(i => `
+      <div class="item-row">
+        <div>
+          <div class="item-desc">${escapeHtml(i.desc)}</div>
+          <div class="item-cant">${fmtCant(i.cantidad)} x ${fmt(i.precioUnit || 0)}</div>
+        </div>
+        <div class="item-montos"><div class="item-saldo">${fmt(i.subtotal || (i.cantidad*i.precioUnit) || 0)}</div></div>
+      </div>
+    `).join('');
+
+    statusEl.textContent = 'Datos cargados desde la imagen — revisá y ajustá si hace falta antes de guardar.';
+  }catch(err){
+    console.error(err);
+    statusEl.textContent = 'No se pudo leer la imagen automáticamente. Cargá los datos a mano abajo.';
+  }
+}
+
+function guardarEntrega(){
+  const fecha = document.getElementById('eFecha').value;
+  const desc = document.getElementById('eDesc').value.trim();
+  const monto = parseFloat(document.getElementById('eMonto').value) || 0;
+  if(!desc){
+    toast('Poné una descripción de la entrega');
+    return;
+  }
+  let itemsOrigen = [];
+  try{
+    const raw = document.getElementById('eItemsData').value;
+    if(raw) itemsOrigen = JSON.parse(raw);
+  }catch(e){}
+  data.entregas.push({
+    id: genId(), fecha, desc, monto, deducciones: [], itemsOrigen
+  });
+  closeModal('overlayEntrega');
+  saveData();
+  toast('Entrega agregada');
+}
+
+/* ---------- Deducción por cantidad seleccionable de cada ítem ---------- */
+
+let deduccionCtx = null; // { boletaId }
+
+function abrirDeduccion(boletaId){
+  const b = data.boletas.find(x => x.id === boletaId);
+  if(!b) return;
+  deduccionCtx = { boletaId };
+  document.getElementById('deduccionInfo').textContent =
+    `${b.desc} — elegí cuánta cantidad de cada ítem descontar`;
+
+  const list = document.getElementById('dedItemsList');
+  list.innerHTML = '';
+  b.items.forEach(item=>{
+    if(item.cantidadSaldo <= 0) return;
+    const row = document.createElement('div');
+    row.className = 'ded-item-row';
+    row.dataset.itemId = item.id;
+    row.innerHTML = `
+      <div class="ded-item-top">
+        <input type="checkbox" class="ded-check" checked>
+        <div class="ded-item-info">
+          <div class="ded-item-desc">${escapeHtml(item.desc)}</div>
+          <div class="ded-item-saldo">Pendiente: ${fmtCant(item.cantidadSaldo)} ${escapeHtml(item.unidad)} · ${fmt(item.saldo)} (a ${fmt(item.precioUnit)}/${escapeHtml(item.unidad)})</div>
+        </div>
+      </div>
+      <div class="ded-item-controls">
+        <div class="field">
+          <div class="field-label">Cantidad a descontar</div>
+          <input type="number" class="ded-item-qty" value="${item.cantidadSaldo}" min="0" max="${item.cantidadSaldo}" step="0.01">
+        </div>
+      </div>
+      <div class="ded-item-subtotal">$0</div>
+    `;
+    list.appendChild(row);
+    const checkbox = row.querySelector('.ded-check');
+    const qtyInput = row.querySelector('.ded-item-qty');
+    const subtotalEl = row.querySelector('.ded-item-subtotal');
+    function updateRow(){
+      let q = parseFloat(qtyInput.value) || 0;
+      if(q > item.cantidadSaldo){ q = item.cantidadSaldo; qtyInput.value = q; }
+      if(q < 0){ q = 0; qtyInput.value = 0; }
+      subtotalEl.textContent = fmt(q * item.precioUnit);
+      updateDeduccionTotalPreview();
+    }
+    checkbox.addEventListener('change', ()=>{
+      qtyInput.disabled = !checkbox.checked;
+      updateDeduccionTotalPreview();
+    });
+    qtyInput.addEventListener('input', updateRow);
+    updateRow();
+  });
+
+  if(list.innerHTML === ''){
+    list.innerHTML = '<div class="empty">Esta boleta ya está saldada.</div>';
+  }
+
+  const sel = document.getElementById('dEntrega');
+  sel.innerHTML = '<option value="">— Sin vincular a una entrega —</option>';
+  data.entregas.slice().reverse().forEach(e=>{
+    const opt = document.createElement('option');
+    opt.value = e.id;
+    opt.textContent = `${fmtFecha(e.fecha)} · ${e.desc}`;
+    sel.appendChild(opt);
+  });
+
+  updateDeduccionTotalPreview();
+  openModal('overlayDeduccion');
+}
+
+function updateDeduccionTotalPreview(){
+  let total = 0;
+  const b = data.boletas.find(x => x.id === deduccionCtx.boletaId);
+  document.querySelectorAll('#dedItemsList .ded-item-row').forEach(row=>{
+    const checked = row.querySelector('.ded-check').checked;
+    if(!checked) return;
+    const item = b.items.find(i=>i.id === row.dataset.itemId);
+    const q = parseFloat(row.querySelector('.ded-item-qty').value) || 0;
+    total += q * item.precioUnit;
+  });
+  document.getElementById('dedTotalPreview').textContent = fmt(total);
+}
+
+function confirmarDeduccion(){
+  if(!deduccionCtx) return;
+  const b = data.boletas.find(x => x.id === deduccionCtx.boletaId);
+  if(!b) return;
+
+  const rows = document.querySelectorAll('#dedItemsList .ded-item-row');
+  const aplicar = [];
+  rows.forEach(row=>{
+    const checked = row.querySelector('.ded-check').checked;
+    if(!checked) return;
+    const itemId = row.dataset.itemId;
+    const item = b.items.find(i=>i.id === itemId);
+    if(!item) return;
+    let qty = parseFloat(row.querySelector('.ded-item-qty').value) || 0;
+    if(qty > item.cantidadSaldo) qty = item.cantidadSaldo;
+    if(qty > 0){
+      aplicar.push({ item, qty, monto: round2(qty * item.precioUnit) });
+    }
+  });
+
+  if(aplicar.length === 0){
+    toast('Seleccioná al menos un ítem con cantidad mayor a 0');
+    return;
+  }
+
+  const entregaId = document.getElementById('dEntrega').value || null;
+  let totalDeducido = 0;
+  aplicar.forEach(({item, qty, monto})=>{
+    item.cantidadSaldo = round2(item.cantidadSaldo - qty);
+    totalDeducido += monto;
+  });
+
+  if(entregaId){
+    const e = data.entregas.find(x => x.id === entregaId);
+    if(e){
+      aplicar.forEach(({item, qty, monto})=>{
+        e.deducciones.push({ boletaId: b.id, itemDesc: item.desc, qty, unidad: item.unidad, monto });
+      });
+    }
+  }
+
+  closeModal('overlayDeduccion');
+  deduccionCtx = null;
+  saveData();
+  toast(`Descontado ${fmt(totalDeducido)}`);
+}
+
+/* ---------- Eliminar / reset ---------- */
+
+function eliminarBoleta(id){
+  if(!confirm('¿Eliminar esta boleta y sus ítems?')) return;
+  data.boletas = data.boletas.filter(b => b.id !== id);
+  saveData();
+}
+
+function eliminarEntrega(id){
+  if(!confirm('¿Eliminar esta entrega? Las deducciones ya aplicadas a boletas no se revierten.')) return;
+  data.entregas = data.entregas.filter(e => e.id !== id);
+  saveData();
+}
+
+function resetAll(){
+  if(!confirm('Esto borra todas las boletas y entregas cargadas. ¿Continuar?')) return;
+  data = { boletas: [], entregas: [] };
+  saveData();
+}
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 1800);
+}
+
+/* ---------- Render ---------- */
+
+function render(){
+  const deudaTotal = data.boletas.reduce((s,b)=> s + b.saldo, 0);
+  const recibidoTotal = data.boletas.reduce((s,b)=> s + b.monto, 0);
+  const deducidoTotal = data.boletas.reduce((s,b)=> s + (b.monto - b.saldo), 0);
+  document.getElementById('deudaTotal').textContent = fmt(deudaTotal);
+  document.getElementById('recibidoTotal').textContent = fmt(recibidoTotal);
+  document.getElementById('statBoletas').textContent = data.boletas.filter(b=>b.saldo>0).length;
+  document.getElementById('statEntregas').textContent = data.entregas.length;
+  document.getElementById('statDeducido').textContent = fmt(deducidoTotal);
+  const netoCobrarTotal = data.entregas.reduce((s,e)=> s + (e.monto - e.deducciones.reduce((ss,d)=>ss+d.monto,0)), 0);
+  document.getElementById('statNetoCobrar').textContent = fmt(netoCobrarTotal);
+
+  const bl = document.getElementById('boletasList');
+  if(data.boletas.length === 0){
+    bl.innerHTML = '<div class="empty">Todavía no cargaste ninguna boleta de insumos.</div>';
+  } else {
+    bl.innerHTML = data.boletas.slice().reverse().map(b=>{
+      const pct = b.monto > 0 ? Math.max(0, Math.min(100, (b.saldo / b.monto) * 100)) : 0;
+      const saldoClass = b.saldo === 0 ? 'saldo-cero' : (pct < 30 ? 'saldo-ok' : 'saldo-pend');
+      const itemsHtml = b.items.map(i=>{
+        const saldada = i.cantidadSaldo <= 0;
+        return `
+          <div class="item-row">
+            <div>
+              <div class="item-desc ${saldada ? 'item-saldada' : ''}">${escapeHtml(i.desc)}</div>
+              <div class="item-cant">${fmtCant(i.cantidadSaldo)} / ${fmtCant(i.cantidad)} ${escapeHtml(i.unidad)} pend.</div>
+            </div>
+            <div class="item-montos">
+              <div class="item-saldo">${saldada ? 'Saldado' : fmt(i.saldo)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      return `
+        <div class="card">
+          <div class="boleta-top">
+            <div>
+              <div class="boleta-desc">${escapeHtml(b.desc)}</div>
+              <div class="boleta-fecha">${fmtFecha(b.fecha)}</div>
+            </div>
+            <div class="boleta-montos">
+              <div class="boleta-total">de ${fmt(b.monto)}</div>
+              <div class="boleta-saldo ${saldoClass}">${b.saldo === 0 ? 'Saldada' : fmt(b.saldo) + ' pend.'}</div>
+            </div>
+          </div>
+          <div class="barra"><div class="barra-fill" style="width:${100-pct}%; background:${b.saldo===0 ? '#00a82d' : '#FFC72C'};"></div></div>
+          <div class="items-list">${itemsHtml}</div>
+          <div class="card-actions">
+            ${b.saldo > 0 ? `<button class="btn-green btn-small" onclick="abrirDeduccion('${b.id}')">Seleccionar cantidad a descontar</button>` : ''}
+            <button class="btn-danger-outline btn-small" onclick="eliminarBoleta('${b.id}')">Eliminar</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const el = document.getElementById('entregasList');
+  if(data.entregas.length === 0){
+    el.innerHTML = '<div class="empty">Todavía no registraste entregas de producto terminado.</div>';
+  } else {
+    el.innerHTML = data.entregas.slice().reverse().map(e=>{
+      const totalDeducido = e.deducciones.reduce((s,d)=> s+d.monto, 0);
+      const itemsOrigen = e.itemsOrigen || [];
+      return `
+        <div class="card">
+          <div class="boleta-top">
+            <div>
+              <div class="entrega-desc">${escapeHtml(e.desc)}</div>
+              <div class="entrega-fecha">${fmtFecha(e.fecha)}</div>
+            </div>
+            <div class="boleta-montos">
+              <div class="entrega-monto">${e.monto ? fmt(e.monto) : '—'}</div>
+            </div>
+          </div>
+          ${itemsOrigen.length ? `
+            <div class="items-list">
+              ${itemsOrigen.map(i => `
+                <div class="item-row">
+                  <div>
+                    <div class="item-desc">${escapeHtml(i.desc)}</div>
+                    <div class="item-cant">${fmtCant(i.cantidad)} x ${fmt(i.precioUnit || 0)}</div>
+                  </div>
+                  <div class="item-montos"><div class="item-saldo">${fmt(i.subtotal || (i.cantidad*i.precioUnit) || 0)}</div></div>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+          ${e.deducciones.length ? `
+            <div class="badge-deducciones">
+              Deducciones aplicadas (${fmt(totalDeducido)}):
+              ${e.deducciones.map(d=> `<div>· ${fmtCant(d.qty)} ${escapeHtml(d.unidad || '')} de ${escapeHtml(d.itemDesc || '')} — ${fmt(d.monto)}</div>`).join('')}
+            </div>
+          ` : ''}
+          ${e.monto ? `
+            <div class="neto-cobrar">
+              <span class="label">Neto a cobrarle</span>
+              <span class="monto">${fmt(e.monto - totalDeducido)}</span>
+            </div>
+          ` : ''}
+          <div class="card-actions">
+            <button class="btn-danger-outline btn-small" onclick="eliminarEntrega('${e.id}')">Eliminar</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function exportarWhatsapp(){
+  const deudaTotal = data.boletas.reduce((s,b)=> s + b.saldo, 0);
+  let msg = `*Conciliación Qué Fiesta*\n\n`;
+  msg += `*Boletas de insumos:*\n`;
+  data.boletas.forEach(b=>{
+    msg += `• ${b.desc} (${fmtFecha(b.fecha)}): ${fmt(b.monto)} — saldo ${fmt(b.saldo)}\n`;
+  });
+  msg += `\n*Entregas:*\n`;
+  if(data.entregas.length === 0) msg += `(sin entregas registradas)\n`;
+  let netoCobrarTotal = 0;
+  data.entregas.forEach(e=>{
+    const ded = e.deducciones.reduce((s,d)=>s+d.monto,0);
+    const neto = e.monto - ded;
+    netoCobrarTotal += neto;
+    msg += `• ${e.desc} (${fmtFecha(e.fecha)}): ${fmt(e.monto)}${ded ? ` — deducido ${fmt(ded)} → *neto a cobrar ${fmt(neto)}*` : ''}\n`;
+  });
+  msg += `\n*Deuda de insumos pendiente: ${fmt(deudaTotal)}*`;
+  msg += `\n*Neto total a cobrarle: ${fmt(netoCobrarTotal)}*`;
+
+  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+render();
+</script>
+</body>
+</html>
