@@ -8,14 +8,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{
-  --gold:#FFC72C;--gold-d:#c79500;--gold-dim:rgba(255,199,44,0.15);--gold-b:rgba(255,199,44,0.4);
-  --ink:#111111;--green:#00a82d;--green-bright:#00d838;
+  --gold:#FFC72C;--gold-d:#a67c00;--gold-dim:rgba(255,199,44,0.15);--gold-b:rgba(255,199,44,0.4);
+  --ink:#111111;--green:#0a8f28;--green-bright:#00d838;
   --bg:#f4f3ee;--bgp:#f4f3ee;--bgc:#ffffff;
-  --txt:#222222;--muted:#888888;--border:#e6e4db;
-  --red:#e23b3b;--blue:#3499c7;--orange:#e07c14;
+  --txt:#1a1a1a;--muted:#5f5f5f;--muted-soft:#767676;--border:#d8d5ca;
+  --red:#c0392b;--blue:#2b7ea8;--orange:#c96a0d;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bgp);font-family:'Fira Sans',sans-serif;color:var(--txt);min-height:100vh;}
+body{background:var(--bgp);font-family:'Fira Sans',sans-serif;color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;}
+/* Legibilidad global: subir mínimos de fuente (9-10px cuestan leer) */
+[style*="font-size:9px"]{font-size:11px !important;}
+[style*="font-size:10px"]{font-size:11px !important;}
+/* Grises claros sobre tarjetas blancas -> más oscuros. Las tarjetas negras (.ink) tienen su propio color y no se ven afectadas porque su texto se define aparte. */
+.panel [style*="color:#aaa"],.panel [style*="color:#999"],.panel [style*="color:#bbb"],.panel [style*="color:#ccc"]{color:#666 !important;}
 .tabs{display:flex;background:var(--ink);border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:100;}
 .tab{flex:1;padding:12px 2px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;color:#666;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold);}
@@ -401,6 +406,25 @@ input.qi{width:52px;text-align:center;font-family:Bebas Neue,sans-serif;font-siz
     <button onclick="document.getElementById('fileRestOrden').click()" style="flex:1;background:#fff;border:1px solid var(--border);color:#111;font-weight:700;font-size:12px;padding:11px;border-radius:8px;cursor:pointer;">⬆ Restaurar</button>
     <input type="file" id="fileRestOrden" accept="application/json" style="display:none" onchange="importarOrdenes(this)">
   </div>
+
+  <!-- ANÁLISIS POR MES (gráficos) -->
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+    <h2 class="st" style="margin:0;">ANÁLISIS DE VENTAS</h2>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <select id="statMesSel" onchange="renderStatsGraficos()" style="padding:6px 10px;border:1px solid var(--border);border-radius:7px;font-size:13px;background:#fff;"></select>
+    </div>
+  </div>
+  <div style="display:flex;gap:5px;margin-bottom:12px;">
+    <button class="statMetricBtn" id="stMetMonto" onclick="setStatMetrica('monto')" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:7px;background:var(--gold);color:#111;font-weight:700;font-size:12px;cursor:pointer;">💰 Por monto</button>
+    <button class="statMetricBtn" id="stMetVol" onclick="setStatMetrica('volumen')" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:7px;background:#fff;color:#111;font-weight:700;font-size:12px;cursor:pointer;">📦 Por volumen</button>
+  </div>
+  <div id="statKPImes"></div>
+  <h2 class="st" style="font-size:13px;">POR CATEGORÍA</h2>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;" id="statCatChart"></div>
+  <h2 class="st" style="font-size:13px;">POR PRODUCTO</h2>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;" id="statProdChart"></div>
+  <h2 class="st" style="font-size:13px;">DISTRIBUCIÓN DE CLIENTES</h2>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;" id="statCliChart"></div>
 
   <!-- MES ACTUAL VS ANTERIOR -->
   <h2 class="st">ESTE MES</h2>
@@ -1256,7 +1280,215 @@ function pctChange(curr,prev){
   return Math.round((curr-prev)/prev*100);
 }
 
+/* ===== ANÁLISIS DE VENTAS: gráficos por categoría/producto/cliente ===== */
+var _statMetrica='monto';   // 'monto' | 'volumen'
+var _statCliOpen=false;     // desglose de "otros" clientes
+var CAT_COLOR={'Tequeños':'#FFC72C','Pastelitos':'#FF8A4C','Empanadas':'#3fae6e','Mini Empanadas':'#3fae6e'};
+function catDe(cod){var p=PRODS.find(function(x){return x.cod===cod;});return p?p.cat:'Otros';}
+function unitsDe(cod){var p=PRODS.find(function(x){return x.cod===cod;});return p?(p.units||1):1;}
+function mesLabel(mk){
+  var meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var pp=mk.split('-');return meses[parseInt(pp[1])-1]+' '+pp[0];
+}
+function mesesConVentas(){
+  var s={};getOrders().forEach(function(o){var f=o.fecha||'';if(f)s[f.slice(0,7)]=1;});
+  return Object.keys(s).sort().reverse();
+}
+function mesPrevKey(mk){
+  var pp=mk.split('-');var y=parseInt(pp[0]),m=parseInt(pp[1])-1;
+  if(m===0){m=12;y--;}return y+'-'+String(m).padStart(2,'0');
+}
+/* agrega las ventas de un mes: por categoría, por producto, por cliente */
+function statsDeMes(mk){
+  var cat={},prod={},cli={};var totMonto=0,totVol=0;
+  getOrders().forEach(function(o){
+    if((o.fecha||'').slice(0,7)!==mk)return;
+    var cliName=o.cliente||'—';
+    (o.items||[]).forEach(function(it){
+      var monto=it.subtotal||0;
+      var vol=(it.qty||0)*(it.units||unitsDe(it.cod));  // unidades físicas
+      var c=catDe(it.cod);
+      if(!cat[c])cat[c]={monto:0,vol:0};
+      cat[c].monto+=monto;cat[c].vol+=vol;
+      if(!prod[it.cod])prod[it.cod]={cod:it.cod,name:it.name||it.cod,cat:c,monto:0,vol:0,packs:0};
+      prod[it.cod].monto+=monto;prod[it.cod].vol+=vol;prod[it.cod].packs+=(it.qty||0);
+      if(!cli[cliName])cli[cliName]={monto:0,vol:0,orders:0};
+      cli[cliName].monto+=monto;cli[cliName].vol+=vol;
+      totMonto+=monto;totVol+=vol;
+    });
+  });
+  getOrders().forEach(function(o){if((o.fecha||'').slice(0,7)===mk&&cli[o.cliente||'—'])cli[o.cliente||'—'].orders++;});
+  return {cat:cat,prod:prod,cli:cli,totMonto:totMonto,totVol:totVol};
+}
+function fmtVal(v){return _statMetrica==='monto'?('$'+Math.round(v).toLocaleString('es-AR')):(Math.round(v).toLocaleString('es-AR')+' u');}
+function pctDeltaTxt(prev,cur){
+  if(!prev||prev===0)return '';
+  var d=(cur-prev)/prev*100;
+  var col=d>=0?'#1a8a3a':'#c0392b';
+  return '<span style="color:'+col+';">'+(d>=0?'+':'')+d.toFixed(0)+'%</span>';
+}
+function initStatMesSel(){
+  var keys=mesesConVentas();var sel=document.getElementById('statMesSel');
+  if(!sel)return keys;
+  var prev=sel.value;
+  sel.innerHTML=keys.map(function(k){return '<option value="'+k+'">'+mesLabel(k)+'</option>';}).join('');
+  if(prev&&keys.indexOf(prev)>=0)sel.value=prev;
+  return keys;
+}
+function setStatMetrica(m){
+  _statMetrica=m;
+  document.getElementById('stMetMonto').style.background=(m==='monto')?'var(--gold)':'#fff';
+  document.getElementById('stMetVol').style.background=(m==='volumen')?'var(--gold)':'#fff';
+  renderStatsGraficos();
+}
+function renderStatsGraficos(){
+  var keys=initStatMesSel();
+  var catBox=document.getElementById('statCatChart');
+  if(!keys.length){
+    if(catBox)catBox.innerHTML='<div style="color:var(--muted);font-size:13px;text-align:center;padding:10px;">Sin ventas registradas aún.</div>';
+    ['statProdChart','statCliChart','statKPImes'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML='';});
+    return;
+  }
+  var mk=document.getElementById('statMesSel').value||keys[0];
+  var S=statsDeMes(mk);
+  var pmk=mesPrevKey(mk);
+  var P=keys.indexOf(pmk)>=0?statsDeMes(pmk):null;
+  var campo=_statMetrica;
+  var tot=(campo==='monto')?S.totMonto:S.totVol;
+  var totPrev=P?((campo==='monto')?P.totMonto:P.totVol):0;
+
+  var kpi=document.getElementById('statKPImes');
+  if(kpi){
+    kpi.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">'+
+      '<div style="background:var(--ink);border-radius:10px;padding:12px 14px;">'+
+        '<div style="font-family:Bebas Neue;font-size:26px;color:var(--gold);line-height:1;">'+fmtVal(tot)+'</div>'+
+        '<div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">'+(campo==='monto'?'Facturado':'Unidades')+' · '+mesLabel(mk)+'</div>'+
+        (P?'<div style="font-size:11px;margin-top:3px;">'+pctDeltaTxt(totPrev,tot)+' vs '+mesLabel(pmk)+'</div>':'')+
+      '</div>'+
+      '<div style="background:var(--ink);border-radius:10px;padding:12px 14px;">'+
+        '<div style="font-family:Bebas Neue;font-size:26px;color:#fff;line-height:1;">'+Object.keys(S.cli).length+'</div>'+
+        '<div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Clientes activos</div>'+
+      '</div>'+
+      '</div>';
+  }
+
+  var cats=Object.keys(S.cat).sort(function(a,b){return S.cat[b][campo]-S.cat[a][campo];});
+  catBox.innerHTML=donaHTML(cats.map(function(c){
+    return {label:c,val:S.cat[c][campo],color:CAT_COLOR[c]||'#999',prev:P&&P.cat[c]?P.cat[c][campo]:0};
+  }),tot,pmk,P!=null);
+
+  var prods=Object.values(S.prod).sort(function(a,b){return b[campo]-a[campo];});
+  var maxP=prods.length?prods[0][campo]:1;
+  var ph='';
+  prods.forEach(function(p){
+    var w=maxP>0?p[campo]/maxP*100:0;
+    var col=CAT_COLOR[p.cat]||'#999';
+    var pctv=tot>0?(p[campo]/tot*100).toFixed(0):0;
+    ph+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'+
+      '<span style="width:42px;font-size:11px;font-family:Oswald;font-weight:600;">'+p.cod+'</span>'+
+      '<div style="flex:1;background:#f0eee6;border-radius:4px;height:20px;position:relative;overflow:hidden;">'+
+        '<div style="width:'+w+'%;height:100%;background:'+col+';border-radius:4px;"></div>'+
+        '<span style="position:absolute;left:7px;top:50%;transform:translateY(-50%);font-size:11px;color:#111;white-space:nowrap;">'+p.name+'</span>'+
+      '</div>'+
+      '<span style="width:92px;text-align:right;font-family:Bebas Neue;font-size:14px;white-space:nowrap;">'+fmtVal(p[campo])+'</span>'+
+      '<span style="width:30px;text-align:right;font-size:11px;color:var(--muted);">'+pctv+'%</span>'+
+      '</div>';
+  });
+  document.getElementById('statProdChart').innerHTML=ph||'<div style="color:var(--muted);font-size:13px;">Sin datos.</div>';
+
+  renderClientesChart(S,tot,pmk,P);
+}
+function donaHTML(items,tot,pmk,hayPrev){
+  items=items.filter(function(x){return x.val>0;});
+  if(!items.length)return '<div style="color:var(--muted);font-size:13px;">Sin datos.</div>';
+  var cum=0;
+  var stops=items.map(function(it){var pct=it.val/tot*100;var s=cum;cum+=pct;return it.color+' '+s.toFixed(2)+'% '+cum.toFixed(2)+'%';}).join(', ');
+  var h='<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">'+
+    '<div style="width:120px;height:120px;border-radius:50%;background:conic-gradient('+stops+');position:relative;flex-shrink:0;">'+
+      '<div style="position:absolute;inset:17px;background:#fff;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;">'+
+        '<div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL</div>'+
+        '<div style="font-family:Bebas Neue;font-size:15px;color:#111;text-align:center;line-height:1;">'+fmtVal(tot)+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:7px;">';
+  items.forEach(function(it){
+    var pct=(it.val/tot*100).toFixed(0);
+    h+='<div style="display:flex;align-items:center;gap:7px;font-size:13px;">'+
+      '<span style="width:11px;height:11px;border-radius:3px;background:'+it.color+';flex-shrink:0;"></span>'+
+      '<span style="flex:1;font-weight:600;">'+it.label+'</span>'+
+      '<span style="font-family:Bebas Neue;font-size:15px;">'+pct+'%</span>'+
+      '<span style="width:88px;text-align:right;font-size:12px;color:var(--muted);">'+fmtVal(it.val)+'</span>'+
+      (hayPrev?'<span style="width:44px;text-align:right;font-size:11px;">'+pctDeltaTxt(it.prev,it.val)+'</span>':'')+
+      '</div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+function renderClientesChart(S,tot,pmk,P){
+  var box=document.getElementById('statCliChart');
+  if(!box)return;
+  var campo=_statMetrica;
+  var arr=Object.keys(S.cli).map(function(name){
+    return {name:name,val:S.cli[name][campo],orders:S.cli[name].orders,prev:P&&P.cli[name]?P.cli[name][campo]:0};
+  }).filter(function(x){return x.val>0;}).sort(function(a,b){return b.val-a.val;});
+  if(!arr.length){box.innerHTML='<div style="color:var(--muted);font-size:13px;">Sin datos.</div>';return;}
+
+  var UMBRAL=0.03;
+  var grandes=[],chicos=[];
+  arr.forEach(function(c){ (c.val/tot>=UMBRAL?grandes:chicos).push(c); });
+  var otrosVal=chicos.reduce(function(a,c){return a+c.val;},0);
+
+  var PAL=['#FFC72C','#FF8A4C','#3fae6e','#4C9AFF','#B37FEB','#F76D6D','#00b8a3','#f5a623','#8e7cc3','#5cb85c','#d98cb3','#7d8fa8'];
+  var segs=grandes.map(function(c,i){return {label:c.name,val:c.val,color:PAL[i%PAL.length],prev:c.prev};});
+  if(otrosVal>0)segs.push({label:'Otros ('+chicos.length+')',val:otrosVal,color:'#c9c6bd',prev:0,esOtros:true});
+
+  var cum=0;
+  var stops=segs.map(function(it){var pct=it.val/tot*100;var s=cum;cum+=pct;return it.color+' '+s.toFixed(2)+'% '+cum.toFixed(2)+'%';}).join(', ');
+  var h='<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">'+
+    '<div style="width:120px;height:120px;border-radius:50%;background:conic-gradient('+stops+');position:relative;flex-shrink:0;">'+
+      '<div style="position:absolute;inset:17px;background:#fff;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;">'+
+        '<div style="font-size:9px;color:var(--muted);letter-spacing:1px;">'+arr.length+' CLI</div>'+
+        '<div style="font-family:Bebas Neue;font-size:15px;color:#111;text-align:center;line-height:1;">'+fmtVal(tot)+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:5px;">';
+  segs.forEach(function(it){
+    var pct=(it.val/tot*100).toFixed(1);
+    if(it.esOtros){
+      h+='<div onclick="toggleOtrosClientes()" style="cursor:pointer;display:flex;align-items:center;gap:7px;font-size:13px;padding:5px 7px;border-radius:6px;background:'+(_statCliOpen?'#f7f6f2':'transparent')+';border:1px dashed #c9c6bd;">'+
+        '<span style="width:11px;height:11px;border-radius:3px;background:'+it.color+';flex-shrink:0;"></span>'+
+        '<span style="flex:1;font-weight:600;color:#666;">'+it.label+' '+(_statCliOpen?'▲':'▼')+'</span>'+
+        '<span style="font-family:Bebas Neue;font-size:15px;">'+pct+'%</span>'+
+        '<span style="width:88px;text-align:right;font-size:12px;color:var(--muted);">'+fmtVal(it.val)+'</span>'+
+        '</div>';
+    } else {
+      h+='<div style="display:flex;align-items:center;gap:7px;font-size:13px;">'+
+        '<span style="width:11px;height:11px;border-radius:3px;background:'+it.color+';flex-shrink:0;"></span>'+
+        '<span style="flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+it.label+'</span>'+
+        '<span style="font-family:Bebas Neue;font-size:15px;">'+pct+'%</span>'+
+        '<span style="width:88px;text-align:right;font-size:12px;color:var(--muted);">'+fmtVal(it.val)+'</span>'+
+        '</div>';
+    }
+  });
+  if(_statCliOpen&&chicos.length){
+    h+='<div style="padding:6px 7px 2px 20px;border-left:2px solid #e0ddd4;margin-top:2px;">';
+    chicos.forEach(function(c){
+      var pct=(c.val/tot*100).toFixed(1);
+      h+='<div style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:3px;color:#555;">'+
+        '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.name+'</span>'+
+        '<span style="color:var(--muted);">'+pct+'%</span>'+
+        '<span style="width:80px;text-align:right;font-family:Bebas Neue;">'+fmtVal(c.val)+'</span>'+
+        '</div>';
+    });
+    h+='</div>';
+  }
+  h+='</div></div>';
+  box.innerHTML=h;
+}
+function toggleOtrosClientes(){_statCliOpen=!_statCliOpen;renderStatsGraficos();}
+
 function renderStats(){
+  renderStatsGraficos();
   var orders=getOrders();
   var now=new Date();
   var curYear=now.getFullYear();
