@@ -1029,8 +1029,11 @@ function renderMap(clientes){
   wrap.appendChild(hdr);
   entries.forEach(function(entry){
     var barrio=entry[0];var cs=entry[1];
-    var als=cs.filter(c=>{var s=getCliStats(c.id);return getCliAlerta(c,s)!==null;});
-    var color=als.length===cs.length?"#ef5350":als.length>0?"#ff9800":"#4caf50";
+    // solo las alertas NEGATIVAS (inactivo, posible baja, bajó vs promedio) cuentan como riesgo.
+    // Las positivas (subió su compra) NO deben pintar el barrio de rojo.
+    var TIPOS_MALOS={ar:1,an:1,ab:1};
+    var enRiesgo=cs.filter(function(c){var s=getCliStats(c.id);var a=getCliAlerta(c,s);return a&&TIPOS_MALOS[a.tipo];});
+    var color=enRiesgo.length===cs.length?"#ef5350":enRiesgo.length>0?"#ff9800":"#4caf50";
     var size=Math.max(10,Math.min(24,8+Math.round(cs.reduce(function(a,c){var s=getCliStats(c.id);return a+s.avgMoney*s.total;},0)/40000)));
     var row=document.createElement("div");
     row.style.cssText="display:flex;align-items:center;gap:8px;padding:6px 8px;background:#1a1a1a;border-radius:6px;border-left:3px solid "+color+";cursor:pointer;";
@@ -1062,7 +1065,7 @@ function openMapDrawer(barrio,cs){
   var body=document.getElementById("dContent");body.innerHTML="";
   cs.forEach(function(c){
     var s=getCliStats(c.id);var a=getCliAlerta(c,s);
-    var bc=a?a.tipo==="ar"?"#ef5350":a.tipo==="an"?"#ff9800":"#42a5f5":"#4caf50";
+    var bc=!a?"#4caf50":(a.tipo==="ar"?"#ef5350":a.tipo==="an"||a.tipo==="ab"?"#ff9800":a.tipo==="aup"?"#4caf50":"#42a5f5");
     var div=document.createElement("div");
     div.style.cssText="display:flex;align-items:center;gap:10px;padding:10px;background:#111;border-radius:8px;margin-bottom:6px;border-left:3px solid "+bc+";";
     var info=document.createElement("div");info.style.flex="1";
@@ -1096,8 +1099,9 @@ function renderClientes(){
     asec.style.display="block";alist.innerHTML="";
     als.forEach(function(x){
       var d=document.createElement("div");
-      var col=x.a.tipo==="ar"?"rgba(239,83,80,.1)":x.a.tipo==="an"?"rgba(255,152,0,.1)":"rgba(33,150,243,.1)";
-      var tcol=x.a.tipo==="ar"?"#ef5350":x.a.tipo==="an"?"#ff9800":"#42a5f5";
+      var t=x.a.tipo;
+      var col=t==="ar"?"rgba(192,57,43,.09)":t==="an"||t==="ab"?"rgba(201,106,13,.09)":t==="aup"?"rgba(10,143,40,.09)":"rgba(43,126,168,.09)";
+      var tcol=t==="ar"?"#c0392b":t==="an"||t==="ab"?"#c96a0d":t==="aup"?"#0a8f28":"#2b7ea8";
       d.style.cssText="background:"+col+";border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:12px;cursor:pointer;";
       d.innerHTML='<strong style="color:var(--ink);">'+x.c.nombre+'</strong> <span style="color:'+tcol+';">'+x.a.msg+'</span>';
       d.addEventListener("click",function(){toggleCliExpand(x.c.id);});
@@ -1106,7 +1110,7 @@ function renderClientes(){
   }else asec.style.display="none";
   var filtered=clientes.slice();
   if(cliFilter==="alerta")filtered=clientes.filter(function(c){var s=getCliStats(c.id);return getCliAlerta(c,s)!==null;});
-  else if(cliFilter==="activo")filtered=clientes.filter(function(c){var s=getCliStats(c.id);var a=getCliAlerta(c,s);return s.lastOrder&&(!a||a.tipo==="ab");});
+  else if(cliFilter==="activo")filtered=clientes.filter(function(c){var s=getCliStats(c.id);var a=getCliAlerta(c,s);return s.lastOrder&&(!a||a.tipo==="ab"||a.tipo==="aup");});
   var sortBy=document.getElementById("cliSort")?document.getElementById("cliSort").value:"volumen";
   filtered.sort(function(a,b){
     var sa=getCliStats(a.id),sb=getCliStats(b.id);
