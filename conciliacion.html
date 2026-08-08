@@ -220,6 +220,22 @@
     font-size:22px;
     color:var(--green);
   }
+  .card-pagada{
+    background:#f6f6f2;
+  }
+  .card-pagada .neto-cobrar .monto{ color:var(--muted); }
+  .badge-pagada{
+    display:inline-block;
+    background:var(--green);
+    color:#fff;
+    font-family:'Oswald',sans-serif;
+    font-size:10px;
+    letter-spacing:0.6px;
+    padding:2px 7px;
+    border-radius:5px;
+    vertical-align:middle;
+    margin-left:6px;
+  }
 
   .empty{
     text-align:center;
@@ -545,6 +561,10 @@ function loadData(){
         });
         return b;
       });
+      parsed.entregas = (parsed.entregas || []).map(e=>{
+        if(e.pagada === undefined) e.pagada = false;
+        return e;
+      });
       return parsed;
     }
   }catch(e){}
@@ -810,7 +830,7 @@ function guardarEntrega(){
     if(raw) itemsOrigen = JSON.parse(raw);
   }catch(e){}
   data.entregas.push({
-    id: genId(), fecha, desc, monto, deducciones: [], itemsOrigen
+    id: genId(), fecha, desc, monto, deducciones: [], itemsOrigen, pagada: false
   });
   closeModal('overlayEntrega');
   saveData();
@@ -961,6 +981,28 @@ function eliminarEntrega(id){
   saveData();
 }
 
+function marcarPagada(id){
+  const e = data.entregas.find(x => x.id === id);
+  if(!e) return;
+  e.pagada = true;
+  saveData();
+  toast('Marcada como pagada');
+}
+
+function marcarPendiente(id){
+  const e = data.entregas.find(x => x.id === id);
+  if(!e) return;
+  e.pagada = false;
+  saveData();
+  toast('Vuelve a quedar pendiente');
+}
+
+let mostrarPagadas = false;
+function toggleHistorialPagadas(){
+  mostrarPagadas = !mostrarPagadas;
+  render();
+}
+
 function resetAll(){
   if(!confirm('Esto borra todas las boletas y entregas cargadas. ¿Continuar?')) return;
   data = { boletas: [], entregas: [] };
@@ -985,7 +1027,7 @@ function render(){
   document.getElementById('statBoletas').textContent = data.boletas.filter(b=>b.saldo>0).length;
   document.getElementById('statEntregas').textContent = data.entregas.length;
   document.getElementById('statDeducido').textContent = fmt(deducidoTotal);
-  const netoCobrarTotal = data.entregas.reduce((s,e)=> s + (e.monto - e.deducciones.reduce((ss,d)=>ss+d.monto,0)), 0);
+  const netoCobrarTotal = data.entregas.filter(e=>!e.pagada).reduce((s,e)=> s + (e.monto - e.deducciones.reduce((ss,d)=>ss+d.monto,0)), 0);
   document.getElementById('statNetoCobrar').textContent = fmt(netoCobrarTotal);
 
   const bl = document.getElementById('boletasList');
@@ -1033,54 +1075,80 @@ function render(){
   }
 
   const el = document.getElementById('entregasList');
+  const pendientes = data.entregas.filter(e => !e.pagada);
+  const pagadas = data.entregas.filter(e => e.pagada);
+
+  function tarjetaEntrega(e){
+    const totalDeducido = e.deducciones.reduce((s,d)=> s+d.monto, 0);
+    const itemsOrigen = e.itemsOrigen || [];
+    const neto = e.monto - totalDeducido;
+    return `
+      <div class="card ${e.pagada ? 'card-pagada' : ''}">
+        <div class="boleta-top">
+          <div>
+            <div class="entrega-desc">${escapeHtml(e.desc)} ${e.pagada ? '<span class="badge-pagada">PAGADA</span>' : ''}</div>
+            <div class="entrega-fecha">${fmtFecha(e.fecha)}</div>
+          </div>
+          <div class="boleta-montos">
+            <div class="entrega-monto">${e.monto ? fmt(e.monto) : '—'}</div>
+          </div>
+        </div>
+        ${itemsOrigen.length ? `
+          <div class="items-list">
+            ${itemsOrigen.map(i => `
+              <div class="item-row">
+                <div>
+                  <div class="item-desc">${escapeHtml(i.desc)}</div>
+                  <div class="item-cant">${fmtCant(i.cantidad)} x ${fmt(i.precioUnit || 0)}</div>
+                </div>
+                <div class="item-montos"><div class="item-saldo">${fmt(i.subtotal || (i.cantidad*i.precioUnit) || 0)}</div></div>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        ${e.deducciones.length ? `
+          <div class="badge-deducciones">
+            Deducciones aplicadas (${fmt(totalDeducido)}):
+            ${e.deducciones.map(d=> `<div>· ${fmtCant(d.qty)} ${escapeHtml(d.unidad || '')} de ${escapeHtml(d.itemDesc || '')} — ${fmt(d.monto)}</div>`).join('')}
+          </div>
+        ` : ''}
+        ${e.monto ? `
+          <div class="neto-cobrar">
+            <span class="label">${e.pagada ? 'Cobrado' : 'Neto a cobrarle'}</span>
+            <span class="monto">${fmt(neto)}</span>
+          </div>
+        ` : ''}
+        <div class="card-actions">
+          ${e.pagada
+            ? `<button class="btn-outline btn-small" onclick="marcarPendiente('${e.id}')">Marcar como pendiente</button>`
+            : `<button class="btn-green btn-small" onclick="marcarPagada('${e.id}')">Marcar como pagada</button>`
+          }
+          <button class="btn-danger-outline btn-small" onclick="eliminarEntrega('${e.id}')">Eliminar</button>
+        </div>
+      </div>
+    `;
+  }
+
   if(data.entregas.length === 0){
     el.innerHTML = '<div class="empty">Todavía no registraste entregas de producto terminado.</div>';
   } else {
-    el.innerHTML = data.entregas.slice().reverse().map(e=>{
-      const totalDeducido = e.deducciones.reduce((s,d)=> s+d.monto, 0);
-      const itemsOrigen = e.itemsOrigen || [];
-      return `
-        <div class="card">
-          <div class="boleta-top">
-            <div>
-              <div class="entrega-desc">${escapeHtml(e.desc)}</div>
-              <div class="entrega-fecha">${fmtFecha(e.fecha)}</div>
-            </div>
-            <div class="boleta-montos">
-              <div class="entrega-monto">${e.monto ? fmt(e.monto) : '—'}</div>
-            </div>
-          </div>
-          ${itemsOrigen.length ? `
-            <div class="items-list">
-              ${itemsOrigen.map(i => `
-                <div class="item-row">
-                  <div>
-                    <div class="item-desc">${escapeHtml(i.desc)}</div>
-                    <div class="item-cant">${fmtCant(i.cantidad)} x ${fmt(i.precioUnit || 0)}</div>
-                  </div>
-                  <div class="item-montos"><div class="item-saldo">${fmt(i.subtotal || (i.cantidad*i.precioUnit) || 0)}</div></div>
-                </div>
-              `).join('')}
-            </div>
-          ` : ''}
-          ${e.deducciones.length ? `
-            <div class="badge-deducciones">
-              Deducciones aplicadas (${fmt(totalDeducido)}):
-              ${e.deducciones.map(d=> `<div>· ${fmtCant(d.qty)} ${escapeHtml(d.unidad || '')} de ${escapeHtml(d.itemDesc || '')} — ${fmt(d.monto)}</div>`).join('')}
-            </div>
-          ` : ''}
-          ${e.monto ? `
-            <div class="neto-cobrar">
-              <span class="label">Neto a cobrarle</span>
-              <span class="monto">${fmt(e.monto - totalDeducido)}</span>
-            </div>
-          ` : ''}
-          <div class="card-actions">
-            <button class="btn-danger-outline btn-small" onclick="eliminarEntrega('${e.id}')">Eliminar</button>
-          </div>
-        </div>
+    let html = '';
+    if(pendientes.length === 0){
+      html += '<div class="empty">No hay entregas pendientes de cobro.</div>';
+    } else {
+      html += pendientes.slice().reverse().map(tarjetaEntrega).join('');
+    }
+    if(pagadas.length > 0){
+      html += `
+        <button class="btn-ghost btn-small" style="width:100%; margin-top:6px;" onclick="toggleHistorialPagadas()">
+          ${mostrarPagadas ? '▲ Ocultar' : '▼ Ver'} historial de cobradas (${pagadas.length})
+        </button>
       `;
-    }).join('');
+      if(mostrarPagadas){
+        html += pagadas.slice().reverse().map(tarjetaEntrega).join('');
+      }
+    }
+    el.innerHTML = html;
   }
 }
 
@@ -1092,15 +1160,16 @@ function escapeHtml(s){
 
 function exportarWhatsapp(){
   const deudaTotal = data.boletas.reduce((s,b)=> s + b.saldo, 0);
+  const pendientes = data.entregas.filter(e => !e.pagada);
   let msg = `*Conciliación Qué Fiesta*\n\n`;
   msg += `*Boletas de insumos:*\n`;
   data.boletas.forEach(b=>{
     msg += `• ${b.desc} (${fmtFecha(b.fecha)}): ${fmt(b.monto)} — saldo ${fmt(b.saldo)}\n`;
   });
-  msg += `\n*Entregas:*\n`;
-  if(data.entregas.length === 0) msg += `(sin entregas registradas)\n`;
+  msg += `\n*Entregas pendientes de cobro:*\n`;
+  if(pendientes.length === 0) msg += `(no hay entregas pendientes de cobro)\n`;
   let netoCobrarTotal = 0;
-  data.entregas.forEach(e=>{
+  pendientes.forEach(e=>{
     const ded = e.deducciones.reduce((s,d)=>s+d.monto,0);
     const neto = e.monto - ded;
     netoCobrarTotal += neto;
