@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#111111">
+<title>Obra Humberto Primo 1750 · Teque Onda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@400;500;600&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f3ee; --gold:#FFC72C; --ink:#111; --green:#00a82d;
+  --alert:#c0392b; --line:#e2e0d8; --muted:#8a8880; --card:#fff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);font-family:'Fira Sans',system-ui,-apple-system,sans-serif;color:var(--ink);padding-bottom:40px}
+h1,h2,.bebas{font-family:'Bebas Neue',Impact,sans-serif;letter-spacing:.5px;margin:0}
+.mono{font-family:'Oswald',system-ui,sans-serif;font-variant-numeric:tabular-nums}
+
+/* HEADER */
+header{background:var(--ink);color:#fff;border-top:4px solid var(--gold);padding:16px 16px 18px;position:sticky;top:0;z-index:20}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.eyebrow{color:var(--gold);font-family:'Oswald';font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.savechip{font-family:'Oswald';font-size:10px;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:5px;text-transform:uppercase}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block}
+h1{font-size:30px;line-height:1;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;margin-bottom:14px}
+.stat label{display:block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;font-family:'Oswald'}
+.stat .val{font-family:'Oswald';font-size:21px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.val.green{color:var(--green)} .val.alert{color:#ff6b5b}
+#budgetInput{background:transparent;border:none;border-bottom:2px solid var(--gold);color:#fff;font-family:'Oswald';font-size:21px;font-weight:600;width:130px;padding:0;outline:none}
+.bar{height:12px;border-radius:99px;background:#333;overflow:hidden;display:flex}
+.bar div{height:100%}
+.legend{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);margin-top:6px;flex-wrap:wrap;gap:6px}
+.legend .l{display:flex;gap:10px}
+.legend .l span{display:flex;align-items:center;gap:4px}
+.sw{width:8px;height:8px;border-radius:50%;display:inline-block}
+.over{color:#ff6b5b;font-weight:600}
+
+/* TOOLBAR */
+.toolbar{display:flex;gap:8px;padding:12px 16px 0;max-width:760px;margin:0 auto}
+.tbtn{flex:1;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;font-family:'Oswald';font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:#555}
+
+/* CATEGORIES */
+main{max-width:760px;margin:0 auto;padding:12px 16px}
+.cat{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.cat.partial{border-left-color:var(--gold)}
+.cat.done{border-left-color:var(--green)}
+.cat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;cursor:pointer}
+.cat-l{display:flex;align-items:center;gap:11px;min-width:0}
+.ico{width:34px;height:34px;border-radius:9px;background:var(--bg);display:grid;place-items:center;font-size:17px;flex-shrink:0}
+.cat-name{font-family:'Bebas Neue';font-size:17px;line-height:1.1}
+.cat-sub{font-size:11px;color:var(--muted)}
+.cat-r{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.cat-total{font-family:'Oswald';font-weight:600;font-size:15px;text-align:right;font-variant-numeric:tabular-nums}
+.cat-conf{font-family:'Oswald';font-size:10px;color:var(--green);text-align:right}
+.chev{color:#bbb;font-size:12px;transition:transform .18s}
+.cat.open .chev{transform:rotate(180deg)}
+.cat-body{display:none;border-top:1px solid var(--line);padding:12px 14px 14px}
+.cat.open .cat-body{display:block}
+
+/* ITEMS */
+.item{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px dashed #eee;font-size:14px}
+.item:last-of-type{border-bottom:none}
+.chk{width:19px;height:19px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;display:grid;place-items:center;font-size:11px;color:#fff}
+.chk.on{background:var(--green);border-color:var(--green)}
+.iname{flex:1;min-width:0;word-break:break-word}
+.imonto{font-family:'Oswald';font-variant-numeric:tabular-nums;flex-shrink:0}
+.iact{color:#c9c7bf;font-size:15px;padding:2px 3px;flex-shrink:0}
+
+/* ADD ROW */
+.addrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+input[type=text],input[type=tel]{border:1px solid var(--line);border-radius:9px;padding:10px 11px;font-size:15px;font-family:'Fira Sans';outline:none;background:#fff;min-width:0}
+input:focus{border-color:var(--gold)}
+.in-name{flex:1 1 100%}
+.in-monto{flex:1 1 110px;font-family:'Oswald';font-variant-numeric:tabular-nums}
+.addbtn{background:var(--ink);color:#fff;border:none;border-radius:9px;padding:10px 15px;font-family:'Oswald';font-size:13px;letter-spacing:.8px;text-transform:uppercase;flex-shrink:0}
+.confl{display:flex;align-items:center;gap:5px;font-size:12px;color:#666;padding:0 4px}
+.confl input{width:17px;height:17px;accent-color:var(--green)}
+footer{text-align:center;font-size:11px;color:var(--muted);padding:14px 20px 0;line-height:1.5}
+button{cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-top">
+    <div class="eyebrow">🏗 Obra en curso</div>
+    <div class="savechip"><span class="dot"></span><span id="saveTxt">guardado</span></div>
+  </div>
+  <h1>Humberto Primo 1750</h1>
+  <div class="stats">
+    <div class="stat"><label>Presupuesto</label><input id="budgetInput" type="tel" inputmode="numeric"></div>
+    <div class="stat"><label>Comprometido</label><div class="val" id="vComp">$ 0</div></div>
+    <div class="stat"><label>Confirmado</label><div class="val green" id="vConf">$ 0</div></div>
+    <div class="stat"><label>Disponible</label><div class="val" id="vDisp">$ 0</div></div>
+  </div>
+  <div class="bar"><div id="barConf" style="background:var(--green)"></div><div id="barCot" style="background:var(--gold)"></div></div>
+  <div class="legend">
+    <div class="l">
+      <span><i class="sw" style="background:var(--green)"></i>confirmado</span>
+      <span><i class="sw" style="background:var(--gold)"></i>cotizado</span>
+    </div>
+    <div id="overMsg"></div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <button class="tbtn" onclick="exportar()">⬆ Exportar</button>
+  <button class="tbtn" onclick="importar()">⬇ Importar</button>
+  <button class="tbtn" onclick="enviarWA()">📲 WhatsApp</button>
+</div>
+
+<main id="cats"></main>
+
+<footer>
+  Se guarda solo en este teléfono. Usá <b>Exportar</b> cada tanto como respaldo,<br>o <b>WhatsApp</b> para mandarte el resumen.
+</footer>
+
+<script>
+var CATS = [
+  {id:"fachada", n:"Fachada", i:"🏢"},
+  {id:"interior", n:"Interior", i:"🏠"},
+  {id:"pisos", n:"Pisos", i:"🔲"},
+  {id:"muebles", n:"Muebles, mesadas y banquetas", i:"🪑"},
+  {id:"electricidad", n:"Electricidad e iluminación", i:"💡"},
+  {id:"carteleria", n:"Cartelería", i:"🪧"},
+  {id:"electro", n:"Electrodomésticos", i:"🧊"},
+  {id:"pintura", n:"Pintura", i:"🖌️"},
+  {id:"albanileria", n:"Albañilería", i:"🧱"},
+  {id:"bano", n:"Baño", i:"🚿"},
+  {id:"techos", n:"Techos", i:"🏚️"},
+  {id:"plomeria", n:"Plomería", i:"🔧"},
+  {id:"habilitacion", n:"Habilitación del lugar", i:"📋"}
+];
+
+var KEY = "obra-hp1750-v1";
+var state = {budget:1600000, items:{}, open:{}};
+
+function load(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(raw){
+      var p = JSON.parse(raw);
+      if(p.budget) state.budget = p.budget;
+      if(p.items) state.items = p.items;
+    }
+  }catch(e){ console.error(e); }
+}
+function save(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify({budget:state.budget, items:state.items}));
+    document.getElementById('saveTxt').textContent = 'guardado';
+  }catch(e){
+    document.getElementById('saveTxt').textContent = 'no guardó';
+  }
+}
+
+function fmt(n){
+  n = Math.round(n||0);
+  return "$ " + n.toLocaleString('es-AR');
+}
+function parseM(v){
+  if(v===null||v===undefined) return null;
+  var s = String(v).replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',','.');
+  var n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+function list(id){ return state.items[id] || []; }
+function catTotal(id){ return list(id).reduce(function(s,i){return s+i.monto;},0); }
+function catConf(id){ return list(id).filter(function(i){return i.confirmed;}).reduce(function(s,i){return s+i.monto;},0); }
+
+function totals(){
+  var comp=0, conf=0;
+  CATS.forEach(function(c){ comp += catTotal(c.id); conf += catConf(c.id); });
+  return {comp:comp, conf:conf, cot:comp-conf, disp:state.budget-comp};
+}
+
+function renderHeader(){
+  var t = totals();
+  document.getElementById('vComp').textContent = fmt(t.comp);
+  document.getElementById('vConf').textContent = fmt(t.conf);
+  var d = document.getElementById('vDisp');
+  d.textContent = fmt(t.disp);
+  d.className = 'val' + (t.disp<0 ? ' alert' : '');
+  var pc = state.budget>0 ? Math.min(100,(t.conf/state.budget)*100) : 0;
+  var pq = state.budget>0 ? Math.min(100-pc,(t.cot/state.budget)*100) : 0;
+  document.getElementById('barConf').style.width = pc+'%';
+  document.getElementById('barCot').style.width = pq+'%';
+  document.getElementById('overMsg').innerHTML = t.disp<0 ? '<span class="over">⚠ te pasaste por '+fmt(Math.abs(t.disp))+'</span>' : '';
+}
+
+function render(){
+  var wrap = document.getElementById('cats');
+  wrap.innerHTML = '';
+  CATS.forEach(function(c){
+    var total = catTotal(c.id), conf = catConf(c.id), items = list(c.id);
+    var cls = 'cat' + (state.open[c.id]?' open':'') + (total>0 ? (conf===total?' done':' partial') : '');
+    var div = document.createElement('div');
+    div.className = cls;
+
+    var itemsHTML = items.map(function(it){
+      return '<div class="item">'+
+        '<div class="chk'+(it.confirmed?' on':'')+'" onclick="toggleConf(\''+c.id+'\',\''+it.id+'\')">'+(it.confirmed?'✓':'')+'</div>'+
+        '<div class="iname">'+escapeHtml(it.name)+'</div>'+
+        '<div class="imonto">'+fmt(it.monto)+'</div>'+
+        '<button class="iact" onclick="editItem(\''+c.id+'\',\''+it.id+'\')">✎</button>'+
+        '<button class="iact" onclick="delItem(\''+c.id+'\',\''+it.id+'\')">✕</button>'+
+      '</div>';
+    }).join('');
+
+    div.innerHTML =
+      '<div class="cat-head" onclick="toggleCat(\''+c.id+'\')">'+
+        '<div class="cat-l"><div class="ico">'+c.i+'</div>'+
+        '<div><div class="cat-name">'+c.n+'</div><div class="cat-sub">'+items.length+(items.length===1?' ítem':' ítems')+'</div></div></div>'+
+        '<div class="cat-r"><div><div class="cat-total">'+fmt(total)+'</div>'+
+        ((conf>0&&conf!==total)?'<div class="cat-conf">'+fmt(conf)+' confirmado</div>':'')+
+        '</div><div class="chev">▼</div></div>'+
+      '</div>'+
+      '<div class="cat-body">'+ itemsHTML +
+        '<div class="addrow">'+
+          '<input class="in-name" type="text" id="n_'+c.id+'" placeholder="Concepto (ej: marmolería mesada)">'+
+          '<input class="in-monto" type="tel" inputmode="numeric" id="m_'+c.id+'" placeholder="Monto">'+
+          '<label class="confl"><input type="checkbox" id="c_'+c.id+'">ya cerrado</label>'+
+          '<button class="addbtn" onclick="addItem(\''+c.id+'\')">Agregar</button>'+
+        '</div>'+
+      '</div>';
+    wrap.appendChild(div);
+  });
+  renderHeader();
+}
+
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function toggleCat(id){ state.open[id] = !state.open[id]; render(); }
+
+function addItem(catId){
+  var nEl = document.getElementById('n_'+catId), mEl = document.getElementById('m_'+catId), cEl = document.getElementById('c_'+catId);
+  var name = nEl.value.trim(), monto = parseM(mEl.value);
+  if(!name || monto===null){ nEl.focus(); return; }
+  if(!state.items[catId]) state.items[catId] = [];
+  state.items[catId].push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5), name:name, monto:monto, confirmed:cEl.checked});
+  state.open[catId] = true;
+  save(); render();
+  var f = document.getElementById('n_'+catId); if(f) f.focus();
+}
+
+function delItem(catId,itemId){
+  if(!confirm('¿Borrar este ítem?')) return;
+  state.items[catId] = list(catId).filter(function(i){return i.id!==itemId;});
+  save(); render();
+}
+
+function editItem(catId,itemId){
+  var it = list(catId).filter(function(i){return i.id===itemId;})[0];
+  if(!it) return;
+  var name = prompt('Concepto:', it.name);
+  if(name===null) return;
+  var monto = prompt('Monto:', it.monto);
+  if(monto===null) return;
+  var m = parseM(monto);
+  it.name = name.trim() || it.name;
+  if(m!==null) it.monto = m;
+  save(); render();
+}
+
+function toggleConf(catId,itemId){
+  var it = list(catId).filter(function(i){return i.id===itemId;})[0];
+  if(!it) return;
+  it.confirmed = !it.confirmed;
+  save(); render();
+}
+
+function exportar(){
+  var txt = JSON.stringify({budget:state.budget, items:state.items});
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ alert('Copiado. Pegalo en una nota o mandátelo por WhatsApp como respaldo.'); },
+    function(){ prompt('Copiá este texto:', txt); });
+  } else { prompt('Copiá este texto:', txt); }
+}
+
+function importar(){
+  var txt = prompt('Pegá acá el respaldo que exportaste antes:');
+  if(!txt) return;
+  try{
+    var p = JSON.parse(txt);
+    if(p.budget) state.budget = p.budget;
+    if(p.items) state.items = p.items;
+    document.getElementById('budgetInput').value = state.budget.toLocaleString('es-AR');
+    save(); render();
+  }catch(e){ alert('Ese texto no es válido.'); }
+}
+
+function enviarWA(){
+  var t = totals();
+  var msg = '*OBRA HUMBERTO PRIMO 1750*\n\n';
+  msg += 'Presupuesto: '+fmt(state.budget)+'\n';
+  msg += 'Comprometido: '+fmt(t.comp)+'\n';
+  msg += 'Confirmado: '+fmt(t.conf)+'\n';
+  msg += 'Disponible: '+fmt(t.disp)+'\n\n';
+  CATS.forEach(function(c){
+    var items = list(c.id);
+    if(!items.length) return;
+    msg += '*'+c.n.toUpperCase()+'* — '+fmt(catTotal(c.id))+'\n';
+    items.forEach(function(it){ msg += (it.confirmed?'✅ ':'⏳ ')+it.name+': '+fmt(it.monto)+'\n'; });
+    msg += '\n';
+  });
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+// budget input
+var bi = document.getElementById('budgetInput');
+bi.addEventListener('focus', function(){ bi.value = state.budget; });
+bi.addEventListener('blur', function(){
+  var v = parseM(bi.value);
+  if(v!==null) state.budget = v;
+  bi.value = state.budget.toLocaleString('es-AR');
+  save(); renderHeader();
+});
+bi.addEventListener('keydown', function(e){ if(e.key==='Enter') bi.blur(); });
+
+load();
+bi.value = state.budget.toLocaleString('es-AR');
+render();
+</script>
+</body>
+</html>
