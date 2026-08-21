@@ -1,0 +1,17 @@
+{
+  "name": "Cierre Palermo · Teque Onda",
+  "short_name": "Cierre",
+  "description": "Cierre de caja diario — sucursal Palermo",
+  "start_url": "/cierre-palermo.html",
+  "scope": "/cierre-palermo.html",
+  "display": "standalone",
+  "background_color": "#f4f3ee",
+  "theme_color": "#111111",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon-cierre-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-cierre-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-cierre-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-cierre-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
