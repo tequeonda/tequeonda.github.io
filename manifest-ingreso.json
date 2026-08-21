@@ -1,0 +1,17 @@
+{
+  "name": "Orden de Ingreso · Teque Onda",
+  "short_name": "Ingresos",
+  "description": "Ingresos de mercadería desde fábrica e historial — Palermo",
+  "start_url": "/ingreso-palermo.html",
+  "scope": "/ingreso-palermo.html",
+  "display": "standalone",
+  "background_color": "#f4f3ee",
+  "theme_color": "#111111",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon-ingreso-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-ingreso-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-ingreso-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-ingreso-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
