@@ -8,7 +8,7 @@
       "nombre": "Tequeño Queso x12 unds",
       "unidades": 12,
       "referenciaCalculadora": true,
-      "precios": { "10-19": 6200, "20-49": 5950, "50+": 5750 }
+      "precios": { "10-19": 6300, "20-49": 5950, "50+": 5750 }
     },
     {
       "cod": "TJQ",
