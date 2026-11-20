@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cierre · Teque Onda</title>
+<link rel="manifest" href="/manifest-cierre.json">
+<meta name="theme-color" content="#111111">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Cierre">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-cierre-192.png">
+<link rel="apple-touch-icon" href="/icon-cierre-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFC72C; --gold-dark: #c79500; --ink: #111111;
+  --green: #00a82d; --green-bright: #00d838;
+  --page: #f4f3ee; --card: #ffffff; --border: #e6e4db;
+  --red: #e23b3b; --orange: #e07c14;
+  --text: #222222; --muted: #888888; --cream: #eceae3;
+  --fh: 'Bebas Neue', sans-serif;
+  --fb: 'Fira Sans', sans-serif;
+  --fc: 'Oswald', sans-serif;
+  --cat-color: #888888; --cat-bg: #f8f7f5;
+}
+
+/* CATEGORY COLOR TOKENS */
+.category[data-cat="POSTRES"]     { --cat-color:#9B6BE0; --cat-bg:#faf7fe; }
+.category[data-cat="CACHITOS"]    { --cat-color:#E0A92C; --cat-bg:#fdfaf2; }
+.category[data-cat="EMPANADAS"]   { --cat-color:#3fae6e; --cat-bg:#f7fdf9; }
+.category[data-cat="PASTELITOS"]  { --cat-color:#FF8A4C; --cat-bg:#fffaf6; }
+.category[data-cat="TEQUEÑOS"]    { --cat-color:#FFC72C; --cat-bg:#fffdf5; }
+.category[data-cat="BEBIDAS"]     { --cat-color:#3499c7; --cat-bg:#f4fbfe; }
+.category[data-cat="SALSAS"]      { --cat-color:#D85A85; --cat-bg:#fef6f9; }
+.category[data-cat="CAJAS"]       { --cat-color:#7a7a7a; --cat-bg:#f8f7f5; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Evita que un scroll hacia abajo en el tope recargue la página (pull-to-refresh) */
+html, body { overscroll-behavior-y: contain; }
+body { background: var(--page); color: var(--text); font-family: var(--fb); min-height: 100vh; padding: 0 0 80px; }
+
+/* ── HEADER ── */
+header {
+  background: var(--ink); border-bottom: 4px solid var(--gold);
+  padding: 14px 16px 12px; display: flex; align-items: center;
+  justify-content: space-between; position: sticky; top: 0; z-index: 100;
+}
+header h1 { font-family: var(--fh); font-size: 1.7rem; letter-spacing: 3px; color: #fff; line-height: 1; }
+header h1 .onda { color: var(--gold); }
+header .sub { font-family: var(--fh); font-size: 0.9rem; color: var(--gold); letter-spacing: 2px; margin-top: 3px; white-space: nowrap; }
+header h1 { white-space: nowrap; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.date-badge { font-family: var(--fh); font-size: 0.9rem; color: #bbb; letter-spacing: 1.5px; white-space: nowrap; }
+.btn-settings {
+  background: transparent; border: 1px solid rgba(255,199,44,0.35);
+  border-radius: 7px; color: var(--gold); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.5px; padding: 6px 12px; height: 34px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; white-space: nowrap; font-family: var(--fb);
+}
+.btn-settings:hover { background: var(--gold); color: var(--ink); }
+
+/* ── SUCURSAL ── */
+.branch-wrap { background: var(--ink); padding: 10px 14px 0; }
+.branch-tabs { display: flex; gap: 4px; background: #222; border-radius: 10px; padding: 4px; }
+.branch-tabs button {
+  flex: 1; padding: 9px 6px; font-family: var(--fh); font-size: 1rem; letter-spacing: 2px;
+  color: #999; background: none; border: none; border-radius: 7px; cursor: pointer;
+}
+.branch-tabs button.active { background: var(--gold); color: var(--ink); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex; gap: 7px; padding: 11px 14px; flex-wrap: wrap;
+  align-items: center; background: var(--ink);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.filter-btn {
+  background: transparent; border: 1px solid rgba(255,255,255,0.15);
+  color: #999; font-family: var(--fb); font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.5px; padding: 5px 12px; border-radius: 20px;
+  cursor: pointer; transition: all 0.15s; text-transform: uppercase;
+}
+.filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+.filter-btn.active        { background: var(--gold);   border-color: var(--gold);   color: var(--ink); }
+.filter-btn.red.active    { background: var(--red);    border-color: var(--red);    color: #fff; }
+.filter-btn.orange.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+.filter-btn.green.active  { background: var(--green);  border-color: var(--green);  color: #fff; }
+.filter-btn.grey.active   { background: #666; border-color: #666; color: #fff; }
+.btn-new {
+  margin-left: auto; background: transparent; border: 1px solid rgba(255,255,255,0.25);
+  color: #ddd; font-family: var(--fb); font-size: 0.7rem; font-weight: 600;
+  padding: 5px 12px; border-radius: 20px; cursor: pointer; white-space: nowrap;
+}
+.btn-new:hover { border-color: var(--red); color: #ff8d8d; }
+
+/* ── CATEGORIES ── */
+.category {
+  margin: 12px 14px 0;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--cat-color);
+  border-radius: 0 11px 11px 0;
+  overflow: hidden;
+  background: var(--cat-bg);
+}
+.cat-header {
+  background: var(--ink); padding: 9px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.cat-header > span:first-child { font-size: 1rem; color: var(--cat-color); }
+.cat-header > span:nth-child(2) {
+  font-family: var(--fh); font-size: 1rem; letter-spacing: 2.5px;
+  color: var(--cat-color); flex: 1;
+}
+.cat-count {
+  margin-left: auto; font-family: var(--fb); font-size: 0.62rem;
+  background: rgba(255,255,255,0.1); border-radius: 10px;
+  padding: 2px 8px; color: #aaa; font-weight: 500;
+}
+
+/* ── PRODUCT ROWS ── */
+.product-row {
+  display: flex; align-items: center;
+  padding: 9px 14px; border-top: 1px solid var(--border);
+  gap: 10px; background: var(--card); transition: background 0.1s;
+}
+.product-row:hover { background: #fafaf8; }
+.product-row.hidden { display: none !important; }
+.product-row.confirmed { opacity: 0.55; background: #f5f4f1; }
+.product-row.confirmed .prod-name { text-decoration: line-through; color: var(--muted); }
+.prod-name { font-size: 0.82rem; font-weight: 500; flex: 1; color: var(--text); }
+.prod-abbr {
+  font-family: var(--fc); font-weight: 600; font-size: 0.68rem;
+  letter-spacing: 1px; color: var(--ink); background: var(--cream);
+  padding: 1px 6px; border-radius: 5px; margin-left: 4px;
+}
+
+/* ── QTY ── */
+.qty-wrap {
+  display: flex; align-items: center;
+  background: var(--page); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.qty-btn {
+  background: transparent; border: none; color: var(--muted);
+  font-size: 1rem; width: 28px; height: 32px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; transition: color 0.1s;
+}
+.qty-btn:hover { color: var(--gold-dark); }
+.qty-btn:disabled { pointer-events: none; opacity: 0.3; }
+.qty-input {
+  background: transparent; border: none; color: var(--text);
+  font-family: var(--fb); font-size: 0.88rem; font-weight: 700;
+  width: 54px; text-align: center; outline: none; height: 32px;
+}
+.qty-input::placeholder { color: #c9c7be; font-weight: 500; }
+.qty-input::-webkit-inner-spin-button { display: none; }
+.qty-input:disabled { color: var(--muted); }
+.unit-label { font-size: 0.62rem; color: var(--muted); min-width: 28px; }
+
+/* packs + sueltas */
+.product-row.pack { flex-wrap: wrap; row-gap: 8px; }
+.pack-controls { flex-basis: 100%; display: flex; align-items: center; gap: 8px; }
+.pack-sep { font-size: 0.72rem; color: var(--muted); }
+.loose-input {
+  background: var(--page); border: 1px solid var(--border); color: var(--text);
+  font-family: var(--fb); font-size: 0.85rem; font-weight: 600;
+  width: 56px; text-align: center; height: 34px; border-radius: 8px; outline: none;
+}
+.loose-input::placeholder { color: #c9c7be; font-weight: 500; }
+.loose-input::-webkit-inner-spin-button { display: none; }
+.loose-input:focus { border-color: var(--gold-dark); }
+.loose-input:disabled { color: var(--muted); }
+
+/* ── BADGES ── */
+.status-badge {
+  font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 10px;
+  letter-spacing: 0.5px; text-transform: uppercase; min-width: 60px; text-align: center;
+}
+.status-badge.critical { background: rgba(226,59,59,0.1);  color: var(--red);    border: 1px solid rgba(226,59,59,0.3); }
+.status-badge.warning  { background: rgba(224,124,20,0.1); color: var(--orange); border: 1px solid rgba(224,124,20,0.25); }
+.status-badge.ok       { background: rgba(0,168,45,0.08);  color: var(--green);  border: 1px solid rgba(0,168,45,0.25); }
+.status-badge.none     { background: transparent; color: #b5b3aa; border: 1px dashed var(--border); }
+.status-badge.done     { background: var(--cream); color: var(--muted); border: 1px solid var(--border); font-size: 0.58rem; }
+
+/* ── ACTION BUTTONS ── */
+.btn-confirm {
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  font-size: 0.72rem; padding: 5px 11px; border-radius: 6px;
+  cursor: pointer; font-family: var(--fb); font-weight: 600;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-confirm:hover { border-color: var(--green); color: var(--green); background: rgba(0,168,45,0.05); }
+.btn-edit {
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  font-size: 0.68rem; padding: 5px 10px; border-radius: 6px;
+  cursor: pointer; font-family: var(--fb); transition: all 0.15s; white-space: nowrap;
+}
+.btn-edit:hover { border-color: var(--gold-dark); color: var(--gold-dark); }
+
+/* ── FREETEXT ── */
+.product-row.freetext { flex-wrap: wrap; gap: 8px; }
+.freetext-input {
+  background: var(--page); border: 1px solid var(--border); color: var(--text);
+  font-family: var(--fb); font-size: 0.82rem; padding: 6px 10px;
+  border-radius: 8px; width: 130px; outline: none;
+}
+.freetext-input:focus { border-color: var(--gold-dark); }
+.freetext-input:disabled { color: var(--muted); pointer-events: none; }
+.divider-confirmed { border: none; border-top: 1px dashed var(--border); margin: 0 14px; }
+.thresh-note { font-size: 0.67rem; color: var(--muted); text-align: center; padding: 10px 16px 0; }
+
+/* ── BANNER BORRADOR ── */
+.draft-banner {
+  display: none; margin: 12px 14px 0; padding: 11px 14px;
+  background: #fff8e1; border: 1px solid var(--gold); border-left: 5px solid var(--gold);
+  border-radius: 0 10px 10px 0; font-size: 0.8rem; color: var(--ink);
+  align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.draft-banner.open { display: flex; }
+.draft-banner .txt { flex: 1; min-width: 180px; line-height: 1.4; }
+.draft-banner button {
+  background: var(--ink); color: #fff; border: none; border-radius: 6px;
+  font-family: var(--fb); font-size: 0.72rem; font-weight: 600; padding: 6px 12px; cursor: pointer;
+}
+.draft-banner button.ghost { background: transparent; color: var(--ink); border: 1px solid #c9b46a; }
+
+/* ── BOTTOM BAR ── */
+.summary-panel {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--ink); border-top: 3px solid var(--gold-dark);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); display: flex; gap: 10px; z-index: 200; align-items: center;
+}
+.summary-stats { display: flex; gap: 14px; align-items: center; flex: 1; flex-wrap: wrap; }
+.stat-pill { font-size: 0.72rem; color: #bbb; }
+.stat-pill b { color: #fff; }
+.btn-generate {
+  background: var(--gold); color: var(--ink); border: none;
+  font-family: var(--fh); font-size: 1.05rem; letter-spacing: 2px;
+  padding: 10px 20px; border-radius: 8px; cursor: pointer; white-space: nowrap;
+}
+.btn-generate:hover { background: #ffd35c; }
+
+/* ── MODALES ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; align-items: flex-end; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card); border: 1px solid var(--border); border-bottom: none;
+  border-radius: 16px 16px 0 0; width: 100%; max-width: 600px;
+  padding: 20px 20px 30px; animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-title { font-family: var(--fh); font-size: 1.3rem; letter-spacing: 2px; color: var(--ink); margin-bottom: 14px; }
+.modal-warn { background: #fff4e5; border: 1px solid #f1c58a; color: #8a4b00; border-radius: 8px; padding: 8px 12px; font-size: 0.75rem; margin-bottom: 10px; display: none; }
+.modal-text {
+  background: var(--page); border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px; font-size: 0.78rem; line-height: 1.7; white-space: pre-wrap;
+  font-family: 'Courier New', monospace; color: var(--text);
+  max-height: 46vh; overflow-y: auto; margin-bottom: 14px;
+}
+.modal-actions { display: flex; gap: 10px; }
+.btn-copy { flex: 1; background: var(--gold); color: var(--ink); border: none; font-family: var(--fh); font-size: 1rem; letter-spacing: 1px; padding: 11px; border-radius: 8px; cursor: pointer; }
+.btn-close { background: var(--page); color: var(--text); border: 1px solid var(--border); font-family: var(--fb); font-size: 0.82rem; padding: 11px 18px; border-radius: 8px; cursor: pointer; }
+.btn-newclose {
+  width: 100%; margin-top: 10px; background: transparent; color: var(--muted);
+  border: 1px dashed var(--border); font-family: var(--fb); font-size: 0.76rem;
+  padding: 9px; border-radius: 8px; cursor: pointer;
+}
+.btn-newclose:hover { color: var(--red); border-color: var(--red); }
+
+.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+.confirm-overlay.open { display: flex; }
+.confirm-box { background: var(--card); border-radius: 14px; max-width: 380px; width: 100%; padding: 20px; border-top: 4px solid var(--gold); }
+.confirm-box h3 { font-family: var(--fh); font-size: 1.3rem; letter-spacing: 2px; color: var(--ink); margin-bottom: 8px; }
+.confirm-box p { font-size: 0.85rem; line-height: 1.5; color: var(--text); margin-bottom: 16px; }
+.confirm-actions { display: flex; gap: 10px; }
+.confirm-actions button { flex: 1; padding: 11px; border-radius: 8px; font-family: var(--fb); font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+.confirm-actions .c-cancel { background: var(--page); border: 1px solid var(--border); color: var(--text); }
+.confirm-actions .c-ok { background: var(--ink); border: none; color: #fff; }
+.confirm-actions .c-ok.danger { background: var(--red); }
+
+/* ── SETTINGS ── */
+.settings-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; flex-direction: column; align-items: center; justify-content: flex-end; }
+.settings-overlay.open { display: flex; }
+.settings-panel { background: var(--card); width: 100%; max-width: 600px; border-radius: 16px 16px 0 0; max-height: 90vh; display: flex; flex-direction: column; }
+.settings-header {
+  background: var(--ink); border-radius: 16px 16px 0 0;
+  border-bottom: 3px solid var(--gold);
+  padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.settings-header h2 { font-family: var(--fh); font-size: 1.3rem; letter-spacing: 2px; color: #fff; }
+.settings-subtitle { font-size: 0.68rem; color: #aaa; margin-top: 2px; }
+.btn-close-settings {
+  background: var(--gold); border: none; color: var(--ink);
+  font-family: var(--fb); font-size: 0.8rem; font-weight: 700;
+  padding: 7px 14px; border-radius: 8px; cursor: pointer;
+}
+.settings-body { flex: 1; overflow-y: auto; padding: 12px 16px 30px; background: var(--page); }
+.settings-cat-title {
+  font-family: var(--fh); font-size: 0.95rem; letter-spacing: 2px;
+  color: var(--ink); padding: 12px 0 6px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 2px solid var(--border); margin-bottom: 6px;
+}
+.settings-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; margin-bottom: 4px;
+  background: var(--card); border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.settings-prod-name { font-size: 0.8rem; font-weight: 500; flex: 1; color: var(--text); }
+.settings-prod-abbr {
+  font-family: var(--fc); font-weight: 600; font-size: 0.65rem;
+  color: var(--ink); background: var(--cream);
+  padding: 1px 6px; border-radius: 4px; display: inline-block; margin-top: 2px; margin-left: 4px;
+}
+.thresh-group { display: flex; align-items: center; gap: 6px; }
+.thresh-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; min-width: 18px; }
+.thresh-input {
+  background: var(--page); border: 1px solid var(--border); color: var(--text);
+  font-family: var(--fb); font-size: 0.82rem; font-weight: 600;
+  width: 52px; text-align: center; padding: 5px 4px; border-radius: 6px; outline: none;
+}
+.thresh-input:focus { border-color: var(--gold-dark); }
+.thresh-input::-webkit-inner-spin-button { display: none; }
+.thresh-select { background: var(--page); border: 1px solid var(--border); color: var(--text); font-family: var(--fb); font-size: 0.8rem; padding: 5px 8px; border-radius: 6px; outline: none; }
+.settings-copy {
+  width: 100%; margin-top: 14px; background: var(--card); border: 1px dashed #bdbab0;
+  color: var(--text); font-family: var(--fb); font-size: 0.78rem; font-weight: 600;
+  padding: 10px; border-radius: 8px; cursor: pointer;
+}
+.settings-save-note { font-size: 0.68rem; color: var(--muted); text-align: center; padding: 16px 0 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🧀 TEQUE <span class="onda">ONDA</span></h1>
+    <div class="sub" id="branchSub">CIERRE · PALERMO</div>
+  </div>
+  <div class="header-right">
+    <div class="date-badge" id="dateBadge"></div>
+    <button class="btn-settings" onclick="openSettings()">⚙ Config</button>
+  </div>
+</header>
+
+<div class="branch-wrap">
+  <div class="branch-tabs" id="branchTabs"></div>
+</div>
+
+<div class="toolbar">
+  <button class="filter-btn active" data-filter="all"      onclick="setFilter('all',this)">Todo</button>
+  <button class="filter-btn red"    data-filter="critical" onclick="setFilter('critical',this)">🔴 Crítico</button>
+  <button class="filter-btn orange" data-filter="warning"  onclick="setFilter('warning',this)">🟡 Bajo</button>
+  <button class="filter-btn green"  data-filter="ok"       onclick="setFilter('ok',this)">🟢 OK</button>
+  <button class="filter-btn grey"   data-filter="pending"  onclick="setFilter('pending',this)">⬜ Pendientes</button>
+  <button class="btn-new" onclick="newClosing()">↺ Nuevo cierre</button>
+</div>
+
+<div class="draft-banner" id="draftBanner">
+  <div class="txt" id="draftBannerTxt"></div>
+  <button onclick="hideBanner()">Seguir</button>
+  <button class="ghost" onclick="newClosing()">Empezar de cero</button>
+</div>
+
+<div id="app"></div>
+<p class="thresh-note">Contá cada ítem y tocá ✓ listo · ✎ editar para corregir · Se guarda solo en este dispositivo · ⚙ Config para umbrales</p>
+
+<div class="summary-panel">
+  <div class="summary-stats">
+    <span class="stat-pill">🔴 <b id="cCrit">0</b></span>
+    <span class="stat-pill">🟡 <b id="cWarn">0</b></span>
+    <span class="stat-pill">🟢 <b id="cOk">0</b></span>
+    <span class="stat-pill">✅ <b id="cDone">0</b>/<b id="cTotal">0</b></span>
+  </div>
+  <button class="btn-generate" onclick="openModal()">📋 GENERAR</button>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">📲 MENSAJE WHATSAPP</div>
+    <div class="modal-warn" id="modalWarn"></div>
+    <div class="modal-text" id="modalText"></div>
+    <div class="modal-actions">
+      <button class="btn-copy" onclick="copyText()">📋 COPIAR</button>
+      <button class="btn-close" onclick="closeModal()">Cerrar</button>
+    </div>
+    <button class="btn-newclose" onclick="closeModal();newClosing()">¿Ya lo enviaste? ↺ Empezar un cierre nuevo</button>
+  </div>
+</div>
+
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-panel">
+    <div class="settings-header">
+      <div>
+        <h2 id="settingsTitle">⚙️ UMBRALES DE STOCK</h2>
+        <div class="settings-subtitle">Los cambios se aplican al instante y se guardan por sucursal</div>
+      </div>
+      <button class="btn-close-settings" onclick="closeSettings()">✓ Listo</button>
+    </div>
+    <div class="settings-body" id="settingsBody"></div>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3 id="confirmTitle"></h3>
+    <p id="confirmText"></p>
+    <div class="confirm-actions">
+      <button class="c-cancel" id="confirmCancel"></button>
+      <button class="c-ok" id="confirmOk"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SUCURSALES ────────────────────────────────────────────────────────────
+const BRANCHES = {
+  palermo:  { name:'PALERMO',        full:'Palermo · Bonpland 1708',        msg:'PALERMO' },
+  humberto: { name:'HUMBERTO PRIMO', full:'Humberto Primo · Humberto Primo 1750', msg:'HUMBERTO PRIMO' }
+};
+const DEFAULT_BRANCH = 'palermo';
+const DRAFT_MAX_AGE_MS = 12 * 60 * 60 * 1000; // 12 h
+
+// ── CATÁLOGO ──────────────────────────────────────────────────────────────
+// pack:true  → se cuenta en PACKS (+ unidades sueltas opcionales); umbrales sobre packs
+// free:true  → texto libre (bolsas / taza)
+const catalog = [
+  { id:'choco',    cat:'POSTRES',    label:'Chocolate',               abbr:'CHOCO',          unit:'unid', critAt:3,  warnAt:10 },
+  { id:'leches',   cat:'POSTRES',    label:'Leches',                  abbr:'LECHES',         unit:'unid', critAt:5,  warnAt:20 },
+  { id:'cachitos', cat:'CACHITOS',   label:'Cachitos',                abbr:'CACHITOS',       unit:'und',  critAt:5,  warnAt:20 },
+  { id:'eme',      cat:'EMPANADAS',  label:'Empanada Mechada',        abbr:'EME',            unit:'und',  critAt:5,  warnAt:25 },
+  { id:'emo',      cat:'EMPANADAS',  label:'Empanada Molida',         abbr:'EMO',            unit:'und',  critAt:5,  warnAt:25 },
+  { id:'epo',      cat:'EMPANADAS',  label:'Empanada Pollo',          abbr:'EPO',            unit:'und',  critAt:5,  warnAt:25 },
+  { id:'ejq',      cat:'EMPANADAS',  label:'Empanada Jamón y Queso',  abbr:'EJQ',            unit:'und',  critAt:5,  warnAt:25 },
+  { id:'eq',       cat:'EMPANADAS',  label:'Empanada Queso',          abbr:'EQ',             unit:'und',  critAt:10, warnAt:40 },
+  { id:'edm',      cat:'EMPANADAS',  label:'Empanada Dominó',         abbr:'EDM',            unit:'und',  critAt:10, warnAt:40 },
+  { id:'epa',      cat:'EMPANADAS',  label:'Empanada Pabellón',       abbr:'EPA',            unit:'und',  critAt:5,  warnAt:30 },
+  { id:'pme',      cat:'PASTELITOS', label:'Pastelito Mechada',       abbr:'PME',            unit:'und',  critAt:10, warnAt:30 },
+  { id:'pmo',      cat:'PASTELITOS', label:'Pastelito Molida',        abbr:'PMO',            unit:'und',  critAt:10, warnAt:30 },
+  { id:'ppo',      cat:'PASTELITOS', label:'Pastelito Pollo',         abbr:'PPO',            unit:'und',  critAt:5,  warnAt:25 },
+  { id:'ppz',      cat:'PASTELITOS', label:'Pastelito Pizza',         abbr:'PPZ',            unit:'und',  critAt:10, warnAt:35 },
+  { id:'pq',       cat:'PASTELITOS', label:'Pastelito Queso',         abbr:'PQ',             unit:'und',  critAt:5,  warnAt:25 },
+  { id:'ppa',      cat:'PASTELITOS', label:'Pastelito Papa y Queso',  abbr:'PPA',            unit:'und',  critAt:10, warnAt:40 },
+  { id:'pjq',      cat:'PASTELITOS', label:'Pastelito Jamón y Queso', abbr:'PJQ',            unit:'und',  critAt:10, warnAt:30 },
+  { id:'to',       cat:'TEQUEÑOS',   label:'Tequeño Original',        abbr:'TO',             unit:'packs', pack:true, critAt:20, warnAt:50 },
+  { id:'tf',       cat:'TEQUEÑOS',   label:'Tequeño Fiestero',        abbr:'TF',             unit:'packs', pack:true, critAt:10, warnAt:30 },
+  { id:'tjq',      cat:'TEQUEÑOS',   label:'Tequeño Jamón y Queso',   abbr:'TJQ',            unit:'packs', pack:true, critAt:5,  warnAt:20 },
+  { id:'tyo',      cat:'TEQUEÑOS',   label:'Tequeño Plátano y Queso', abbr:'TYO',            unit:'und',  critAt:5,  warnAt:25 },
+  { id:'malta58',  cat:'BEBIDAS',    label:'Malta 58',                abbr:'MALTAS 58',      unit:'und',  critAt:10, warnAt:20 },
+  { id:'maltapeq', cat:'BEBIDAS',    label:'Malta Reko Pequeña',      abbr:'MALTA REKO Peq', unit:'und',  critAt:5,  warnAt:15 },
+  { id:'maltagde', cat:'BEBIDAS',    label:'Malta Reko Grande',       abbr:'MALTA REKO Gde', unit:'und',  critAt:3,  warnAt:10 },
+  { id:'te',       cat:'BEBIDAS',    label:'Té',                      abbr:'TE',             unit:'und',  critAt:10, warnAt:25 },
+  { id:'mayo',     cat:'SALSAS',     label:'Mayonesa',                abbr:'MAYONESA',       unit:'',     free:true, critAt:null, warnAt:null, freeCritAt:2 },
+  { id:'mojito',   cat:'SALSAS',     label:'Mojito Ajo 🧄',           abbr:'MOJITO',         unit:'',     free:true, critAt:null, warnAt:null, freeCritAt:0.25 },
+  { id:'picante',  cat:'SALSAS',     label:'Picante 🌶️',              abbr:'PICANTE',        unit:'und',  critAt:5,  warnAt:15 },
+  { id:'cajap',    cat:'CAJAS',      label:'Caja Pequeña',            abbr:'CAJA P',         unit:'und',  critAt:20, warnAt:100 },
+  { id:'cajag',    cat:'CAJAS',      label:'Caja Grande',             abbr:'CAJA G',         unit:'und',  critAt:20, warnAt:80 },
+];
+const byId = {}; catalog.forEach(p => byId[p.id] = p);
+
+// ── ESTADO ────────────────────────────────────────────────────────────────
+let currentBranch = DEFAULT_BRANCH;
+let thresholds = {};
+let state = {};
+let currentFilter = 'all';
+let msgGenerated = false;   // true si ya se generó el mensaje y no hubo cambios después
+
+function freshState() {
+  const s = {};
+  catalog.forEach(p => { s[p.id] = { val:0, loose:0, freeVal:'', confirmed:false, touched:false }; });
+  return s;
+}
+const isCounted = id => state[id].confirmed || state[id].touched;
+const countedTotal = () => catalog.filter(p => isCounted(p.id)).length;
+const confirmedTotal = () => catalog.filter(p => state[p.id].confirmed).length;
+
+// ── STORAGE (todo por sucursal) ───────────────────────────────────────────
+const KEY_LAST   = 'tq_cierre_last_branch';
+const keyThr     = b => 'tq_cierre_thr_' + b;
+const keyDraft   = b => 'tq_cierre_draft_' + b;
+const KEY_OLD_THR = 'tequeonda_thresholds'; // versión anterior (solo Palermo)
+
+function defaultThresholds() {
+  const t = {};
+  catalog.forEach(p => { t[p.id] = { critAt:p.critAt, warnAt:p.warnAt, freeCritAt:p.freeCritAt ?? null }; });
+  return t;
+}
+function readThresholds(b) {
+  const t = defaultThresholds();
+  try {
+    let raw = localStorage.getItem(keyThr(b));
+    if (!raw && b === 'palermo') raw = localStorage.getItem(KEY_OLD_THR); // migración
+    if (raw) {
+      const saved = JSON.parse(raw);
+      catalog.forEach(p => {
+        const s = saved[p.id]; if (!s) return;
+        if (p.free) { if (typeof s.freeCritAt === 'number') t[p.id].freeCritAt = s.freeCritAt; }
+        else if (typeof s.critAt === 'number' && typeof s.warnAt === 'number') { t[p.id].critAt = s.critAt; t[p.id].warnAt = s.warnAt; }
+      });
+    }
+  } catch(e) {}
+  return t;
+}
+function saveThresholds() {
+  try { localStorage.setItem(keyThr(currentBranch), JSON.stringify(thresholds)); } catch(e) {}
+}
+
+function saveDraft() {
+  try {
+    if (!countedTotal()) { localStorage.removeItem(keyDraft(currentBranch)); return; }
+    localStorage.setItem(keyDraft(currentBranch), JSON.stringify({ v:1, branch:currentBranch, savedAt:Date.now(), state }));
+  } catch(e) {}
+}
+function readDraft(b) {
+  try {
+    const raw = localStorage.getItem(keyDraft(b));
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    if (!d || !d.state || !d.savedAt) return null;
+    const s = freshState(); let any = false;
+    catalog.forEach(p => {
+      const x = d.state[p.id]; if (!x) return;
+      s[p.id] = { val:Number(x.val)||0, loose:Number(x.loose)||0, freeVal:String(x.freeVal||''), confirmed:!!x.confirmed, touched:!!x.touched };
+      if (s[p.id].confirmed || s[p.id].touched) any = true;
+    });
+    return any ? { savedAt:d.savedAt, state:s } : null;
+  } catch(e) { return null; }
+}
+function changed() { msgGenerated = false; saveDraft(); }
+
+// ── PARSERS ───────────────────────────────────────────────────────────────
+function parseMayonesa(fv) {
+  if (!fv) return 0;
+  fv = fv.toLowerCase().replace(/bolsas?/gi,'').replace(/\s+/g,' ').trim();
+  const fracMap = {'1/2':0.5,'1/3':0.33,'2/3':0.67,'1/4':0.25,'3/4':0.75};
+  let total = 0;
+  for (const [k,v] of Object.entries(fracMap)) { if (fv.includes(k)) { total += v; fv = fv.replace(k,''); } }
+  fv = fv.replace(/\bb\b/gi,'').replace(/b$/i,'').trim();
+  const num = parseFloat(fv.replace(/[^0-9.]/g,''));
+  if (!isNaN(num)) total += num;
+  return total;
+}
+function parseMojito(fv) {
+  if (!fv) return 0;
+  fv = fv.toLowerCase().replace(/tazas?/g,'').trim();
+  const fracMap = {'1/8':0.125,'1/4':0.25,'3/8':0.375,'1/2':0.5,'3/4':0.75,'1/3':0.33,'2/3':0.67};
+  for (const [k,v] of Object.entries(fracMap)) { if (fv.includes(k)) return v; }
+  const num = parseFloat(fv);
+  return isNaN(num) ? 0 : num;
+}
+
+// ── STATUS ────────────────────────────────────────────────────────────────
+function getStatus(p) {
+  if (!isCounted(p.id)) return 'none';
+  const t = thresholds[p.id];
+  if (p.free) {
+    const fv = (state[p.id].freeVal || '').trim();
+    if (!fv || fv === '0') return 'critical';
+    const critAt = t.freeCritAt ?? 0;
+    const parsed = p.id === 'mayo' ? parseMayonesa(fv) : parseMojito(fv);
+    return parsed <= critAt ? 'critical' : 'ok';
+  }
+  const v = Number(state[p.id].val) || 0;
+  if (v <= t.critAt) return 'critical';
+  if (v <= t.warnAt) return 'warning';
+  return 'ok';
+}
+function badgeText(st) {
+  return st==='critical' ? '🔴 CRÍTICO' : st==='warning' ? '🟡 BAJO' : st==='ok' ? '🟢 OK' : '⬜ SIN CONTAR';
+}
+function fmtVal(p) {
+  const s = state[p.id];
+  if (p.free) return s.freeVal || '—';
+  if (p.pack) {
+    const n = Number(s.val)||0, l = Number(s.loose)||0;
+    let t = `${n} ${n===1?'pack':'packs'}`;
+    if (l > 0) t += ` y ${l} und`;
+    return t;
+  }
+  return `${Number(s.val)||0}${p.unit ? ' '+p.unit : ''}`;
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────
+function confirmItem(id) { state[id].confirmed = true; state[id].touched = true; changed(); render(); }
+function editItem(id) {
+  state[id].confirmed = false; changed(); render();
+  setTimeout(() => { const inp = document.getElementById('input-'+id); if (inp) { inp.focus(); inp.select(); } }, 50);
+}
+function refreshRowStatus(id) {
+  const p = byId[id], st = getStatus(p);
+  const badge = document.getElementById('badge-'+id);
+  if (badge && !state[id].confirmed) { badge.className = 'status-badge '+st; badge.textContent = badgeText(st); }
+  const row = document.querySelector('[data-id="'+id+'"]');
+  if (row) row.dataset.status = st;
+}
+function updateQty(id, val) {
+  state[id].val = val==='' ? 0 : Math.max(0, Number(val)||0);
+  state[id].touched = true; refreshRowStatus(id); changed(); updateStats();
+}
+function updateLoose(id, val) {
+  state[id].loose = val==='' ? 0 : Math.max(0, Number(val)||0);
+  state[id].touched = true; refreshRowStatus(id); changed(); updateStats();
+}
+function adjustQty(id, delta) {
+  state[id].val = Math.max(0, (Number(state[id].val)||0)+delta);
+  state[id].touched = true;
+  const inp = document.getElementById('input-'+id); if (inp) inp.value = state[id].val;
+  refreshRowStatus(id); changed(); updateStats();
+}
+function updateFree(id, val) {
+  state[id].freeVal = val; state[id].touched = true;
+  refreshRowStatus(id); changed(); updateStats();
+}
+
+// ── FILTER ────────────────────────────────────────────────────────────────
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+function applyFilter() {
+  document.querySelectorAll('.product-row').forEach(row => {
+    const st=row.dataset.status, done=row.dataset.confirmed==='true';
+    let show = currentFilter==='all' ? true : currentFilter==='pending' ? !done : st===currentFilter;
+    row.classList.toggle('hidden',!show);
+  });
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────
+function updateStats() {
+  let crit=0,warn=0,ok=0;
+  catalog.forEach(p => {
+    const st=getStatus(p);
+    if(st==='critical')crit++; else if(st==='warning')warn++; else if(st==='ok')ok++;
+  });
+  document.getElementById('cCrit').textContent=crit;
+  document.getElementById('cWarn').textContent=warn;
+  document.getElementById('cOk').textContent=ok;
+  document.getElementById('cDone').textContent=confirmedTotal();
+  document.getElementById('cTotal').textContent=catalog.length;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function catIcon(cat) {
+  return {POSTRES:'🍫',CACHITOS:'🥐',EMPANADAS:'🥟',PASTELITOS:'🫓',TEQUEÑOS:'🧀',BEBIDAS:'🍺',SALSAS:'🫙',CAJAS:'📦'}[cat]||'📌';
+}
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+
+function buildRow(p) {
+  const s = state[p.id], st = getStatus(p), done = s.confirmed, counted = isCounted(p.id);
+  const badge = done
+    ? `<span class="status-badge done">✓ listo</span>`
+    : `<span class="status-badge ${st}" id="badge-${p.id}">${badgeText(st)}</span>`;
+  const actionBtn = done
+    ? `<button class="btn-edit" onclick="editItem('${p.id}')">✎ editar</button>`
+    : `<button class="btn-confirm" onclick="confirmItem('${p.id}')">✓ listo</button>`;
+  const dis = done ? 'disabled' : '';
+  const head = `<div class="prod-name">${p.label} <span class="prod-abbr">${p.abbr}</span></div>`;
+  const rowAttrs = `data-status="${st}" data-confirmed="${done}" data-id="${p.id}"`;
+
+  if (p.free) {
+    return `<div class="product-row freetext ${done?'confirmed':''}" ${rowAttrs}>${head}
+      <input class="freetext-input" type="text" placeholder="ej: 5B y 1/2" value="${esc(s.freeVal)}"
+        oninput="updateFree('${p.id}',this.value)" ${dis}>${badge}${actionBtn}</div>`;
+  }
+  const shown = counted ? s.val : '';
+  const qty = `<div class="qty-wrap">
+      <button class="qty-btn" onclick="adjustQty('${p.id}',-1)" ${dis}>−</button>
+      <input class="qty-input" type="number" inputmode="numeric" min="0" placeholder="0" value="${shown}"
+        onfocus="this.select()" oninput="updateQty('${p.id}',this.value)" id="input-${p.id}" ${dis}>
+      <button class="qty-btn" onclick="adjustQty('${p.id}',1)" ${dis}>+</button>
+    </div>`;
+  if (p.pack) {
+    const loose = s.loose ? s.loose : '';
+    return `<div class="product-row pack ${done?'confirmed':''}" ${rowAttrs}>${head}${badge}${actionBtn}
+      <div class="pack-controls">${qty}<span class="unit-label">packs</span>
+        <span class="pack-sep">y</span>
+        <input class="loose-input" type="number" inputmode="numeric" min="0" placeholder="0" value="${loose}"
+          onfocus="this.select()" oninput="updateLoose('${p.id}',this.value)" id="loose-${p.id}" ${dis}>
+        <span class="unit-label">und sueltas</span>
+      </div></div>`;
+  }
+  return `<div class="product-row ${done?'confirmed':''}" ${rowAttrs}>${head}${qty}
+    <span class="unit-label">${p.unit}</span>${badge}${actionBtn}</div>`;
+}
+
+function render() {
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  let html='';
+  cats.forEach(cat => {
+    const products=catalog.filter(p=>p.cat===cat);
+    const pending=products.filter(p=>!state[p.id].confirmed);
+    const confirmed=products.filter(p=>state[p.id].confirmed);
+    html+=`<div class="category" data-cat="${cat.replace(/\s/g,'_')}">
+      <div class="cat-header">
+        <span>${catIcon(cat)}</span>
+        <span>${cat}</span>
+        <span class="cat-count">${products.length} items</span>
+      </div>`;
+    pending.forEach(p=>{html+=buildRow(p);});
+    if(confirmed.length){html+=`<hr class="divider-confirmed">`;confirmed.forEach(p=>{html+=buildRow(p);});}
+    html+=`</div>`;
+  });
+  document.getElementById('app').innerHTML=html;
+  applyFilter(); updateStats();
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────
+function openSettings() { renderSettings(); document.getElementById('settingsOverlay').classList.add('open'); }
+function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); render(); }
+
+function renderSettings() {
+  document.getElementById('settingsTitle').textContent = '⚙️ UMBRALES · ' + BRANCHES[currentBranch].name;
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  let html='';
+  cats.forEach(cat => {
+    html+=`<div><div class="settings-cat-title">${catIcon(cat)} ${cat}</div>`;
+    catalog.filter(p=>p.cat===cat).forEach(p => {
+      const t=thresholds[p.id];
+      if (p.free) {
+        html+=`<div class="settings-row">
+          <div class="settings-prod-name">${p.label}<span class="settings-prod-abbr">${p.abbr}</span></div>
+          <select class="thresh-select" onchange="updateFreeThresh('${p.id}',this.value)">
+            ${p.id==='mayo' ? `
+              <option value="1" ${(t.freeCritAt??2)<=1?'selected':''}>≤ 1 bolsa</option>
+              <option value="2" ${(t.freeCritAt??2)===2?'selected':''}>≤ 2 bolsas</option>
+              <option value="3" ${(t.freeCritAt??2)===3?'selected':''}>≤ 3 bolsas</option>
+              <option value="4" ${(t.freeCritAt??2)===4?'selected':''}>≤ 4 bolsas</option>
+            ` : `
+              <option value="0.125" ${(t.freeCritAt??0.25)<=0.125?'selected':''}>≤ 1/8 taza</option>
+              <option value="0.25"  ${(t.freeCritAt??0.25)===0.25?'selected':''}>≤ 1/4 taza</option>
+              <option value="0.375" ${(t.freeCritAt??0.25)===0.375?'selected':''}>≤ 3/8 taza</option>
+              <option value="0.5"   ${(t.freeCritAt??0.25)===0.5?'selected':''}>≤ 1/2 taza</option>
+            `}
+          </select>
+        </div>`;
+      } else {
+        html+=`<div class="settings-row">
+          <div class="settings-prod-name">${p.label}<span class="settings-prod-abbr">${p.abbr} · ${p.unit}</span></div>
+          <div class="thresh-group">
+            <span class="thresh-label">🔴</span>
+            <input class="thresh-input" type="number" inputmode="numeric" min="0" value="${t.critAt??0}" onchange="updateThresh('${p.id}','critAt',this.value)">
+            <span class="thresh-label">🟡</span>
+            <input class="thresh-input" type="number" inputmode="numeric" min="0" value="${t.warnAt??0}" onchange="updateThresh('${p.id}','warnAt',this.value)">
+          </div>
+        </div>`;
+      }
+    });
+    html+=`</div>`;
+  });
+  const other = Object.keys(BRANCHES).find(b => b !== currentBranch);
+  html+=`<button class="settings-copy" onclick="copyThreshFrom('${other}')">↧ Copiar umbrales de ${BRANCHES[other].name}</button>`;
+  html+=`<p class="settings-save-note">🔴 Crítico ≤ valor · 🟡 Bajo ≤ valor · TO, TF y TJQ se miden en packs · Cambios instantáneos</p>`;
+  document.getElementById('settingsBody').innerHTML=html;
+}
+function updateThresh(id, field, val) {
+  thresholds[id][field] = Math.max(0, Number(val)||0);
+  if (thresholds[id].critAt > thresholds[id].warnAt) thresholds[id].warnAt = thresholds[id].critAt;
+  saveThresholds(); updateStats(); renderSettings();
+}
+function updateFreeThresh(id, val) { thresholds[id].freeCritAt = parseFloat(val); saveThresholds(); updateStats(); }
+function copyThreshFrom(b) {
+  askConfirm({
+    title:'Copiar umbrales',
+    text:`Se reemplazan los umbrales de ${BRANCHES[currentBranch].name} por los de ${BRANCHES[b].name}.`,
+    ok:'Copiar', cancel:'Cancelar',
+    onOk:() => { thresholds = readThresholds(b); saveThresholds(); renderSettings(); updateStats(); }
+  });
+}
+
+// ── GENERATE ──────────────────────────────────────────────────────────────
+function generateMsg() {
+  const cats=[...new Set(catalog.map(p=>p.cat))];
+  const dateStr=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  let msg=`🏪 *CIERRE ${BRANCHES[currentBranch].msg} · ${dateStr.toUpperCase()}*\n\n`;
+  cats.forEach(cat => {
+    msg+=`*${cat}*\n`;
+    catalog.filter(p=>p.cat===cat).forEach(p => {
+      const st=getStatus(p);
+      if (st==='none') { msg+=`➖ ${p.abbr}: sin contar\n`; return; }
+      const icon=st==='critical'?'❌':st==='warning'?'⚠️':'✅';
+      msg+=`${icon} ${p.abbr}: ${fmtVal(p)}\n`;
+    });
+    msg+='\n';
+  });
+  const crits=catalog.filter(p=>getStatus(p)==='critical');
+  const warns=catalog.filter(p=>getStatus(p)==='warning');
+  if(crits.length||warns.length){
+    msg+=`📋 *PRIORIDAD REPOSICIÓN*\n`;
+    if(crits.length){
+      msg+=`\n❌ *CRÍTICO*\n`;
+      crits.forEach(p=>{ msg+=`   • ${p.abbr}: ${fmtVal(p)}\n`; });
+    }
+    if(warns.length){
+      msg+=`\n⚠️ *BAJO*\n`;
+      warns.forEach(p=>{ msg+=`   • ${p.abbr}: ${fmtVal(p)}\n`; });
+    }
+  }
+  return msg.trimEnd();
+}
+
+function openModal() {
+  const missing = catalog.length - countedTotal();
+  const w = document.getElementById('modalWarn');
+  if (missing > 0) { w.style.display='block'; w.textContent = `⚠️ Faltan ${missing} ítems sin contar. Salen como "sin contar" en el mensaje.`; }
+  else w.style.display='none';
+  document.getElementById('modalText').textContent=generateMsg();
+  document.getElementById('modalOverlay').classList.add('open');
+  msgGenerated = true;
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function copyText() {
+  const text=document.getElementById('modalText').textContent;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(flashCopied).catch(()=>fallbackCopy(text));
+  } else { fallbackCopy(text); }
+}
+function fallbackCopy(text) {
+  const ta=document.createElement('textarea');
+  ta.value=text; ta.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); flashCopied(); }catch(e){ alert('Copiá el texto manualmente:\n\n'+text); }
+  document.body.removeChild(ta);
+}
+function flashCopied() {
+  const btn=document.querySelector('.btn-copy');
+  btn.textContent='✅ COPIADO'; setTimeout(()=>btn.textContent='📋 COPIAR',2500);
+}
+
+// ── CONFIRMACIÓN GENÉRICA ─────────────────────────────────────────────────
+function askConfirm({title, text, ok, cancel, onOk, onCancel, danger}) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmText').textContent = text;
+  const bOk = document.getElementById('confirmOk'), bNo = document.getElementById('confirmCancel');
+  bOk.textContent = ok; bNo.textContent = cancel;
+  bOk.classList.toggle('danger', !!danger);
+  const ov = document.getElementById('confirmOverlay');
+  const close = () => ov.classList.remove('open');
+  bOk.onclick = () => { close(); onOk && onOk(); };
+  bNo.onclick = () => { close(); onCancel && onCancel(); };
+  ov.classList.add('open');
+}
+
+// ── NUEVO CIERRE ──────────────────────────────────────────────────────────
+function resetClosing() {
+  state = freshState(); msgGenerated = false;
+  try { localStorage.removeItem(keyDraft(currentBranch)); } catch(e) {}
+  hideBanner(); render();
+  window.scrollTo({ top:0 });
+}
+function newClosing() {
+  const counted = countedTotal();
+  if (!counted) { resetClosing(); return; }
+  askConfirm({
+    title:'Nuevo cierre',
+    text:`Se borra el conteo actual de ${BRANCHES[currentBranch].name} (${confirmedTotal()} de ${catalog.length} confirmados). Esto no se puede deshacer.`,
+    ok:'Sí, empezar de cero', cancel:'Cancelar', danger:true,
+    onOk: resetClosing
+  });
+}
+
+// ── BANNER ────────────────────────────────────────────────────────────────
+function showBanner(html) {
+  document.getElementById('draftBannerTxt').innerHTML = html;
+  document.getElementById('draftBanner').classList.add('open');
+}
+function hideBanner() { document.getElementById('draftBanner').classList.remove('open'); }
+
+// ── SUCURSAL ──────────────────────────────────────────────────────────────
+function renderBranchTabs() {
+  document.getElementById('branchTabs').innerHTML = Object.entries(BRANCHES).map(([k,b]) =>
+    `<button class="${k===currentBranch?'active':''}" onclick="setBranch('${k}')">${b.name}</button>`).join('');
+  document.getElementById('branchSub').textContent = 'CIERRE · ' + BRANCHES[currentBranch].name;
+  document.title = 'Cierre ' + BRANCHES[currentBranch].name + ' · Teque Onda';
+}
+function setBranch(b, initial) {
+  if (!BRANCHES[b]) b = DEFAULT_BRANCH;
+  if (!initial) saveDraft();            // el borrador de la sucursal anterior queda guardado
+  currentBranch = b;
+  try { localStorage.setItem(KEY_LAST, b); } catch(e) {}
+  try { const u = new URL(location.href); u.searchParams.set('sucursal', b); history.replaceState(null, '', u); } catch(e) {}
+  thresholds = readThresholds(b);
+  state = freshState(); msgGenerated = false;
+  hideBanner(); renderBranchTabs();
+
+  const d = readDraft(b);
+  if (d && Date.now() - d.savedAt > DRAFT_MAX_AGE_MS) {
+    // Borrador viejo: preguntar antes de arrastrarlo
+    const when = new Date(d.savedAt).toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+    const n = catalog.filter(p => d.state[p.id].confirmed).length;
+    render();
+    askConfirm({
+      title:'Cierre sin terminar',
+      text:`Hay un cierre de ${BRANCHES[b].name} del ${when} sin enviar (${n} de ${catalog.length} confirmados). ¿Seguís con ese o empezás uno nuevo?`,
+      ok:'Seguir con ese', cancel:'Empezar de cero',
+      onOk:() => { state = d.state; render(); showBanner(`♻️ Cierre anterior recuperado · <b>${n} de ${catalog.length}</b> confirmados`); },
+      onCancel:() => { try { localStorage.removeItem(keyDraft(b)); } catch(e) {} }
+    });
+    return;
+  }
+  if (d) {
+    state = d.state; render();
+    showBanner(`♻️ Cierre en curso recuperado · <b>${confirmedTotal()} de ${catalog.length}</b> confirmados`);
+    return;
+  }
+  render();
+}
+
+// ── PROTECCIONES ──────────────────────────────────────────────────────────
+window.addEventListener('beforeunload', e => {
+  if (countedTotal() > 0 && confirmedTotal() < catalog.length && !msgGenerated) {
+    e.preventDefault(); e.returnValue = '';
+  }
+});
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveDraft(); });
+window.addEventListener('pagehide', saveDraft);
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.getElementById('dateBadge').textContent =
+  new Date().toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'}).replace(/[.,]/g,'').toUpperCase();
+(function init() {
+  let b = null;
+  try { b = new URLSearchParams(location.search).get('sucursal'); } catch(e) {}
+  if (!BRANCHES[b]) { try { b = localStorage.getItem(KEY_LAST); } catch(e) {} }
+  setBranch(BRANCHES[b] ? b : DEFAULT_BRANCH, true);
+})();
+</script>
+</body>
+</html>
