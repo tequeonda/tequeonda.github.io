@@ -21,7 +21,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teque Onda – Auténtica Comida Rápida Venezolana</title>
-    <meta name="description" content="Venta de tequeños artesanales venezolanos en Buenos Aires. Comprá online, retirá en local o pedí delivery. En Palermo.">
+    <meta name="description" content="Venta de tequeños artesanales venezolanos en Buenos Aires. Comprá online, retirá en local o pedí delivery. En Palermo y Humberto Primo.">
     <link rel="icon" href="img/logo-to.svg" type="image/svg">
     <link rel="shortcut icon" href="img/logo-to.svg" type="image/svg">
     <link rel="icon" href="/favicon-192.png" sizes="192x192" type="image/png">
@@ -38,6 +38,29 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        .sucursales-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;max-width:1100px;margin:0 auto}
+        .sucursal-card{background:#f4f3ee;border-radius:18px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;gap:6px}
+        .sucursal-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:1px;color:#111;margin:0 0 14px}
+        .sucursal-badge{display:inline-block;background:#FFC72C;color:#111;font-family:'Oswald',sans-serif;font-size:.8rem;text-transform:uppercase;padding:3px 10px;border-radius:20px;vertical-align:middle;letter-spacing:.5px}
+        .sucursal-card .sucursales-info{flex-direction:column;align-items:flex-start;gap:12px;margin-bottom:20px}
+        .sucursal-card .map-wrapper{width:100%;margin:0 0 20px}
+        .sucursal-card .map-wrapper iframe{height:250px}
+        .sucursal-btns{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+        .btn-outline-dark{border:2px solid #111;color:#111;background:transparent}
+        .btn-outline-dark:hover{background:#111;color:#fff}
+    </style>
+
+    <script type="application/ld+json">
+    [
+      {"@context":"https://schema.org","@type":"Restaurant","name":"Teque Onda Bonpland","servesCuisine":"Venezolana","url":"https://tequeonda.com.ar/",
+       "address":{"@type":"PostalAddress","streetAddress":"Bonpland 1708","addressLocality":"Palermo, Ciudad Autónoma de Buenos Aires","addressCountry":"AR"},
+       "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"11:00","closes":"23:00"}]},
+      {"@context":"https://schema.org","@type":"Restaurant","name":"Teque Onda Humberto Primo","servesCuisine":"Venezolana","url":"https://tequeonda.com.ar/",
+       "address":{"@type":"PostalAddress","streetAddress":"Humberto Primo 1750","addressLocality":"Ciudad Autónoma de Buenos Aires","addressCountry":"AR"},
+       "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"18:00","closes":"23:59"}]}
+    ]
+    </script>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -71,7 +94,7 @@
     <section class="hero">
         <span class="hero-badge">🇻🇪 Auténtica Comida Venezolana</span>
         <h1>¡Bienvenidos a<br><span>Teque Onda!</span></h1>
-        <p>Tequeños, empanadas y pastelitos venezolanos artesanales directo a tu puerta en Palermo, Buenos Aires.</p>
+        <p>Tequeños, empanadas y pastelitos venezolanos artesanales en Palermo y Humberto Primo, Buenos Aires.</p>
         <div class="hero-cta">
             <a href="https://menu.fu.do/tequeonda" class="btn btn-gold" target="_blank" rel="noopener">Pedir Ahora</a>
             <a href="#menu" class="btn btn-outline">Ver Menú</a>
@@ -284,35 +307,69 @@
     <!-- ========== SUCURSALES ========== -->
     <section class="sucursales" id="sucursales">
         <h2 class="section-title">Dónde Encontrarnos</h2>
-        <p class="section-sub">Vení a visitarnos o pedí online</p>
+        <p class="section-sub">Ahora con 2 sucursales en CABA · Vení a visitarnos o pedí online</p>
 
-        <div class="sucursales-info">
-            <div class="sucursales-info-item">
-                <span class="icon-badge"><i class="fas fa-map-marker-alt"></i></span>
-                <span>Bonpland 1708, Palermo, CABA, Argentina</span>
-            </div>
-            <div class="sucursales-info-item">
-                <span class="icon-badge"><i class="fas fa-clock"></i></span>
-                <span>Lunes a Sábado: 11:00 – 23:00</span>
-            </div>
+        <div class="sucursales-grid">
+            <!-- Bonpland -->
+            <article class="sucursal-card">
+                <h3>Teque Onda Bonpland</h3>
+                <div class="sucursales-info">
+                    <div class="sucursales-info-item">
+                        <span class="icon-badge"><i class="fas fa-map-marker-alt"></i></span>
+                        <span>Bonpland 1708, Palermo, CABA</span>
+                    </div>
+                    <div class="sucursales-info-item">
+                        <span class="icon-badge"><i class="fas fa-clock"></i></span>
+                        <span>Lunes a Sábado: 11:00 – 23:00</span>
+                    </div>
+                </div>
+                <div class="map-wrapper">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.7!2d-58.4372087!3d-34.5832112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcb5ff03eab05b%3A0x6986657a1e0e5b72!2sTeque%20Onda%20Bonpland!5e0!3m2!1ses!2sar!4v1"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Ubicación de Teque Onda Bonpland en Google Maps">
+                    </iframe>
+                </div>
+                <div class="sucursal-btns">
+                    <a href="https://www.google.com/maps/place/Teque+Onda+Bonpland/@-34.5832112,-58.4372087,16z/data=!4m6!3m5!1s0x95bcb5ff03eab05b:0x6986657a1e0e5b72!8m2!3d-34.583116!4d-58.4372576!16s%2Fg%2F11sszl5wkl?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D" class="btn btn-gold" target="_blank" rel="noopener">📍 Cómo llegar</a>
+                    <a href="https://menu.fu.do/tequeonda" class="btn btn-outline-dark" target="_blank" rel="noopener">🛵 Pedir Online</a>
+                </div>
+            </article>
+
+            <!-- Humberto Primo -->
+            <article class="sucursal-card">
+                <h3>Teque Onda Humberto Primo <span class="sucursal-badge">¡Nuevo!</span></h3>
+                <div class="sucursales-info">
+                    <div class="sucursales-info-item">
+                        <span class="icon-badge"><i class="fas fa-map-marker-alt"></i></span>
+                        <span>Humberto Primo 1750, CABA</span>
+                    </div>
+                    <div class="sucursales-info-item">
+                        <span class="icon-badge"><i class="fas fa-clock"></i></span>
+                        <span>Lunes a Sábado: 18:00 – 00:00</span>
+                    </div>
+                    <div class="sucursales-info-item">
+                        <span class="icon-badge"><i class="fas fa-utensils"></i></span>
+                        <span>Comé en el local o retirá</span>
+                    </div>
+                </div>
+                <div class="map-wrapper">
+                    <iframe
+                        src="https://www.google.com/maps?q=Humberto+Primo+1750,+CABA,+Argentina&output=embed"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Ubicación de Teque Onda Humberto Primo en Google Maps">
+                    </iframe>
+                </div>
+                <div class="sucursal-btns">
+                    <a href="https://www.google.com/maps/search/?api=1&amp;query=Humberto+Primo+1750+CABA" class="btn btn-gold" target="_blank" rel="noopener">📍 Cómo llegar</a>
+                    <a href="https://ganapan.com.ar/cartatienda/TequeOnda" class="btn btn-outline-dark" target="_blank" rel="noopener">🛒 Pedir para retirar</a>
+                </div>
+            </article>
         </div>
-
-        <div class="map-wrapper">
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.7!2d-58.4372087!3d-34.5832112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcb5ff03eab05b%3A0x6986657a1e0e5b72!2sTeque%20Onda%20Bonpland!5e0!3m2!1ses!2sar!4v1"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                title="Ubicación de Teque Onda en Google Maps">
-            </iframe>
-        </div>
-
-        <a href="https://www.google.com/maps/place/Teque+Onda+Bonpland/@-34.5832112,-58.4372087,16z/data=!4m6!3m5!1s0x95bcb5ff03eab05b:0x6986657a1e0e5b72!8m2!3d-34.583116!4d-58.4372576!16s%2Fg%2F11sszl5wkl?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
-           class="btn btn-gold"
-           target="_blank"
-           rel="noopener">
-            📍 Ver en Google Maps
-        </a>
     </section>
 <section style="background: linear-gradient(135deg, #003399 0%, #0047b3 100%); padding: 60px 20px; text-align: center; color: white; margin-top: 60px;">
     <h2 style="font-size: 2.5rem; margin-bottom: 20px;">¿Tenés un Restaurante, Bar o Negocio?</h2>
@@ -325,7 +382,7 @@
 </section>
     <!-- ========== FOOTER ========== -->
     <footer>
-        <p>&copy; 2025 Teque Onda. Todos los derechos reservados.</p>
+        <p>&copy; 2026 Teque Onda. Todos los derechos reservados.</p>
         <div class="redes-sociales">
             <a href="https://www.instagram.com/tequeondaoficial" target="_blank" rel="noopener" aria-label="Instagram">
                 <i class="fab fa-instagram"></i>
