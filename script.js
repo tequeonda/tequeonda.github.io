@@ -89,7 +89,7 @@ const menuData = {
         titulo: 'Opciones Vegetarianas',
         items: [
             { nombre: 'Pastelitos Queso, Papa&Queso y Pizza',    img: 'img/pve.jpg',          descripcion: 'Pastelitos Elige tus sabores favoritos de queso, papa & queso o pizza' },
-            { nombre: 'Mini Empandas de Domino y de Queso', img: 'img/mve.jpg',        descripcion: 'Mini empanadas de Porotos y Queso o Solo Queso, Elegi la que quieras' },
+            { nombre: 'Empanadas de Dominó y de Queso', img: 'img/mve.jpg',        descripcion: 'Empanadas de porotos y queso o solo queso. ¡Elegí la que quieras!' },
             { nombre: 'TequeYoyo',     img: 'img/ty.jpg',  descripcion: 'La evolución del tequeño con plátano maduro y queso auténtico. Tradición venezolana lista para compartir.' },
         ]
     },
