@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedí Teque Onda | Elegí tu sucursal</title>
+<meta name="description" content="Pedí tequeños, pastelitos y empanadas venezolanas en Teque Onda Bonpland (Palermo) o Humberto Primo (Constitución). Delivery, retiro y WhatsApp.">
+<meta name="theme-color" content="#0D0A05">
+<meta property="og:title" content="Pedí Teque Onda – Elegí tu sucursal">
+<meta property="og:description" content="Tequeños, pastelitos y empanadas venezolanas. Bonpland 1708 (Palermo) y Humberto Primo 1750 (Constitución).">
+<meta property="og:image" content="https://tequeonda.com.ar/icon-512.png">
+<link rel="icon" href="/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16832609626"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-16832609626');
+</script>
+<style>
+  :root{--gold:#FFC72C;--dark:#0D0A05;--card:#1a1610;--line:#2c261b;--cream:#f4f3ee;--green:#00a82d;--muted:#b9b2a2}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Fira Sans',sans-serif;background:var(--dark);color:var(--cream);min-height:100vh;
+    background-image:radial-gradient(circle at 50% -10%,rgba(255,199,44,.18),transparent 55%)}
+  .wrap{max-width:480px;margin:0 auto;padding:28px 18px 40px}
+  header{text-align:center;margin-bottom:22px}
+  header img{width:110px;height:110px;border-radius:50%;background:var(--gold);padding:6px;box-shadow:0 0 0 4px rgba(255,199,44,.25)}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:1px;color:var(--gold);margin-top:12px;line-height:1}
+  header p{color:var(--muted);font-size:.95rem;margin-top:6px}
+  .branch{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:14px;overflow:hidden}
+  .branch>summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;gap:12px}
+  .branch>summary::-webkit-details-marker{display:none}
+  .pin{font-size:1.5rem}
+  .bt{flex:1}
+  .bt h2{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:.5px;line-height:1.05}
+  .bt small{display:block;color:var(--muted);font-size:.85rem;margin-top:2px}
+  .new{background:var(--green);color:#fff;font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;vertical-align:middle;margin-left:6px;letter-spacing:.5px}
+  .chev{color:var(--gold);font-size:1.2rem;transition:transform .2s}
+  .branch[open] .chev{transform:rotate(180deg)}
+  .branch[open]>summary{border-bottom:1px solid var(--line)}
+  .links{padding:14px;display:grid;gap:10px}
+  .hours{font-size:.85rem;color:var(--muted);text-align:center;padding:2px 0 4px}
+  .hours b{color:var(--cream);font-weight:600}
+  a.btn{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;text-decoration:none;
+    background:#262016;color:var(--cream);font-weight:600;font-size:1rem;border:1px solid var(--line);transition:transform .12s,background .12s}
+  a.btn:hover,a.btn:active{transform:translateY(-1px);background:#30291c}
+  a.btn .ic{width:28px;text-align:center;font-size:1.25rem}
+  a.btn .tx{flex:1}
+  a.btn .tx small{display:block;font-weight:400;font-size:.78rem;color:var(--muted)}
+  a.btn.main{background:var(--gold);color:#111;border-color:var(--gold)}
+  a.btn.main .tx small{color:#4a3b00}
+  a.btn.wa{background:#0f3d1e;border-color:#17602f}
+  .b2b{display:block;text-align:center;margin-top:20px;padding:18px;border-radius:16px;text-decoration:none;color:#111;
+    background:linear-gradient(135deg,#FFC72C,#f0a500)}
+  .b2b strong{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.5px;display:block;line-height:1}
+  .b2b span{font-size:.88rem}
+  footer{text-align:center;margin-top:26px;font-size:.82rem;color:var(--muted)}
+  footer a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="https://tequeonda.com.ar/img/logo-to.svg" alt="Teque Onda">
+    <h1>¿Dónde querés pedir?</h1>
+    <p>Tequeños, pastelitos y empanadas venezolanas 🇻🇪</p>
+  </header>
+
+  <!-- ============ BONPLAND ============ -->
+  <details class="branch" id="bonpland">
+    <summary>
+      <span class="pin">📍</span>
+      <span class="bt"><h2>Bonpland 1708</h2><small>Palermo</small></span>
+      <span class="chev">▾</span>
+    </summary>
+    <div class="links">
+      <div class="hours"><b>Lun a Mié</b> 11 a 23 hs · <b>Jue a Sáb</b> 11 a 23:50 hs</div>
+      <a class="btn main" data-ev="bonpland_menu" href="https://menu.fu.do/tequeonda" target="_blank" rel="noopener">
+        <span class="ic">🛒</span><span class="tx">Menú y pedir online<small>Delivery o retiro en el local</small></span></a>
+      <a class="btn wa" data-ev="bonpland_whatsapp" href="https://wa.me/5491176662770" target="_blank" rel="noopener">
+        <span class="ic">💬</span><span class="tx">WhatsApp Palermo</span></a>
+      <a class="btn" data-ev="bonpland_mercado" href="https://mpago.li/1iWtE4Y" target="_blank" rel="noopener">
+        <span class="ic">🛵</span><span class="tx">Pedir por Mercado Delivery</span></a>
+      <a class="btn" data-ev="bonpland_rappi" href="https://rappi.app.link/Teque_Onda" target="_blank" rel="noopener">
+        <span class="ic">🛵</span><span class="tx">Pedir por Rappi</span></a>
+      <a class="btn" data-ev="bonpland_pedidosya" href="https://www.pedidosya.com.ar/restaurantes/buenos-aires/teque-onda-bonpland-6cd4d7c7-1516-486d-b155-87e58e24e6db-menu" target="_blank" rel="noopener">
+        <span class="ic">🛵</span><span class="tx">Pedir por PedidosYa</span></a>
+      <a class="btn" data-ev="bonpland_maps" href="https://www.google.com/maps/place/Teque+Onda+Bonpland/@-34.5832112,-58.4372087,16z/data=!4m6!3m5!1s0x95bcb5ff03eab05b:0x6986657a1e0e5b72!8m2!3d-34.583116!4d-58.4372576" target="_blank" rel="noopener">
+        <span class="ic">🗺️</span><span class="tx">Cómo llegar</span></a>
+    </div>
+  </details>
+
+  <!-- ============ HUMBERTO PRIMO ============ -->
+  <details class="branch" id="humberto-primo">
+    <summary>
+      <span class="pin">📍</span>
+      <span class="bt"><h2>Humberto Primo 1750 <span class="new">¡NUEVO!</span></h2><small>Constitución</small></span>
+      <span class="chev">▾</span>
+    </summary>
+    <div class="links">
+      <div class="hours"><b>Lun a Sáb</b> 18 a 00 hs</div>
+      <a class="btn main" data-ev="hp_ganapan" href="https://ganapan.com.ar/cartatienda/TequeOnda" target="_blank" rel="noopener">
+        <span class="ic">🛒</span><span class="tx">Menú y pedir online<small>Retiro en el local</small></span></a>
+      <a class="btn wa" data-ev="hp_whatsapp" href="https://wa.me/5491127973000" target="_blank" rel="noopener">
+        <span class="ic">💬</span><span class="tx">WhatsApp Humberto Primo</span></a>
+      <!-- PENDIENTE: pegar el link real de Mercado Delivery de Humberto Primo en href -->
+      <a class="btn" data-ev="hp_mercado" href="" target="_blank" rel="noopener">
+        <span class="ic">🛵</span><span class="tx">Pedir por Mercado Delivery</span></a>
+      <a class="btn" data-ev="hp_rappi" href="https://www.rappi.com.ar/restaurantes/delivery/24925-teque-onda" target="_blank" rel="noopener">
+        <span class="ic">🛵</span><span class="tx">Pedir por Rappi</span></a>
+      <a class="btn" data-ev="hp_maps" href="https://www.google.com/maps/search/?api=1&query=Teque+Onda+Humberto+Primo+1750+CABA" target="_blank" rel="noopener">
+        <span class="ic">🗺️</span><span class="tx">Cómo llegar</span></a>
+    </div>
+  </details>
+
+  <!-- ============ MAYORISTA ============ -->
+  <a class="b2b" data-ev="mayorista" href="/mayorista.html">
+    <strong>🧾 Mayoristas y catering</strong>
+    <span>Bares, restaurantes y eventos: precios por volumen</span>
+  </a>
+
+  <footer>
+    <a href="/">tequeonda.com.ar</a> · @tequeondaoficial
+  </footer>
+</div>
+
+<script>
+  // Botones sin link todavía: se ocultan solos hasta que se cargue el href
+  document.querySelectorAll('a.btn').forEach(a => {
+    if (!a.getAttribute('href')) a.style.display = 'none';
+  });
+  // Abrir una sucursal si viene en el link (ej: /pedir#humberto-primo)
+  const h = location.hash.slice(1);
+  const target = h && document.getElementById(h);
+  if (target && target.tagName === 'DETAILS') target.open = true;
+  // Al abrir una sucursal, se cierra la otra
+  document.querySelectorAll('details.branch').forEach(d => d.addEventListener('toggle', () => {
+    if (d.open) document.querySelectorAll('details.branch').forEach(o => { if (o !== d) o.open = false; });
+  }));
+  // Medir clics por botón (Google Ads / Analytics)
+  document.querySelectorAll('[data-ev]').forEach(a => a.addEventListener('click', () => {
+    try { gtag('event', 'click_link', { link_name: a.dataset.ev }); } catch (e) {}
+  }));
+</script>
+</body>
+</html>
