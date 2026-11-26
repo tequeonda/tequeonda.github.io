@@ -123,7 +123,7 @@ function abrirPanel(cat) {
             <div class="menu-item-card-body">
                 <h4>${item.nombre}</h4>
                 <p>${item.descripcion}</p>
-                <a href="https://menu.fu.do/tequeonda" class="btn btn-gold" target="_blank" rel="noopener">Pedir</a>
+                <a href="/pedir" class="btn btn-gold">Pedir</a>
             </div>
         </div>
     `).join('');
