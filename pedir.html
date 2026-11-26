@@ -70,52 +70,8 @@
     <p>Tequeños, pastelitos y empanadas venezolanas 🇻🇪</p>
   </header>
 
-  <!-- ============ BONPLAND ============ -->
-  <details class="branch" id="bonpland">
-    <summary>
-      <span class="pin">📍</span>
-      <span class="bt"><h2>Bonpland 1708</h2><small>Palermo</small></span>
-      <span class="chev">▾</span>
-    </summary>
-    <div class="links">
-      <div class="hours"><b>Lun a Mié</b> 11 a 23 hs · <b>Jue a Sáb</b> 11 a 23:50 hs</div>
-      <a class="btn main" data-ev="bonpland_menu" href="https://menu.fu.do/tequeonda" target="_blank" rel="noopener">
-        <span class="ic">🛒</span><span class="tx">Menú y pedir online<small>Delivery o retiro en el local</small></span></a>
-      <a class="btn wa" data-ev="bonpland_whatsapp" href="https://wa.me/5491176662770" target="_blank" rel="noopener">
-        <span class="ic">💬</span><span class="tx">WhatsApp Palermo</span></a>
-      <a class="btn" data-ev="bonpland_mercado" href="https://mpago.li/1iWtE4Y" target="_blank" rel="noopener">
-        <span class="ic">🛵</span><span class="tx">Pedir por Mercado Delivery</span></a>
-      <a class="btn" data-ev="bonpland_rappi" href="https://rappi.app.link/Teque_Onda" target="_blank" rel="noopener">
-        <span class="ic">🛵</span><span class="tx">Pedir por Rappi</span></a>
-      <a class="btn" data-ev="bonpland_pedidosya" href="https://www.pedidosya.com.ar/restaurantes/buenos-aires/teque-onda-bonpland-6cd4d7c7-1516-486d-b155-87e58e24e6db-menu" target="_blank" rel="noopener">
-        <span class="ic">🛵</span><span class="tx">Pedir por PedidosYa</span></a>
-      <a class="btn" data-ev="bonpland_maps" href="https://www.google.com/maps/place/Teque+Onda+Bonpland/@-34.5832112,-58.4372087,16z/data=!4m6!3m5!1s0x95bcb5ff03eab05b:0x6986657a1e0e5b72!8m2!3d-34.583116!4d-58.4372576" target="_blank" rel="noopener">
-        <span class="ic">🗺️</span><span class="tx">Cómo llegar</span></a>
-    </div>
-  </details>
-
-  <!-- ============ HUMBERTO PRIMO ============ -->
-  <details class="branch" id="humberto-primo">
-    <summary>
-      <span class="pin">📍</span>
-      <span class="bt"><h2>Humberto Primo 1750 <span class="new">¡NUEVO!</span></h2><small>Constitución</small></span>
-      <span class="chev">▾</span>
-    </summary>
-    <div class="links">
-      <div class="hours"><b>Lun a Sáb</b> 18 a 00 hs</div>
-      <a class="btn main" data-ev="hp_ganapan" href="https://ganapan.com.ar/cartatienda/TequeOnda" target="_blank" rel="noopener">
-        <span class="ic">🛒</span><span class="tx">Menú y pedir online<small>Retiro en el local</small></span></a>
-      <a class="btn wa" data-ev="hp_whatsapp" href="https://wa.me/5491127973000" target="_blank" rel="noopener">
-        <span class="ic">💬</span><span class="tx">WhatsApp Humberto Primo</span></a>
-      <!-- PENDIENTE: pegar el link real de Mercado Delivery de Humberto Primo en href -->
-      <a class="btn" data-ev="hp_mercado" href="" target="_blank" rel="noopener">
-        <span class="ic">🛵</span><span class="tx">Pedir por Mercado Delivery</span></a>
-      <a class="btn" data-ev="hp_rappi" href="https://www.rappi.com.ar/restaurantes/delivery/24925-teque-onda" target="_blank" rel="noopener">
-        <span class="ic">🛵</span><span class="tx">Pedir por Rappi</span></a>
-      <a class="btn" data-ev="hp_maps" href="https://www.google.com/maps/search/?api=1&query=Teque+Onda+Humberto+Primo+1750+CABA" target="_blank" rel="noopener">
-        <span class="ic">🗺️</span><span class="tx">Cómo llegar</span></a>
-    </div>
-  </details>
+  <!-- Las sucursales se cargan desde /sucursales.json (el mismo archivo que usa el bot de WhatsApp) -->
+  <div id="sucursales"><p class="hours">Cargando sucursales…</p></div>
 
   <!-- ============ MAYORISTA ============ -->
   <a class="b2b" data-ev="mayorista" href="/mayorista.html">
@@ -129,22 +85,48 @@
 </div>
 
 <script>
-  // Botones sin link todavía: se ocultan solos hasta que se cargue el href
-  document.querySelectorAll('a.btn').forEach(a => {
-    if (!a.getAttribute('href')) a.style.display = 'none';
-  });
-  // Abrir una sucursal si viene en el link (ej: /pedir#humberto-primo)
-  const h = location.hash.slice(1);
-  const target = h && document.getElementById(h);
-  if (target && target.tagName === 'DETAILS') target.open = true;
-  // Al abrir una sucursal, se cierra la otra
-  document.querySelectorAll('details.branch').forEach(d => d.addEventListener('toggle', () => {
-    if (d.open) document.querySelectorAll('details.branch').forEach(o => { if (o !== d) o.open = false; });
-  }));
-  // Medir clics por botón (Google Ads / Analytics)
-  document.querySelectorAll('[data-ev]').forEach(a => a.addEventListener('click', () => {
-    try { gtag('event', 'click_link', { link_name: a.dataset.ev }); } catch (e) {}
-  }));
+  const ICON = { mercado: '🛵', rappi: '🛵', pedidosya: '🛵' };
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const btn = (cls, ev, url, ic, txt, sub) =>
+    `<a class="btn ${cls}" data-ev="${ev}" href="${esc(url)}" target="_blank" rel="noopener"><span class="ic">${ic}</span><span class="tx">${esc(txt)}${sub ? `<small>${esc(sub)}</small>` : ''}</span></a>`;
+
+  function render(data) {
+    const pref = { 'bonpland': 'bonpland', 'humberto-primo': 'hp' };
+    document.getElementById('sucursales').innerHTML = data.sucursales.map(s => {
+      const p = pref[s.id] || s.id;
+      return `<details class="branch" id="${s.id}">
+    <summary><span class="pin">📍</span>
+      <span class="bt"><h2>${esc(s.direccion)}${s.nuevo ? ' <span class="new">¡NUEVO!</span>' : ''}</h2><small>${esc(s.barrio)}</small></span>
+      <span class="chev">▾</span></summary>
+    <div class="links">
+      <div class="hours">${esc(s.horario_texto)}</div>
+      ${btn('main', p + '_menu', s.menu.url, '🛒', 'Menú y pedir online', s.menu.detalle)}
+      ${btn('wa', p + '_whatsapp', 'https://wa.me/' + s.whatsapp, '💬', 'WhatsApp ' + s.nombre)}
+      ${s.apps.map(a => btn('', p + '_' + a.id, a.url, ICON[a.id] || '🛵', 'Pedir por ' + a.nombre)).join('')}
+      ${btn('', p + '_maps', s.maps, '🗺️', 'Cómo llegar')}
+    </div></details>`;
+    }).join('');
+
+    // Abrir una sucursal si viene en el link (ej: /pedir#humberto-primo)
+    const h = location.hash.slice(1), target = h && document.getElementById(h);
+    if (target && target.tagName === 'DETAILS') target.open = true;
+    // Al abrir una sucursal, se cierra la otra
+    document.querySelectorAll('details.branch').forEach(d => d.addEventListener('toggle', () => {
+      if (d.open) document.querySelectorAll('details.branch').forEach(o => { if (o !== d) o.open = false; });
+    }));
+    // Medir clics por botón (Google Ads / Analytics)
+    document.querySelectorAll('[data-ev]').forEach(a => a.addEventListener('click', () => {
+      try { gtag('event', 'click_link', { link_name: a.dataset.ev }); } catch (e) {}
+    }));
+  }
+
+  fetch('/sucursales.json', { cache: 'no-cache' })
+    .then(r => r.json()).then(render)
+    .catch(() => {
+      document.getElementById('sucursales').innerHTML =
+        '<a class="btn main" href="https://menu.fu.do/tequeonda"><span class="ic">🛒</span><span class="tx">Bonpland – Palermo</span></a>' +
+        '<a class="btn main" style="margin-top:10px" href="https://ganapan.com.ar/cartatienda/TequeOnda"><span class="ic">🛒</span><span class="tx">Humberto Primo – Constitución</span></a>';
+    });
 </script>
 </body>
 </html>
