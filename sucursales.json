@@ -39,7 +39,8 @@
       "telefono": "+54 11 2797-3000",
       "maps": "https://www.google.com/maps/search/?api=1&query=Teque+Onda+Humberto+Primo+1750+CABA",
       "apps": [
-        { "id": "rappi", "nombre": "Rappi", "url": "https://www.rappi.com.ar/restaurantes/delivery/24925-teque-onda" }
+        { "id": "rappi", "nombre": "Rappi", "url": "https://www.rappi.com.ar/restaurantes/delivery/24925-teque-onda" },
+        { "id": "mercado", "nombre": "Mercado Delivery", "url": "https://meli.la/2mdmfH5" }
       ],
       "barrios_delivery": ["Constitución", "Monserrat", "San Cristóbal", "Balvanera", "Once", "Montserrat"]
     }
