@@ -231,7 +231,12 @@
   })();
   // Medir clics por botón (Google Ads / Analytics)
   document.querySelectorAll('[data-ev]').forEach(a => a.addEventListener('click', () => {
-    try { gtag('event', 'click_link', { link_name: a.dataset.ev, sucursal: 'humberto-primo' }); } catch (e) {}
+    try {
+      gtag('event', 'click_link', { link_name: a.dataset.ev, sucursal: 'humberto-primo' });
+      // Conversión de Google Ads: intención de pedido (pedir online, apps de delivery, llamar, WhatsApp)
+      if (/_(menu|mercado|rappi|pedidosya|llamar|llamar_texto|whatsapp)$/.test(a.dataset.ev))
+        gtag('event', 'conversion', { send_to: 'AW-16832609626/FG2WCKeCg8EdENr6tNo-', transport_type: 'beacon' });
+    } catch (e) {}
   }));
 </script>
 </body>
